@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg id="svg2" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" height="17.854mm" width="15.513mm" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" viewBox="0 0 54.967875 63.260752">
+ <defs id="defs4">
+  <clipPath id="clipPath3622-3" clipPathUnits="userSpaceOnUse">
+   <path id="path3624-6" d="m63.525 818.14h19.462v-19.462h-19.462v19.462z"/>
+  </clipPath>
+ </defs>
+ <metadata id="metadata7">
+  <rdf:RDF>
+   <cc:Work rdf:about="">
+    <dc:format>image/svg+xml</dc:format>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:title/>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <g id="layer1" transform="translate(-328.23 -396.45)">
+  <g id="g6031" transform="translate(259.82 295.33)">
+   <path id="path3588" d="m79.634 146.07c0 1.9488-1.5788 3.5275-3.525 3.5275-1.9488 0-3.5288-1.5788-3.5288-3.5275 0-1.9475 1.58-3.525 3.5288-3.525 1.9462 0 3.525 1.5775 3.525 3.525" fill="#857f90"/>
+   <path id="path3592" d="m112.13 146.07c0 1.9488-1.58 3.5275-3.5262 3.5275-1.9475 0-3.5275-1.5788-3.5275-3.5275 0-1.9475 1.58-3.525 3.5275-3.525 1.9462 0 3.5262 1.5775 3.5262 3.525" fill="#857f90"/>
+   <g stroke="#857f90" stroke-miterlimit="10" stroke-width="1.785" fill="none">
+    <path id="path3596" d="m82.491 146.07h20.175"/>
+    <path id="path3600" d="m82.491 141.97h20.175"/>
+    <path id="path3604" d="m82.491 149.91h20.175"/>
+    <path id="path3606" d="m114.65 156.07h-45.349v-47.046h45.349v47.046z"/>
+   </g>
+   <path id="path3608" d="m79.813 164.38h-7.4088v-8.3025h7.4088v8.3025z" fill="#857f90"/>
+   <path id="path3610" d="m112.31 164.38h-7.41v-8.3025h7.41v8.3025z" fill="#857f90"/>
+   <path id="path3614" d="m76.109 113.28h30.722" stroke="#857f90" stroke-miterlimit="10" stroke-width="1.785" fill="none"/>
+   <path id="path3616" d="m111.21 117.51h-38.476v18.568h38.476v-18.568z" stroke="#857f90" stroke-miterlimit="10" stroke-width="1.785" fill="none"/>
+   <g id="g3626" transform="matrix(1.25 0 0 -1.25 19.643 1123.8)">
+    <g id="g3628" clip-path="url(#clipPath3622-3)">
+     <g id="g3630" transform="translate(82.987 808.41)">
+      <path id="path3632" d="m0 0c0-5.374-4.356-9.731-9.73-9.731-5.375 0-9.732 4.357-9.732 9.731s4.357 9.731 9.732 9.731c5.374 0 9.73-4.357 9.73-9.731" fill="#29abe2"/>
+     </g>
+    </g>
+   </g>
+  </g>
+ </g>
+</svg>

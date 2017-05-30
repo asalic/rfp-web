@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="defaultLanguage" content="en-US">
+    <meta name="availableLanguages" content="en-US, es-ES, pt-BR">
+
+    <title>Routes for People Web</title>
+
+    <!-- Bootstrap -->
+    <link devmoderfp
+      cssreplhref="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+      href="vendors/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!--link devmoderfp
+      cssreplhref="https://openlayers.org/en/v4.0.1/css/ol.css"
+      href="vendors/openlayers/ol.css" rel="stylesheet"-->
+
+    <link devmoderfp
+      cssreplhref="http://cdn.leafletjs.com/leaflet/v1.0.3/leaflet.css"
+      href="vendors/leaflet/leaflet.css" rel="stylesheet">
+    <link devmoderfp
+      cssreplhref="https://unpkg.com/leaflet.markercluster@1.0.4/dist/MarkerCluster.Default.css"
+      href="vendors/leaflet/marker_cluster/MarkerCluster.Default.css" rel="stylesheet">
+    <link devmoderfp
+      cssreplhref="https://unpkg.com/leaflet.markercluster@1.0.4/dist/MarkerCluster.css"
+      href="vendors/leaflet/marker_cluster/MarkerCluster.css" rel="stylesheet">
+    <!--link cssreplhref="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.45/css/bootstrap-datetimepicker-standalone.min.css"
+      rel="stylesheet" href="vendors/bootstrap-datetimepicker/bootstrap-datetimepicker-standalone.min.css" /-->
+    <link rel="stylesheet" href="vendors/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css" />
+    <link rel="stylesheet" href="vendors/fonts/font-awesome/css/font-awesome.min.css">
+
+    <link devmoderfp
+      cssreplhref="res/app.min.css"
+      href="res/css/app.css" rel="stylesheet">
+
+        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script devmoderfp
+      jsreplsrc="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"
+      src="vendors/jquery-3.1.1.min.js"></script>
+    <script devmoderfp
+      jsreplsrc="https://cdnjs.cloudflare.com/ajax/libs/jsrender/0.9.83/jsrender.min.js"
+      src="vendors/jsrender.min.js"></script>
+    <script devmoderfp
+      jsreplsrc="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment-with-locales.min.js"
+      src="vendors/moment-with-locales.js"></script>
+    <link rel="localization" name="main" href="res/l20n/app.{locale}.ftl">
+    <script src="vendors/l20n.js"></script>
+    <script src="vendors/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+
+    <!--script devmoderfp
+      jsreplsrc="https://openlayers.org/en/v4.0.1/build/ol.js"
+      src="vendors/openlayers/ol.js"></script-->
+
+    <script devmoderfp
+      jsreplsrc="http://cdn.leafletjs.com/leaflet/v1.0.3/leaflet.js"
+      src="vendors/leaflet/leaflet.js"></script>
+
+    <script devmoderfp
+      jsreplsrc="https://unpkg.com/leaflet.markercluster@1.0.4/dist/leaflet.markercluster.js"
+      src="vendors/leaflet/marker_cluster/leaflet.markercluster.js"></script>
+
+
+  <!-- Include all compiled plugins (below), or include individual files as needed -->
+  <script devmoderfp
+    jsreplsrc="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+    src="vendors/bootstrap/js/bootstrap.min.js"></script>
+  <script devmoderfp
+    jsreplsrc="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.2/bootstrap3-typeahead.min.js"
+    src="vendors/bootstrap3-typeahead.min.js"></script>
+  <!--script devmoderfp
+    jsreplsrc="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.45/js/bootstrap-datetimepicker.min.js"
+    src="vendors/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script-->
+  <!--script src="vendors/markerclusterer/markerclusterer.js"></script>
+  <script src="https://www.google.com/jsapi"></script>
+  <script src="https://apis.google.com/js/platform.js"></script-->
+  
+  
+    <script devmoderfp rfpmerge="11" src='res/js/utils.js'></script>
+
+    <!--Load all Model classes-->
+    <script devmoderfp rfpmerge="1" src='res/js/app-conf.js'></script>
+    <script devmoderfp rfpmerge="2" src='res/js/routes/route.js'></script>
+    <script devmoderfp rfpmerge="3" src='res/js/trips/stop.js'></script>
+    <script devmoderfp rfpmerge="4" src='res/js/trips/map-layer.js'></script>
+    <script devmoderfp rfpmerge="5" src='res/js/trips/best-rec-trip-stop.js'></script>
+    <script devmoderfp rfpmerge="5" src='res/js/more/lang.js'></script>
+    <script devmoderfp rfpmerge="7" src='res/js/more/user.js'></script>
+    <script devmoderfp rfpmerge="1" src='res/js/more/city.js'></script>
+    <script devmoderfp rfpmerge="1" src='res/js/more/country.js'></script>
+    <script devmoderfp rfpmerge="5" src='res/js/routes/route-stop.js'></script>
+    <script devmoderfp rfpmerge="5" src='res/js/routes/route-trip.js'></script>
+    <script devmoderfp rfpmerge="5" src='res/js/routes/route-schedule.js'></script>
+    <script devmoderfp rfpmerge="1" src='res/js/favs/fav.js'></script>
+    <script devmoderfp rfpmerge="1" src='res/js/favs/fav-route.js'></script>
+    <script devmoderfp rfpmerge="1" src='res/js/favs/fav-trip.js'></script>
+    <!--script devmoderfp rfpmerge="6" src='res/js/more/rfpw-country.js'></script-->
+
+    <!--Load the ctrlrs classes-->
+    <script devmoderfp rfpmerge="5" src='res/js/trips/best-trips-stop-handler.js'></script>
+    <script devmoderfp rfpmerge="7" src='res/js/trips/map-layer-factory.js'></script>
+    <script devmoderfp rfpmerge="8" src='res/js/trips/br-create-trip-handler.js'></script>
+    <script devmoderfp rfpmerge="8" src='res/js/trips/map-handler.js'></script>
+    <script devmoderfp rfpmerge="9" src='res/js/routes/routes-handler.js'></script>
+    <script devmoderfp rfpmerge="7" src='res/js/more/date-time-handler.js'></script>
+    <script devmoderfp rfpmerge="10" src='res/js/more/localization.js'></script>
+    <script devmoderfp rfpmerge="7" src='res/js/more/user-auth.js'></script>
+    <script devmoderfp rfpmerge="11" src='res/js/more/more-handler.js'></script>
+    <script devmoderfp rfpmerge="1" src='res/js/favs/favs-handler.js'></script>
+
+    <!--Load base classes-->
+    <script devmoderfp rfpmerge="12" src='res/js/storage.js'></script>
+    <script devmoderfp rfpmerge="13" src='res/js/app.js'></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+
+    <script devmoderfp removetag>
+    function devmode_syncLoadHTML(strUrl, parentToAppend)
+    {
+      jQuery.ajax({
+        url: strUrl,
+        success: function(html)
+        {
+          parentToAppend.append(html);
+          // try {
+          //   parentToAppend.append(new XMLSerializer().serializeToString($.parseXML(html)));
+          // } catch (e) {
+          //   try {
+          //     parentToAppend.empty();
+          //     parentToAppend.append(new XMLSerializer().serializeToString(html.documentElement));
+          //   } catch (e) {
+          //
+          //   }
+          // } finally {
+          //
+          // }
+        },
+        error: function(request,
+            textStatus, errorThrown)
+            {
+              //console.log(errorThrown);
+            },
+        async:false
+      });
+    }
+    </script>
+
+    <div id="div-accept-storage-usr"
+      class="alert alert-info alert-dismissible spa-rfpw-diplay-none" role="alert">
+      <button id="btn-accept-storage-usr"
+        class="btn btn-link alert-link pull-right" data-dismiss="alert"
+        data-l10n-id="btnacceptstorageusr"></button>
+      <span data-l10n-id="spnacceptstorageusr"></span>
+    </div>
+    <div class="tabbable">
+        <div id="div-trips-create-trip-stop-sel-msg"
+          class="spa-rfpw-trips-create-trips-msg spa-rfpw-diplay-none">
+          <span data-l10n-id="divtripscreatetripstopselmsg"></span>
+          <button id="btn-trips-create-trip-stop-sel-cancel" type="button"
+            data-l10n-id="btncancel"
+            class="btn btn-default"></button>
+        </div>
+        <ul id="navbar" class="nav nav-tabs nav-tabs-justified">
+            <li class="active spa-rfpw-take-all-space">
+              <a href="#div-trips" data-toggle="tab">
+                <i class="glyphicon glyphicon-map-marker"></i>
+                <span data-l10n-id="trips-ttl"></span>
+              </a>
+            </li>
+            <li class="spa-rfpw-take-all-space">
+              <a href="#div-routes" data-toggle="tab">
+                <i class="glyphicon glyphicon-road"></i>
+                <span data-l10n-id="routes-ttl"></span>
+              </a>
+            </li>
+            <li class="spa-rfpw-take-all-space">
+              <a href="#div-favs" data-toggle="tab">
+                <i class="glyphicon glyphicon-star"></i>
+                <span data-l10n-id="favs-ttl"></span>
+              </a>
+            </li>
+            <li class="spa-rfpw-take-all-space">
+              <a href="#div-more" data-toggle="tab">
+                <i class="glyphicon glyphicon-th-list"></i>
+                <span data-l10n-id="more-ttl"></span>
+              </a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div id="div-trips" class="tab-pane active">
+              <script devmoderfp appendhtml="www/trips.html">
+                devmode_syncLoadHTML("trips.html", $("#div-trips"));
+              </script>
+            </div>
+            <div id="div-routes" class="tab-pane">
+              <script devmoderfp appendhtml="www/routes.html">
+                devmode_syncLoadHTML("routes.html", $("#div-routes"));
+              </script>
+            </div>
+            <div id="div-favs" class="tab-pane">
+              <script devmoderfp appendhtml="www/favs.html">
+                devmode_syncLoadHTML("favs.html", $("#div-favs"));
+              </script>
+            </div>
+            <div id="div-more" class="tab-pane">
+              <script devmoderfp appendhtml="www/more.html">
+                devmode_syncLoadHTML("more.html", $("#div-more"));
+              </script>
+            </div>
+        </div>
+    </div>
+
+  <div class="modal fade" id="dlg-error" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title glyphicon glyphicon-exclamation-sign">Error</h4>
+        </div>
+        <div class="modal-body">
+          <p id="dlg-error-content">Error text</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" data-l10n-id="btn-dlg-close" class="btn btn-default"
+            data-dismiss="modal"></button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  </body>
+</html>

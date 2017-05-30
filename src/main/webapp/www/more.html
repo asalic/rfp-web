@@ -1,0 +1,170 @@
+<div id="div-more-wrapper" class="container-fluid">
+  <div class="row">
+    <div class="col-xs-12">
+      <span class="pull-right">
+        <span data-l10n-id="more-login"></span>
+        <span id="spn-more-login-anon" class="spa-rfpw-signedin-usr" data-l10n-id="more-login-anon"></span>
+        <span id="spn-more-login-usr" class="spa-rfpw-signedin-usr"></span>
+        <!--btn data-l10n-id="more-login-btn" class="btn btn-primary"></btn-->
+        <button id="btn-more-signin" data-l10n-id="btn-more-signin" class="btn btn-primary"></button>
+        <button id="btn-more-signout" data-l10n-id="btn-more-signout" class="btn btn-primary"></button>
+        <button id="btn-more-signrevoke" data-l10n-id="btn-more-signrevoke" class="btn btn-primary"></button>
+        <!--button id="btn-more-signup" data-l10n-id="btn-more-signup" class="btn btn-primary"></button-->
+      </span>
+    </div>
+  </div>
+
+    <!-- <div class="col-md-4">
+      <div class="row">
+        <div class="col-xs-6">
+          <select id="sel-reg-country" class="form-control clearfix"></select>
+        </div>
+        <div class="col-xs-6">
+          <select id="sel-reg-city" class="form-control clearfix"></select>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4"></div>
+  </div> -->
+  <div class="row">
+    <div class="col-sm-3 col-md-3 spa-rfpw-more-row-margin">
+      <div id="div-more-region" class="panel panel-default">
+        <div data-l10n-id="more-region-ttl" data-toggle="collapse"
+          data-target="#collapse-more-region" class="panel-heading"></div>
+        <div id="collapse-more-region" class="panel-collapse collapse">
+          <div id="div-more-region-lst" class="panel-body list-group">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-3 col-md-3 spa-rfpw-more-row-margin">
+      <select id="sel-more-lang" class="form-control clearfix"></select>
+    </div>
+
+    <div class="col-sm-3 col-md-3 spa-rfpw-more-row-margin">
+      <div class="panel panel-default">
+        <div data-l10n-id="more-date-time-ttl" data-toggle="collapse"
+          data-target="#collapse-more-date-time" class="panel-heading"></div>
+        <div id="collapse-more-date-time" class="panel-collapse collapse">
+          <div class="panel-body">
+
+            <div class="spa-rfpw-more-row-margin">
+              <label class="radio-inline">
+                <input type="radio" name="rbtn-more-date-time-apps-dt">
+                  <span data-l10n-id="more-date-time-apps-dt-reg"></span>
+                </input>
+              </label>
+            </div>
+
+            <div class="spa-rfpw-more-row-margin">
+              <label class="radio-inline">
+                <input type="radio" name="rbtn-more-date-time-apps-dt">
+                  <span data-l10n-id="more-date-time-apps-dt-dev"></span>
+                </input>
+              </label>
+            </div>
+
+            <div class="spa-rfpw-more-row-margin">
+              <label class="radio-inline">
+                <input type="radio" name="rbtn-more-date-time-apps-dt">
+                  <span data-l10n-id="more-date-time-apps-dt-cust"></span>
+                </input>
+              </label>
+
+              <div class="container">
+                <div class="row">
+                  <div class='col-xs-8'>
+                    <div id='div-more-custom-dt' class="input-group date form_datetime"
+                      data-date="2000-09-16T05:25:07Z" data-date-format="dd MM yyyy - HH:ii p"
+                      data-link-field="dtp_input1">
+                      <input class="form-control" size="16" type="text" value="" readonly>
+                      </input>
+                      <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+            					<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                    </div>
+                    <!--div class="form-group">
+                      <div class='input-group date' id='div-more-custom-dt'>
+                        <input id="boom" type='text' class="form-control"></input>
+                        <span class="input-group-addon">
+                          <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                      </div>
+                    </div-->
+                  </div>
+                  <div class='col-xs-4'>
+                    <select id="sel-more-custom-dt-utc" class="form-control clearfix"></select>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+          </div><!--body-->
+        </div><!--collapse-->
+      </div><!--panel-->
+    </div>
+
+    <div class="col-sm-2 col-md-2 spa-rfpw-more-row-margin">
+      <button id="btn-more-reset" data-l10n-id="more-reset"
+        class="btn btn-default form-control clearfix"></button>
+    </div>
+
+    <div class="col-sm-2 col-md-2 spa-rfpw-more-row-margin">
+      <button id="btn-more-about" data-l10n-id="btn-more-about"
+        class="btn btn-default form-control clearfix"></button>
+    </div>
+
+    <div class="col-sm-2 col-md-2 spa-rfpw-more-row-margin">
+      <button id="btn-more-new" data-l10n-id="btn-more-new"
+        class="btn btn-default form-control clearfix"></button>
+    </div>
+
+  </div>
+</div>
+
+<div class="modal fade" id="dlg-more-about" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-body">
+        <p>
+          <h4>Routes for People Web</h4><br />
+          <span id="dlg-more-about-content-v"
+            data-l10n-id="dlg-more-about-content-v"></span>
+            <br></br><br></br>
+          <span data-l10n-id="dlg-more-about-content-cr"></span>
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button id="btn-more-about" type="button" data-l10n-id="btn-dlg-close" class="btn btn-default"
+          data-dismiss="modal"></button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<div class="modal fade" id="dlg-more-new" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-body">
+        <hr />
+        <p>
+          <h5><span data-l10n-id="dlg-more-hnew"></span> 1.0: </h5>
+          <span data-l10n-id="dlg-more-bnew1_0">
+          </span><br />
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button id="btn-more-new" type="button" data-l10n-id="btn-dlg-close" class="btn btn-default"
+          data-dismiss="modal"></button>
+      </div>
+    </div>
+
+  </div>
+</div>

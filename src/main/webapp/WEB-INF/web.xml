@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee" 
+         xmlns:web="http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+         version="3.1" metadata-complete="false" xmlns="http://xmlns.jcp.org/xml/ns/javaee">
+
+<filter>
+<filter-name>ExpiresFilter</filter-name>
+       <filter-class>org.apache.catalina.filters.ExpiresFilter</filter-class>
+    <init-param>
+        <param-name>ExpiresByType image</param-name>
+        <param-value>access plus 0 seconds</param-value>
+    </init-param>
+    <init-param>
+        <param-name>ExpiresByType text/css</param-name>
+        <param-value>access plus 0 seconds</param-value>
+    </init-param>
+    <init-param>
+        <param-name>ExpiresByType application/javascript</param-name>
+        <param-value>access plus 0 seconds</param-value>
+    </init-param>
+    <!-- Let everything else expire immediately -->
+    <init-param>
+        <param-name>ExpiresDefault</param-name>
+        <param-value>access plus 0 seconds</param-value>
+    </init-param>
+</filter>
+
+<filter-mapping>
+    <filter-name>ExpiresFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+    <dispatcher>REQUEST</dispatcher>
+</filter-mapping>
+
+	<display-name>Routes for People Web</display-name>
+	 <servlet>
+        <servlet-name>jersey-servlet</servlet-name>
+        <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+        <init-param>
+             <param-name>jersey.config.server.provider.packages</param-name>
+             <param-value>upv.bigsea.rfpweb</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+	
+
+
+	<servlet-mapping>
+		<servlet-name>jersey-servlet</servlet-name>
+		<url-pattern>/webservice/*</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+    <servlet-name>default</servlet-name>
+    <url-pattern>/res/*</url-pattern>
+</servlet-mapping>
+<servlet-mapping>
+    <servlet-name>default</servlet-name>
+    <url-pattern>/vendors/*</url-pattern>
+</servlet-mapping>
+<servlet-mapping>
+    <servlet-name>default</servlet-name>
+    <url-pattern>*.html</url-pattern>
+</servlet-mapping>
+</web-app>

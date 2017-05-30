@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg id="svg2" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" height="16.144mm" width="12.036mm" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" viewBox="0 0 42.645968 57.203214">
+ <metadata id="metadata7">
+  <rdf:RDF>
+   <cc:Work rdf:about="">
+    <dc:format>image/svg+xml</dc:format>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:title/>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <g id="layer1" transform="translate(-206.97 -571.21)">
+  <g id="g6794" transform="translate(81.358 208.07)">
+   <path id="path4704" d="m144.52 390.78h6.9538v28.758h-6.9538v-28.758z" fill="#33334c"/>
+   <g id="g4706" transform="matrix(1.25 0 0 -1.25 134.2 419.54)">
+    <path id="path4708" d="m0 0h22.082" stroke="#33334c" stroke-linecap="round" stroke-miterlimit="10" stroke-width="1.3" fill="none"/>
+   </g>
+   <g id="g4710" transform="matrix(1.25 0 0 -1.25 160.94 377.56)">
+    <path id="path4712" d="m0 0h-17.976v5.856h17.976l4.641-2.928-4.641-2.928z" fill="#f5f3f1"/>
+   </g>
+   <g id="g4714" transform="matrix(1.25 0 0 -1.25 160.94 377.56)">
+    <path id="path4716" d="m0 0h-17.976v5.856h17.976l4.641-2.928-4.641-2.928z" stroke="#33334c" stroke-miterlimit="10" stroke-width="1.3" fill="none"/>
+   </g>
+   <g id="g4718" transform="matrix(1.25 0 0 -1.25 132.94 390.36)">
+    <path id="path4720" d="m0 0h17.976v5.856h-17.976l-4.641-2.928 4.641-2.928z" fill="#f5f3f1"/>
+   </g>
+   <g id="g4722" transform="matrix(1.25 0 0 -1.25 132.94 390.36)">
+    <path id="path4724" d="m0 0h17.976v5.856h-17.976l-4.641-2.928 4.641-2.928z" stroke="#33334c" stroke-miterlimit="10" stroke-width="1.3" fill="none"/>
+   </g>
+   <path id="path4726" d="m151.48 363.15h-6.9538v6.655h6.9538v-6.655z" fill="#33334c"/>
+   <path id="path4728" d="m151.48 377.56h-6.9538v5.4775h6.9538v-5.4775z" fill="#33334c"/>
+  </g>
+ </g>
+</svg>

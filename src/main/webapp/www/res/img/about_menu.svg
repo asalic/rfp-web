@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg id="svg2" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" height="20.198mm" width="20.198mm" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" viewBox="0 0 71.56875 71.56875">
+ <defs id="defs4">
+  <clipPath id="clipPath3534-3" clipPathUnits="userSpaceOnUse">
+   <path id="path3536-6" d="m0 954.23h540v-954.23h-540v954.23z"/>
+  </clipPath>
+ </defs>
+ <metadata id="metadata7">
+  <rdf:RDF>
+   <cc:Work rdf:about="">
+    <dc:format>image/svg+xml</dc:format>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:title/>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <g id="layer1" transform="translate(-407.07 -636.58)">
+  <g id="g5000" transform="translate(315.08 -221.07)">
+   <text id="text3524" font-size="42.117px" font-stretch="condensed" y="907.36682" x="123.28754" font-family="&apos;Roboto Condensed&apos;" fill="#f5f3f1">
+    <tspan id="tspan3526" y="907.36682" x="123.28754">i</tspan>
+   </text>
+   <path id="path3528" d="m130.12 885.11h-4.175v22.251h4.175v-22.251zm0-9.8288h-4.175v3.9888h4.175v-3.9888z" stroke="#f5f3f1" stroke-miterlimit="10" stroke-width="2.3338" fill="none"/>
+   <g id="g3530" transform="matrix(1.25 0 0 -1.25 43.214 1128.8)">
+    <g id="g3532" clip-path="url(#clipPath3534-3)">
+     <g id="g3538" transform="translate(94.501 188.26)">
+      <path id="path3540" stroke-linejoin="round" d="m0 0c0-14.83-12.021-26.85-26.851-26.85-14.829 0-26.85 12.02-26.85 26.85s12.021 26.851 26.85 26.851c14.83 0 26.851-12.021 26.851-26.851z" stroke="#f5f3f1" stroke-linecap="round" stroke-miterlimit="10" stroke-width="3.554" fill="none"/>
+     </g>
+    </g>
+   </g>
+  </g>
+ </g>
+</svg>

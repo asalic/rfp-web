@@ -1,0 +1,10 @@
+{
+  "name": "Release_RFP",
+  "version": "1.0.0",
+  "description": "npm release script",
+  "scripts": {
+    "clean": "rimraf ./www-release && mkdir www-release",
+    "prebuild": "npm run clean",
+    "build": "./build.js"
+  }
+}

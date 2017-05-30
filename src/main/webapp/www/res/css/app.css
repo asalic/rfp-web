@@ -1,0 +1,344 @@
+/**.nav-tabs > li.active > a,
+.nav-tabs > li.active > a:hover,
+.nav-tabs > li.active > a:focus {
+  color: #002db3;
+  background-color: #66CCFF;
+}
+
+.nav-tabs {
+  color: #66CCFF;
+}*/
+
+.spa-rfpw-take-all-space {
+    width: 25%;
+    text-align: center;
+}
+
+.tabbable
+{
+  height: 100%;
+  width: 100%;
+}
+
+.tab-content{
+  display: block;
+    left: 0;
+    width: 100%;
+    bottom: 0;
+    overflow: auto;
+}
+
+#map-container {
+  position: absolute;
+  width: 100%;
+}
+
+#map-canvas {position: absolute; top: 0; right: 0; bottom: 0; left: 0;}
+
+.spa-rfpw-route-icon
+{
+  -moz-border-radius: 20px;
+  border-radius: 20px;
+  border-color:black;
+  color: black;
+  padding: 0.3em;
+  margin: 0.3em;
+  font-size: 1em;
+  display: inline-block;
+}
+
+.spa-rfpw-btn-rm-layer
+{
+  padding: 0.1em;
+}
+
+/*
+ * These CSS rules affect the tooltips within maps with the custom-popup
+ * class. See the full CSS for all customizable options:
+ * https://github.com/mapbox/mapbox.js/blob/001754177f3985c0e6b4a26e3c869b0c66162c99/theme/style.css#L321-L366
+*/
+/*.custom-popup .leaflet-popup-content-wrapper {
+  background:#2c3e50;
+  color:#fff;
+  font-size:16px;
+  line-height:24px;
+  }
+.custom-popup .leaflet-popup-content-wrapper a {
+  color:rgba(255,255,255,0.5);
+  }
+.custom-popup .leaflet-popup-tip-container {
+  width:30px;
+  height:15px;
+  }
+.custom-popup .leaflet-popup-tip {
+  border-left:15px solid transparent;
+  border-right:15px solid transparent;
+  border-top:15px solid #2c3e50;
+  }
+*/
+.spa-rfpw-bus-line-progress
+{
+  margin-bottom:5%;
+  margin-top: 0;
+}
+
+#lines-lst-empty
+{
+  text-align: center;
+}
+
+.spa-rfpw-vert-bar
+{
+  position: relative;
+  float: left;
+  width: 0.3em;
+  height: 2.5em;
+  display: block;
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-left: 0;
+  margin-right: 0.6em;
+  padding-left: 0;
+  /*background-color: black;*/
+}
+
+.spa-rfpw-nm-star
+{
+    position: relative;
+    /*float: left;
+    width: inherit;*/
+    text-align: center;
+    height: 3em;
+}
+.spa-rfpw-st-end-station
+{
+    position: relative;
+    /*float: right;
+    margin-right: 0;*/
+}
+
+.spa-rfpw-progress-graph
+{
+  width: 100%; /* width and height are arbitrary, just make sure the #bar styles are changed accordingly */
+  height: 1.5em;
+  border: 1px solid #888;
+  background: rgb(168,168,168);
+  background: -moz-linear-gradient(top, rgba(168,168,168,1) 0%, rgba(204,204,204,1) 23%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(168,168,168,1)), color-stop(23%,rgba(204,204,204,1)));
+  background: -webkit-linear-gradient(top, rgba(168,168,168,1) 0%,rgba(204,204,204,1) 23%);
+  background: -o-linear-gradient(top, rgba(168,168,168,1) 0%,rgba(204,204,204,1) 23%);
+  background: -ms-linear-gradient(top, rgba(168,168,168,1) 0%,rgba(204,204,204,1) 23%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a8a8a8', endColorstr='#cccccc',GradientType=0 );
+  background: linear-gradient(top, rgba(168,168,168,1) 0%,rgba(204,204,204,1) 23%);
+  position: relative;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+.spa-rfpw-progress-bar
+{
+  height: 1.5em; /* Not 30px because the 1px top-border brings it up to 30px to match #graph */
+  background: rgb(255,197,120);
+  background: -moz-linear-gradient(top, rgba(255,197,120,1) 0%, rgba(244,128,38,1) 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,197,120,1)), color-stop(100%,rgba(244,128,38,1)));
+  background: -webkit-linear-gradient(top, rgba(255,197,120,1) 0%,rgba(244,128,38,1) 100%);
+  background: -o-linear-gradient(top, rgba(255,197,120,1) 0%,rgba(244,128,38,1) 100%);
+  background: -ms-linear-gradient(top, rgba(255,197,120,1) 0%,rgba(244,128,38,1) 100%);
+  background: linear-gradient(top, rgba(255,197,120,1) 0%,rgba(244,128,38,1) 100%);
+  border-top: 1px solid #fceabb;
+}
+.spa-rfpw-progress-bar .spa-rfp-progress-text
+{
+  position: absolute;
+  color: black;
+  text-align: center;
+  width: 100%;
+  margin: 0;
+  line-height: normal;
+}
+.scrollable-menu
+{
+    height: auto;
+    max-height: 200px;
+    overflow-x: hidden;
+}
+.spa-rfpw-route-row-hidden
+{
+  visibility: hidden;
+}
+
+.gm-style-iw div *
+{
+    overflow: hidden !important;
+    line-height: 2em;
+}
+
+.row:not(:last-child)
+{
+    border-bottom: 1px solid #ccc;
+}
+
+.col-xs-3:not(:last-child)
+{
+    border-right: 1px solid #ccc;
+}
+
+/** Thec checkbox hack: https://css-tricks.com/the-checkbox-hack/**/
+@-webkit-keyframes bugfix {
+  from {padding:0;}
+  to {padding:0;}
+}
+#chkb-trips-more
+{
+  position: absolute;
+  top: -9999px;
+  left: -9999px;
+}
+#div-trips-more-down-ic
+{
+  display: none;
+}
+#div-trips-more-up-ic
+{
+  display: block;
+}
+#chkb-trips-more:checked ~ #div-trips-more-down-ic
+{
+  display: block;
+}
+#chkb-trips-more:checked ~ #div-trips-more-up-ic
+{
+  display: none;
+}
+#lbl-trips-more
+{
+  width: 100%;
+  height: auto;
+  overflow:hidden;
+  max-height: 100% !important;
+  padding: 0.1em;
+  margin: 0 !important;
+}
+#div-trips-more-container
+{
+  width: 100%;
+  overflow:hidden;
+}
+
+#routes-main-lst
+{
+  overflow-y:scroll;
+  height:100%;
+}
+
+.spa-rfpw-more-row-margin
+{
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+html,
+body {
+  /* Fix Android */
+  -webkit-animation: bugfix infinite 1s;
+  height: 100%;
+  background-color: white;
+  margin: 0;
+  /*background-color: white;*/
+}
+
+.spa-rfpw-round-button
+{
+  border-radius: 20px;
+  margin: 0.2em;
+}
+
+.spa-rfpw-hidden
+{
+  visibility: hidden;
+}
+
+.spa-rfpw-diplay-none
+{
+  display: none;
+}
+
+.spa-rfpw-loader-msg {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+   text-align: center;
+}
+
+.spa-rfpw-loader-window {
+  position: absolute;
+  height: 100%;
+width: 100%;
+right: 0;
+top: 0;
+background-color:white;
+z-index: 1000;
+padding: 1em;
+}
+
+.spa-rfpw-loader-spin {
+  margin: 0 auto;
+  border: 0.5em solid #f3f3f3;
+border-radius: 50%;
+border-top: 0.5em solid #3498db;
+width: 3em;
+height: 3em;
+-webkit-animation: spin 2s linear infinite;
+animation: spin 2s linear infinite;
+}
+
+.spa-rfpw-signedin-usr
+{
+  color: blue;
+}
+
+@-webkit-keyframes spin {
+0% { -webkit-transform: rotate(0deg); }
+100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+0% { transform: rotate(0deg); }
+100% { transform: rotate(360deg); }
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  height: 100%;
+}
+
+.spa-rfpw-hidden-dt {
+ display: block;
+}
+
+.spa-rfpw-blocked-dt {
+   color: #c2c2c2 !important; /* The important overrides the settings from bootstrap */
+   cursor: not-allowed;
+}
+
+.spa-rfpw-margin-br-info {
+  margin-left: 0.5em;
+  margin-right: 0.5em;
+}
+
+.spa-rfpw-trips-br-row-padding
+{
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+}
+
+.spa-rfpw-trips-create-trips-msg
+{
+  position: absolute;
+  padding: 0.5em;
+  z-index:100;
+  width: 100%;
+  opacity:1;
+  background-color: white;
+}

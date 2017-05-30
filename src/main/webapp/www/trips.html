@@ -1,0 +1,147 @@
+<div id="div-trips-more-container">
+
+
+  <label id="lbl-trips-more" class="btn btn-primary" for="chkb-trips-more"
+    data-toggle="collapse" data-target="#div-trips-more-btns">
+      <input type="checkbox" id="chkb-trips-more"></input>
+      <div id="div-trips-more-down-ic" class="glyphicon glyphicon-chevron-down"></div>
+      <div id="div-trips-more-up-ic" class="glyphicon glyphicon-chevron-up"></div>
+  </label>
+
+  <div id="map-container" class="custom-popup">
+    <div id="div-trips-more-btns" class="collapse in" style="z-index: 1000; position: absolute;">
+      <button id="btn-trips-my-loc" type="button"
+        data-toggle="tooltip" title="" disabled="disabled"
+        class="btn btn-default spa-rfpw-round-button glyphicon glyphicon-screenshot">
+      </button>
+      <button id="btn-trips-create-trip"  type="button" data-toggle="tooltip"
+        title="" disabled="disabled"
+        class="btn btn-default spa-rfpw-round-button glyphicon glyphicon-send">
+      </button>
+      <button id="btn-trips-layers" type="button" data-toggle="tooltip"
+        title="" disabled="disabled"
+        class="btn btn-default spa-rfpw-round-button glyphicon glyphicon-tasks">
+      </button>
+      <button id="btn-trips-back-city" type="button" data-toggle="tooltip"
+        title="" disabled="disabled"
+        class="btn btn-default spa-rfpw-round-button glyphicon glyphicon-globe">
+      </button>
+    </div>
+    <div id="map-canvas"></div>
+  </div>
+
+<!--LAYERS dialog structure -->
+  <div class="modal fade" id="dlg-trips-layers" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&#x274C;</button>
+          <h4 class="modal-title" data-l10n-id="dlg-trips-layers"></h4>
+        </div>
+        <div  class="modal-body">
+          <div id="dlg-trips-layers-content" class="list-group">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal" data-l10n-id="btn-dlg-close"></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!--Show best routes for a certain stop dialog-->
+  <div class="modal fade" id="dlg-trips-br-stop-route" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&#x274C;</button>
+          <h4 class="modal-title"></h4>
+        </div>
+        <div class="modal-body">
+          <div class="alert alert-danger spa-rfpw-diplay-none" role="alert"
+            data-l10n-id="dlgtripsbrstoprouteerr"></div>
+          <div id="dlg-trips-br-stop-route-sort" class="row">
+            <div class="col-sm-2" data-l10n-id="dlgtripsbrstoproutesort"></div>
+            <div class="col-sm-4">
+              <select>
+                <option value="1" data-l10n-id="dlgtripsbrstoprouteselst"></option>
+                <option value="2" data-l10n-id="dlgtripsbrstoprouteseldu"></option>
+                <option value="3" data-l10n-id="dlgtripsbrstoprouteselem"></option>
+              </select>
+            </div>
+          </div>
+          <ul class="list-group">
+          </ul>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal" data-l10n-id="btn-dlg-close"></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!--Show create trips between two stops dialog-->
+  <div class="modal fade" id="dlg-trips-br-trips" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&#x274C;</button>
+          <h4 class="modal-title"></h4>
+        </div>
+        <div class="modal-body">
+          <div class="alert alert-danger spa-rfpw-diplay-none" role="alert"
+            data-l10n-id="dlgtripsbrstoprouteerr"></div>
+          <div class="container-liquid">
+            <div class="row spa-rfpw-trips-br-row-padding">
+              <span class="col-sm-2" data-l10n-id="dlgtripsbrtripsfrom"></span>
+              <div class="col-sm-8">
+                <input id="inp-trips-br-trips-from" data-provide="typeahead" type="text"
+                  placeholder="Beginning Stop">
+              </div>
+              <div class="col-sm-2">
+                <button id="btn-trips-br-trips-from"
+                  class="btn btn-info spa-rfpw-btn-rm-layer" type="button">
+                  <span class="glyphicon glyphicon-pushpin"></span>
+                </button>
+              </div>
+            </div>
+
+            <div class="row spa-rfpw-trips-br-row-padding spa-rfpw-row-no-border">
+              <span class="col-sm-2" data-l10n-id="dlgtripsbrtripsto"></span>
+              <div class="col-sm-8">
+                <input id="inp-trips-br-trips-to" data-provide="typeahead" type="text"
+                  placeholder="End Stop">
+              </div>
+              <div class="col-sm-2">
+                <button id="btn-trips-br-trips-to"
+                  class="btn btn-info spa-rfpw-btn-rm-layer" type="button">
+                  <span class="glyphicon glyphicon-pushpin"></span>
+                </button>
+              </div>
+            </div>
+
+            <div class="row spa-rfpw-trips-br-row-padding">
+              <div class="col-sm-12">
+                <button type="button"
+                  class="btn btn-default pull-right"
+                  data-dismiss="modal"
+                  data-l10n-id="btn-dlg-close">
+                </button>
+                <button id="btn-trips-br-trips-create"
+                  class="btn btn-default pull-right" type="button"
+                  data-l10n-id="btntripsbrtripscreate"></button>
+              </div>
+            </div>
+          </div>
+
+          <hr />
+          <ul class="list-group">
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>

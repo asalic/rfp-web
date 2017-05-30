@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg id="svg2" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" height="18.02mm" width="13.276mm" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" viewBox="0 0 47.041317 63.851199">
+ <defs id="defs4">
+  <clipPath id="clipPath4318-7" clipPathUnits="userSpaceOnUse">
+   <path id="path4320-5" d="m0 960h540v-960h-540v960z"/>
+  </clipPath>
+ </defs>
+ <metadata id="metadata7">
+  <rdf:RDF>
+   <cc:Work rdf:about="">
+    <dc:format>image/svg+xml</dc:format>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:title/>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <g id="layer1" transform="translate(-313.62 -691.87)">
+  <g id="g4314" transform="matrix(1.25 0 0 -1.25 265.4 1048.9)">
+   <g id="g4316" clip-path="url(#clipPath4318-7)">
+    <path id="path4322" d="m55.264 260.55h6.14v-25.386h-6.14v25.386z" stroke="#857f90" stroke-miterlimit="10" stroke-width="1.175" fill="none"/>
+    <g id="g4324" transform="translate(46.149 235.16)">
+     <path id="path4326" d="m0 0h24.367" stroke="#857f90" stroke-linecap="round" stroke-miterlimit="10" stroke-width="1.175" fill="none"/>
+    </g>
+    <g id="g4328" transform="translate(69.751 272.21)">
+     <path id="path4330" d="m0 0h-19.835v6.462h19.835l5.121-3.231-5.121-3.231z" fill="#857f90"/>
+    </g>
+    <g id="g4332" transform="translate(69.751 272.21)">
+     <path id="path4334" d="m0 0h-19.835v6.462h19.835l5.121-3.231-5.121-3.231z" stroke="#857f90" stroke-miterlimit="10" stroke-width="1.428" fill="none"/>
+    </g>
+    <g id="g4336" transform="translate(45.036 260.92)">
+     <path id="path4338" d="m0 0h19.835v6.462h-19.835l-5.121-3.231 5.121-3.231z" stroke="#857f90" stroke-miterlimit="10" stroke-width="1.428" fill="none"/>
+    </g>
+    <path id="path4340" d="m61.403 284.94h-6.14v-5.875h6.14v5.875z" stroke="#857f90" stroke-miterlimit="10" stroke-width="1.428" fill="none"/>
+    <path id="path4342" d="m61.403 272.21h-6.14v-4.836h6.14v4.836z" stroke="#857f90" stroke-miterlimit="10" stroke-width="1.175" fill="none"/>
+   </g>
+  </g>
+ </g>
+</svg>

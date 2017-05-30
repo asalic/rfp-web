@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg id="svg2" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" height="16.116mm" width="11.672mm" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" viewBox="0 0 41.358673 57.104454">
+ <metadata id="metadata7">
+  <rdf:RDF>
+   <cc:Work rdf:about="">
+    <dc:format>image/svg+xml</dc:format>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:title/>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <g id="layer1" transform="translate(-276.46 -438.1)">
+  <g id="g5274">
+   <g id="g3656" transform="matrix(1.25 0 0 -1.25 300.2 443.28)">
+    <path id="path3658" d="m0 0c0-1.933-1.567-3.5-3.5-3.5s-3.5 1.567-3.5 3.5 1.567 3.5 3.5 3.5 3.5-1.567 3.5-3.5z" stroke="#f5f3f1" stroke-miterlimit="10" stroke-width="1.3" fill="none"/>
+   </g>
+   <g stroke="#f5f3f1" stroke-miterlimit="10" stroke-width="1.625" fill="none">
+    <path id="path3660" d="m295.83 490.76h-5.2038v-19.369h5.2038v19.369z"/>
+    <path id="path3662" d="m301.03 490.76h-5.2038v-19.369h5.2038v19.369z"/>
+    <path id="path3664" d="m295.83 494.33h6.875v-3.5612h-6.875v3.5612z"/>
+   </g>
+   <g id="g3666" transform="matrix(1.25 0 0 -1.25 300.36 456.74)">
+    <path id="path3668" d="m0 0c-0.396 0-0.792 0.152-1.094 0.453-0.604 0.606-0.603 1.584 0 2.188l9.842 9.841c0.605 0.606 1.582 0.606 2.188 0.001 0.604-0.604 0.604-1.583 0-2.187l-9.842-9.843c-0.303-0.302-0.699-0.452-1.094-0.453z" stroke="#f5f3f1" stroke-miterlimit="10" stroke-width="1.3" fill="none"/>
+   </g>
+   <path id="path3672" fill="none" d="m301.04 455.36v16.038h-10.412v-16.038c0-2.875 2.325-5.2125 5.2-5.2125s5.2125 2.3375 5.2125 5.2125"/>
+   <g id="g3674" transform="matrix(1.25 0 0 -1.25 301.04 455.36)">
+    <path id="path3676" d="m0 0v-12.83h-8.33v12.83c0 2.3 1.86 4.17 4.16 4.17s4.17-1.87 4.17-4.17z" stroke="#f5f3f1" stroke-miterlimit="10" stroke-width="1.3" fill="none"/>
+   </g>
+   <g id="g3678" transform="matrix(1.25 0 0 -1.25 291.19 453.56)">
+    <path id="path3680" d="m0 0c0.279 0.279 0.666 0.452 1.093 0.453 0.856-0.001 1.547-0.694 1.547-1.547v-13.918c0.001-0.856-0.691-1.547-1.546-1.548-0.856 0-1.547 0.692-1.547 1.547v13.919c0 0.427 0.174 0.814 0.453 1.094" fill="none"/>
+   </g>
+   <path id="path3684" d="m291.19 453.56c0.34875-0.34875 0.8325-0.565 1.3662-0.56625 1.07 0.001 1.9338 0.8675 1.9338 1.9338v17.398c0.001 1.07-0.86375 1.9338-1.9325 1.935-1.07 0-1.9338-0.865-1.9338-1.9338v-17.399c0-0.53375 0.2175-1.0175 0.56625-1.3675z" stroke="#f5f3f1" stroke-miterlimit="10" stroke-width="1.625" fill="none"/>
+   <path id="path3686" d="m290.62 494.33h6.875v-3.5612h-6.875v3.5612z" stroke="#f5f3f1" stroke-miterlimit="10" stroke-width="1.625" fill="none"/>
+   <g id="g3688" transform="matrix(1.25 0 0 -1.25 277.35 494.33)">
+    <path id="path3690" d="m0 0h31.667" stroke="#f5f3f1" stroke-linecap="round" stroke-miterlimit="10" stroke-width="1.4" fill="#33334c"/>
+   </g>
+  </g>
+ </g>
+</svg>
