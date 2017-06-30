@@ -7,8 +7,10 @@ public class City {
   protected String code;
   protected double lat;
   protected double lng;
-  protected String portBRRoute;
-  protected String hostBRRoute;
+  protected String mesosDNSBRRoutes;
+  protected String portBRRoutes;
+  protected String hostBRRoutes;
+  protected String mesosDNSBRTrips;
   protected String portBRTrips;
   protected String hostBRTrips;
   public int getId() {
@@ -41,17 +43,23 @@ public class City {
   public void setLng(double lng) {
     this.lng = lng;
   }
-  public String getPortBRRoute() {
-    return portBRRoute;
+  public String getMesosDNSBRRoutes() {
+    return mesosDNSBRRoutes;
   }
-  public void setPortBRRoute(String portBRRoute) {
-    this.portBRRoute = portBRRoute;
+  public void setMesosDNSBRRoutes(String mesosDNSBRRoutes) {
+    this.mesosDNSBRRoutes = mesosDNSBRRoutes;
   }
-  public String getHostBRRoute() {
-    return hostBRRoute;
+  public String getPortBRRoutes() {
+    return portBRRoutes;
   }
-  public void setHostBRRoute(String hostBRRoute) {
-    this.hostBRRoute = hostBRRoute;
+  public void setPortBRRoute(String portBRRoutes) {
+    this.portBRRoutes = portBRRoutes;
+  }
+  public String getHostBRRoutes() {
+    return hostBRRoutes;
+  }
+  public void setHostBRRoutes(String hostBRRoutes) {
+    this.hostBRRoutes = hostBRRoutes;
   }
   public String getPortBRTrips() {
     return portBRTrips;
@@ -64,6 +72,12 @@ public class City {
   }
   public void setHostBRTrips(String hostBRTrips) {
     this.hostBRTrips = hostBRTrips;
+  }
+  public String getMesosDNSBRTrips() {
+    return mesosDNSBRTrips;
+  }
+  public void setMesosDNSBRTrips(String mesosDNSBRTrips) {
+    this.mesosDNSBRTrips = mesosDNSBRTrips;
   }
   
 

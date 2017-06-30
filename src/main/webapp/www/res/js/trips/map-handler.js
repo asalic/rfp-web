@@ -218,7 +218,7 @@ RFPWMapHandler.prototype.addStops2Map = function()
 
 RFPWMapHandler.prototype._sucAddStops2Map = function(stopsLst)
 {
-  var stopsLst = stopsLst;//JSON.parse(stopsLst);
+  var stopsLst = stopsLst.data;//JSON.parse(stopsLst);
   // var options = {
   //     imagePath: RFPWApplicationContext.MARKERCLUSTERER_IMG_REL_PATH,
   // };

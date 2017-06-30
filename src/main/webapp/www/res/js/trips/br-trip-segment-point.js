@@ -22,9 +22,3 @@ function RFPWBRTripSegmentPoint(instance)
   this.lng = instance.lng;
 }
 
-if(typeof exports !== 'undefined') {
-  if(typeof module !== 'undefined' && module.exports) {
-    console.log("BR Trip Segment Point nodeJs");
-    module.exports = RFPWBRTripSegmentPoint;
-  }
-}

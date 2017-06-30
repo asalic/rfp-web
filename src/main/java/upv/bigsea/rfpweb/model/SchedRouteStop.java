@@ -1,5 +1,7 @@
 package upv.bigsea.rfpweb.model;
 
+import java.util.List;
+
 public class SchedRouteStop {
   
   public static class StopsIdsNms
@@ -45,14 +47,30 @@ public class SchedRouteStop {
     }
     public void setArrivalTimes(String[] arrivalTimes) {
       this.arrivalTimes = arrivalTimes;
-    }
-    
-    
-    
+    }   
   }
   
   protected int uid;
   protected String shapeId;
-  protected StopsIdsNms stopsIdsNames;
+  protected List<StopsIdsNms> stopsIdsNms;
+  
+  public int getUid() {
+    return uid;
+  }
+  public void setUid(int uid) {
+    this.uid = uid;
+  }
+  public String getShapeId() {
+    return shapeId;
+  }
+  public void setShapeId(String shapeId) {
+    this.shapeId = shapeId;
+  }
+  public List<StopsIdsNms> getStopsIdsNms() {
+    return stopsIdsNms;
+  }
+  public void setStopsIdsNms(List<StopsIdsNms> stopsIdsNms) {
+    this.stopsIdsNms = stopsIdsNms;
+  }
 
 }

@@ -62,6 +62,9 @@ ENV PSQL_PORT 5432
 ENV PSQL_HOST localhost
 ENV MESOS_DNS_IP_PORT http://127.0.0.1:8123
 ENV MESOS_DNS_RFP_DB_ID _rfp-db-rfp._tcp.marathon.mesos
+ENV AUTH_SERVICE_URL https://eubrabigsea.dei.uc.pt/engine/api/verify_token
+ENV AUTH_SERVICE_INVALID_TOKEN_RESP "invalid token"
+ENV MESOS_DNS_AUTH_SERVICE_ID _rfp-db-rfp._tcp.marathon.mesos
 #ENV REGIONS_PATH ${app_base_path}/regions.json
 ENV CMD_KEEP_ALIVE tail -f /dev/null
 ENV REGIONS_URL ftp://ftpgrycap.i3m.upv.es/public/eubrabigsea/data/regions.json
@@ -74,7 +77,7 @@ RUN rm -rf ${TOMCAT_ROOT}/webapps/ROOT.war ${TOMCAT_ROOT}/webapps/ROOT || true
 RUN cat ${APP_PATH}/pom.xml | sed "s|<outputDirectory>[^ ]*</outputDirectory>|<outputDirectory>${TOMCAT_ROOT}/webapps/</outputDirectory>|" > ${APP_PATH}/pom.xml.tmp &&\
 	mv ${APP_PATH}/pom.xml.tmp ${APP_PATH}/pom.xml
 RUN node ${APP_PATH}/src/main/webapp/build.js -p "${APP_PATH}/src/main/webapp/" -v "2.0beta" -w "/webservice"
-RUN mvn -e -f ${APP_PATH}/pom.xml -P release clean package
+RUN mvn -e -f ${APP_PATH}/pom.xml -P debug clean package
 #RUN chown -R tomcat ${TOMCAT_ROOT}/webapps/ ${TOMCAT_ROOT}/work/ ${TOMCAT_ROOT}/temp/ ${TOMCAT_ROOT}/logs/
 
 ENTRYPOINT python2 ${APP_PATH}/mesos-dns-discover.py --mesosdns "${MESOS_DNS_IP_PORT}" \
@@ -82,7 +85,6 @@ ENTRYPOINT python2 ${APP_PATH}/mesos-dns-discover.py --mesosdns "${MESOS_DNS_IP_
     --mesosdns_db "${MESOS_DNS_RFP_DB_ID}" \
     --vars /eubrabigsea/vars.rc \
     --regions_local_path "${REGIONS_LOCAL_PATH}" &&\
-  cat /eubrabigsea/vars.rc &&\
   export $(cat /eubrabigsea/vars.rc) &&\
   ${TOMCAT_ROOT}/bin/startup.sh &&\
   eval ${CMD_KEEP_ALIVE}

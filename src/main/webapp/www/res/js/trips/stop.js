@@ -1,11 +1,11 @@
-"use strict";
 function RFPWStop(stopServer)
 {
-  this._id = stopServer["stop_id"];
-  this._lat = stopServer.coords[1];
-  this._lng = stopServer.coords[0];
-  this._title = stopServer["title"];
-  this._routesIds = stopServer["routes-ids"];
+  this._uid = stopServer["stopUid"];
+  this._id = stopServer["stopId"];
+  this._lat = stopServer["stopLat"];
+  this._lng = stopServer["stopLng"];
+  this._title = stopServer["stopName"];
+  this._routesIds = stopServer["routesIds"];
 }
 
 RFPWStop.prototype.getId = function() {return this._id;}

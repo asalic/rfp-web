@@ -1,12 +1,3 @@
-if( typeof exports !== 'undefined' ) {
-  if( typeof module !== 'undefined' && module.exports ) {
-    console.log("BR Trip Segment nodeJs");
-    module.exports = RFPWBRTripSegment;
-    var RFPWBRTripSegmentShape = require("./br-trip-segment-shape");
-    var RFPWBRTripSegmentPoint = require("./br-trip-segment-point");
-  }
-}
-
 function RFPWBRTripSegment(instance)
 {
   this.uid = instance.uid;

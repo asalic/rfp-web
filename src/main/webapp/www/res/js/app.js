@@ -101,12 +101,28 @@ RFPWApplicationContext.prototype.init = function()
   this.routesHandler = new RFPWRoutesHandler($("#routes-main-lst"));
   this.favsHandler = new RFPWFavsHandler();
   this.moreHandler = new RFPWMoreHandler();
-  this._initHandlers();
-
+  this._tokenAuthenticate();
   if (!this.storage.isAcceptStorageUsr())
   {// Show the information box
     $("#div-accept-storage-usr").removeClass("spa-rfpw-diplay-none");
   }
+}
+
+RFPWApplicationContext.prototype._tokenAuthenticate = function()
+{
+  this.moreHandler.getUserAuth().tokenAuthenticate($.proxy(this._tokenAuthenticateSucc, this), 
+      $.proxy(this._tokenAuthenticateErr, this));
+}
+
+RFPWApplicationContext.prototype._tokenAuthenticateSucc = function()
+{
+  console.log(this);
+  this._initHandlers();
+}
+
+RFPWApplicationContext.prototype._tokenAuthenticateErr = function()
+{
+  this._initHandlers();
 }
 
 RFPWApplicationContext.prototype._initHandlers = function()
@@ -265,6 +281,8 @@ RFPWApplicationContext.prototype._acceptStorageUsr = function()
   console.log("User accepted storage conditions");
   this.storage.setAcceptStorageUsr(true);
 }
+
+RFPWApplicationContext.prototype.reloadApp = function() {location.reload();}
 
 /**
  * How many times should we check if the regions have been loaded

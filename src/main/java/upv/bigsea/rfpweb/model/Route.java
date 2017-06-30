@@ -4,6 +4,9 @@ public class Route {
   
   protected int uid;
   protected String routeId;
+  protected String routeShortName;
+  protected String routeLongName;
+  protected String routeType;
   protected String startStop;
   protected String endStop;
   protected String routeColor;
@@ -71,6 +74,24 @@ public class Route {
   }
   public void setStars(double stars) {
     this.stars = stars;
+  }
+  public String getRouteShortName() {
+    return routeShortName;
+  }
+  public void setRouteShortName(String routeShortName) {
+    this.routeShortName = routeShortName;
+  }
+  public String getRouteLongName() {
+    return routeLongName;
+  }
+  public void setRouteLongName(String routeLongName) {
+    this.routeLongName = routeLongName;
+  }
+  public String getRouteType() {
+    return routeType;
+  }
+  public void setRouteType(String routeType) {
+    this.routeType = routeType;
   }
   
   

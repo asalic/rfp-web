@@ -29,6 +29,15 @@ RFPWStorage.prototype.setDtCustUTC = function(dtCustUTC) {localStorage.setItem("
 RFPWStorage.prototype.isAcceptStorageUsr = function() {return localStorage.getItem("acceptStorageUsr") === "true";}
 RFPWStorage.prototype.setAcceptStorageUsr = function(acceptStorageUsr) {localStorage.setItem("acceptStorageUsr", acceptStorageUsr.toString());}
 
+RFPWStorage.prototype.getUsrAuthToken = function() {return localStorage.getItem("usrAuthToken");}
+RFPWStorage.prototype.setUsrAuthToken = function(usrAuthToken) {localStorage.setItem("usrAuthToken", usrAuthToken.toString());}
+
+RFPWStorage.prototype.getUsrLName = function() {return localStorage.getItem("usrLName");}
+RFPWStorage.prototype.setUsrLName = function(usrLName) {localStorage.setItem("usrLName", usrLName.toString());}
+
+RFPWStorage.prototype.getUsrFName = function() {return localStorage.getItem("usrFName");}
+RFPWStorage.prototype.setUsrFName = function(usrFName) {localStorage.setItem("usrFName", usrFName.toString());}
+
 
 RFPWStorage.prototype.reset = function() {localStorage.clear();}
 RFPWStorage.prototype.init = function()
@@ -48,6 +57,14 @@ RFPWStorage.prototype.init = function()
     localStorage.setItem("dtCustUTC", RFPWStorage.DEFAULT_DT_CUST_UTC);
   if (localStorage.getItem("acceptStorageUsr") === null)
     localStorage.setItem("acceptStorageUsr", RFPWStorage.DEFAULT_ACCEPT_STORAGE_USR);
+  if (localStorage.getItem("usrAuthToken") === null)
+    localStorage.setItem("usrAuthToken", RFPWStorage.DEFAULT_USR_AUTH_TOKEN);
+  
+  // temp values
+  if (localStorage.getItem("usrLName") === null)
+    localStorage.setItem("usrLName", RFPWStorage.DEFAULT_USR_L_NAME);
+  if (localStorage.getItem("usrFName") === null)
+    localStorage.setItem("usrFName", RFPWStorage.DEFAULT_USR_F_NAME);
 }
 
 RFPWStorage.DEFAULT_LANGUAGE_IDX = "0";
@@ -79,3 +96,13 @@ RFPWStorage.DEFAULT_DT_CUST_UTC = "0";
  * @type {String}
  */
 RFPWStorage.DEFAULT_ACCEPT_STORAGE_USR = "false";
+
+/**
+ * Default value for the user token in the context of authentication; It
+ * is empty if the user is not authenticated
+ * @type {String}
+ */
+RFPWStorage.DEFAULT_USR_AUTH_TOKEN = "";
+
+RFPWStorage.DEFAULT_USR_L_NAME = "";
+RFPWStorage.DEFAULT_USR_F_NAME = "";

@@ -1,5 +1,8 @@
 package upv.bigsea.rfpweb;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -8,9 +11,15 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import upv.bigsea.rfpweb.model.Route;
 import upv.bigsea.rfpweb.model.SchedRouteStop;
@@ -18,7 +27,7 @@ import upv.bigsea.rfpweb.model.Shape;
 import upv.bigsea.rfpweb.model.Stop;
 
 public class Gtfs {
-  
+
   protected static final String GET_ROUTES_QUERY = "SELECT route_id, route_short_name, route_long_name, route_type, route_color, route_text_color FROM gtfs_routes ORDER BY (case when route_short_name ~ '^[0-9]+$' THEN lpad(route_short_name, 10, '0') else route_short_name end)";
   protected static final String GET_STOPS_QUERY = "SELECT * FROM view_stops_routes_ids;";
   protected static final String GET_SHAPES_QUERY = "SELECT gtfs_shapes.shape_id, ARRAY_TO_STRING(array_agg(gtfs_shapes.shape_pt_lon || '%1$s' || gtfs_shapes.shape_pt_lat ORDER BY gtfs_shapes.shape_pt_sequence), '%2$s') AS coords FROM gtfs_routes LEFT JOIN gtfs_trips ON gtfs_routes.route_id=gtfs_trips.route_id AND gtfs_routes.route_id=$$%3$s$$ INNER JOIN gtfs_shapes ON gtfs_trips.shape_id=gtfs_shapes.shape_id GROUP BY gtfs_shapes.shape_id";
@@ -31,53 +40,58 @@ public class Gtfs {
     this.params = params;
   }
 
-  public  List<Route> getRoutes(String countryCode, String cityCode) throws SQLException, ClassNotFoundException
-  {
+  public List<Route> getRoutes(String countryCode, String cityCode) throws SQLException, ClassNotFoundException {
     List<Route> routes = new ArrayList<Route>();
     Connection getGtfsDBConn = this.getGtfsDBConn(getDBName(countryCode, cityCode));
     Statement stmt = getGtfsDBConn.createStatement();
     ResultSet rs = stmt.executeQuery(GET_ROUTES_QUERY);
     int uid = 0;
-    while ( rs.next() ) {
-        Route r = new Route();
-        ++uid;
-        String []startEndStop = {null, null};
-        if (rs.getString("route_long_name") != null && rs.getString("route_long_name").length() > 3)
-          startEndStop = rs.getString("route_long_name").split("\\s+-\\s+", 2);
-        r.setUid(uid);
-        r.setRouteId(rs.getString("route_id"));
-        r.setStartStop(startEndStop[0]);
-        if (startEndStop.length == 2)
-          r.setEndStop(startEndStop[1]);
-        else
-          r.setEndStop(null);
-          
-        //delete row["route_long_name"];
-        if (rs.getString("route_color") == null)
-          r.setRouteColor("000000");
-        else
-          r.setRouteColor(rs.getString("route_color"));
-        r.setRouteColor('#' + r.getRouteColor());
-        if (rs.getString("route_text_color") == null)
-          r.setRouteTextColor("000000");
-        else
-          r.setRouteTextColor(rs.getString("route_text_color"));
-        routes.add(r);
+    while (rs.next()) {
+      Route r = new Route();
+      ++uid;
+      String[] startEndStop = { null, null };
+      if (rs.getString("route_long_name") != null && rs.getString("route_long_name").length() > 3)
+        startEndStop = rs.getString("route_long_name").split("\\s+-\\s+", 2);
+      r.setUid(uid);
+      r.setRouteId(rs.getString("route_id"));
+      r.setRouteShortName(rs.getString("route_short_name"));
+      r.setRouteLongName(rs.getString("route_long_name"));
+      r.setRouteType(rs.getString("route_type"));
+      r.setStartStop(startEndStop[0]);
+      if (startEndStop.length == 2)
+        r.setEndStop(startEndStop[1]);
+      else
+        r.setEndStop(null);
+
+      // delete row["route_long_name"];
+      if (rs.getString("route_color") == null)
+        r.setRouteColor("000000");
+      else
+        r.setRouteColor(rs.getString("route_color"));
+      r.setRouteColor('#' + r.getRouteColor());
+      if (rs.getString("route_text_color") == null)
+        r.setRouteTextColor("000000");
+      else
+        r.setRouteTextColor(rs.getString("route_text_color"));
+      routes.add(r);
     }
     rs.close();
     stmt.close();
     getGtfsDBConn.close();
     return routes;
   }
-  
-  public  List<Stop> getStops(String countryCode, String cityCode) throws SQLException, ClassNotFoundException
-  {
+
+  public List<Stop> getStops(String countryCode, String cityCode) throws SQLException, ClassNotFoundException, FileNotFoundException, UnsupportedEncodingException {
+    PrintWriter writer1 = new PrintWriter("/tmp/stops.err", "UTF-8");
+    writer1.println(countryCode);
+    writer1.println(cityCode);
+    writer1.close();
     List<Stop> stops = new ArrayList<Stop>();
     Connection getGtfsDBConn = this.getGtfsDBConn(getDBName(countryCode, cityCode));
     Statement stmt = getGtfsDBConn.createStatement();
     ResultSet rs = stmt.executeQuery(GET_STOPS_QUERY);
     int uid = 0;
-    while ( rs.next() ) {
+    while (rs.next()) {
       Stop stop = new Stop();
       ++uid;
       stop.setUid(uid);
@@ -85,57 +99,110 @@ public class Gtfs {
       stop.setStopLat(rs.getString("stop_lat"));
       stop.setStopId(rs.getString("stop_id"));
       stop.setStopName(rs.getString("stop_name"));
-      stop.setRoutesIds(rs.getString("array_agg").split("'"));
+      String rIds = rs.getString("array_agg");
+      
+      String []a = rIds.split(QUERY_ARR_SEP);
+      for (int idx=0; idx<a.length; ++idx)
+      {
+        if (a[idx].startsWith("{"))
+          a[idx] = a[idx].substring(1, a[idx].length());
+        if (a[idx].startsWith("\""))
+          a[idx] = a[idx].substring(1, a[idx].length());
+        if (a[idx].endsWith("}"))
+          a[idx] = a[idx].substring(0, a[idx].length() - 1);
+        if (a[idx].endsWith("\""))
+          a[idx] = a[idx].substring(0, a[idx].length() - 1);
+      }
+      System.out.println();
+      stop.setRoutesIds(a);
       stops.add(stop);
     }
     rs.close();
     stmt.close();
-    getGtfsDBConn.close();    
-    return stops;    
+    getGtfsDBConn.close();
+    return stops;
   }
-  
-  public  List<Shape> getShapes(String countryCode, String cityCode, String routeId) throws SQLException, ClassNotFoundException
-  {
+
+  public List<Shape> getShapes(String countryCode, String cityCode, String routeId)
+      throws SQLException, ClassNotFoundException {
     List<Shape> shapes = new ArrayList<Shape>();
     Connection getGtfsDBConn = this.getGtfsDBConn(getDBName(countryCode, cityCode));
     Statement stmt = getGtfsDBConn.createStatement();
-    ResultSet rs = stmt.executeQuery(String.format(GET_SHAPES_QUERY, GET_SHAPES_QUERY_COORDS_SEP, QUERY_ARR_SEP, routeId));
+    ResultSet rs = stmt
+        .executeQuery(String.format(GET_SHAPES_QUERY, GET_SHAPES_QUERY_COORDS_SEP, QUERY_ARR_SEP, routeId));
     int uid = 0;
-    while ( rs.next() ) {
+    while (rs.next()) {
       ++uid;
-      System.out.println(rs.getString("coords"));
-      String []coordsTmp = rs.getString("coords").split(QUERY_ARR_SEP);
-      String [][]coords = new String [coordsTmp.length][];
-      for (int idxC=0; idxC<coordsTmp.length; ++idxC)
-      {
+      String[] coordsTmp = rs.getString("coords").split(QUERY_ARR_SEP);
+      String[][] coords = new String[coordsTmp.length][];
+      for (int idxC = 0; idxC < coordsTmp.length; ++idxC) {
         coords[idxC] = coordsTmp[idxC].split(GET_SHAPES_QUERY_COORDS_SEP);
       }
-      shapes.add(new Shape("Feature", new Shape.Geometry("LineString", coords), new Shape.Properties(rs.getString("shape_id"), uid)));
+      shapes.add(new Shape("Feature", new Shape.Geometry("LineString", coords),
+          new Shape.Properties(rs.getString("shape_id"), uid)));
     }
     rs.close();
     stmt.close();
-    getGtfsDBConn.close();    
-    return shapes;    
+    getGtfsDBConn.close();
+    return shapes;
   }
-  
-  public  List<SchedRouteStop> getSchedRouteStop(String countryCode, String cityCode, String routeId, String dt, String utc) throws SQLException, ClassNotFoundException
-  {
+
+  public List<SchedRouteStop> getSchedRouteStop(String countryCode, String cityCode, String routeId, String dt,
+      String utc) throws SQLException, ClassNotFoundException {
     List<SchedRouteStop> schedRouteStop = new ArrayList<SchedRouteStop>();
     Connection getGtfsDBConn = this.getGtfsDBConn(getDBName(countryCode, cityCode));
     Statement stmt = getGtfsDBConn.createStatement();
     final Calendar calendar = Calendar.getInstance();
-    calendar.setTimeInMillis(Long.parseLong(dt)*60000);
-    //System.out.println(calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.US));
-    ResultSet rs = stmt.executeQuery(String.format(GET_SCHED_ROUTE_STOP_QUERY, routeId, calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.US).toLowerCase()));
-    int uid = 0;
-    while ( rs.next() ) {
-      ++uid;
-      
+    calendar.setTimeInMillis(Long.parseLong(dt) * 60000);
+    // System.out.println(calendar.getDisplayName(Calendar.DAY_OF_WEEK,
+    // Calendar.LONG, Locale.US));
+    ResultSet rs = stmt.executeQuery(String.format(GET_SCHED_ROUTE_STOP_QUERY, routeId,
+        calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.US).toLowerCase()));
+    Map<String, Map<String, List<String>>> tmpResults = new HashMap<>();
+    while (rs.next()) {
+      String sid = rs.getString("shape_id");
+      if (!tmpResults.containsKey(sid))
+        tmpResults.put(sid, new HashMap<String, List<String>>());
+
+      Map<String, List<String>> stopMap = tmpResults.get(sid);
+      String stopId = rs.getString("stop_id");
+      if (!stopMap.containsKey(stopId))
+        stopMap.put(stopId, new ArrayList<String>());
+
+      List<String> aTimeLst = stopMap.get(stopId);
+      String aTime = rs.getString("arrival_time");
+      aTimeLst.add(aTime.substring(0, aTime.indexOf(':')));
     }
+
+    int uid = 0;
+    int uidSIM = 0;
+    for (Map.Entry<String, Map<String, List<String>>> entry : tmpResults.entrySet()) {
+      ++uid;
+      String key = entry.getKey();
+      Map<String, List<String>> stopMap = entry.getValue();
+      SchedRouteStop srs = new SchedRouteStop();
+      srs.setShapeId(key);
+      srs.setUid(uid);
+      List<SchedRouteStop.StopsIdsNms> stopsIdsNms = new ArrayList<>();
+      for (Map.Entry<String, List<String>> sm : stopMap.entrySet()) {
+        ++uidSIM;
+        String stopId = sm.getKey();
+        List<String> aTimes = sm.getValue();
+        String sName = aTimes.get(0);
+        aTimes.remove(0);
+        Set<String> aTimesTmp = new HashSet<>(aTimes);
+        String []aTimesArr = (String[]) aTimesTmp.toArray();
+        Arrays.sort(aTimesArr);
+        stopsIdsNms.add(new SchedRouteStop.StopsIdsNms(uidSIM, stopId, sName, aTimesArr));
+      }
+      
+      srs.setStopsIdsNms(stopsIdsNms);
+    }
+
     rs.close();
     stmt.close();
-    getGtfsDBConn.close();    
-    return schedRouteStop;    
+    getGtfsDBConn.close();
+    return schedRouteStop;
   }
 
   protected Connection getGtfsDBConn(String dbName) throws SQLException, ClassNotFoundException {
@@ -146,8 +213,9 @@ public class Gtfs {
     parameters.put("password", params.getPsqlPassw());
     return DriverManager.getConnection(url, parameters);
   }
-  
-  protected String getDBName(String countryCode, String cityCode)
-  {return countryCode + "_" + cityCode;}
+
+  protected String getDBName(String countryCode, String cityCode) {
+    return countryCode + "_" + cityCode;
+  }
 
 }

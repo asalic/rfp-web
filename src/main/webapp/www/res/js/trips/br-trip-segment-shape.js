@@ -6,9 +6,3 @@ function RFPWBRTripSegmentShape(instance)
     coordinates: instance.geometry.coordinates};
 }
 
-if( typeof exports !== 'undefined' ) {
-  if( typeof module !== 'undefined' && module.exports ) {
-    console.log("BR Trip Segment Shape nodeJs");
-    module.exports = RFPWBRTripSegmentShape;
-  }
-}

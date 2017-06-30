@@ -1,15 +1,14 @@
-"use strict";
 function RFPWRoute(routeServer)
 {
   this.uid = routeServer["uid"];
-  this.id = routeServer["route_id"];
-  this.shortNm = routeServer["route_short_name"];
-  this.longNm = routeServer["route_long_name"];
-  this.color = routeServer["route_color"];
+  this.id = routeServer["routeId"];
+  this.shortNm = routeServer["routeShortName"];
+  this.longNm = routeServer["routeLongName"];
+  this.color = routeServer["routeColor"];
   this.stars = routeServer["stars"];
-  this.endStop = routeServer["end_stop"];
-  this.startStop = routeServer["start_stop"];
-  this.type = routeServer["route_type"];
+  this.endStop = routeServer["endStop"];
+  this.startStop = routeServer["startStop"];
+  this.type = routeServer["routeType"];
   this.crowdedness = routeServer["crowdedness"];
   this.responsivness = routeServer["responsivness"];
   this.conservation = routeServer["conservation"];
@@ -36,7 +35,9 @@ RFPWRoute.prototype.getColor = function() {return this.color;}
 RFPWRoute.prototype.getDrawnPaths = function() {return this.drawnPaths;}
 RFPWRoute.prototype.addDrawnPath = function(path) {this.drawnPaths.push(path);}
 RFPWRoute.prototype.clearDrawnPaths = function() {this.drawnPaths = [];}
+RFPWRoute.prototype.getType = function() {return this.type;}
 
+RFPWRoute.prototype.getPaths = function() {return this.paths;}
 RFPWRoute.prototype.setDrawnPathsGroup = function(dpg)
 {this.drawnPathsGroup = dpg;}
 RFPWRoute.prototype.getDrawnPathsGroup = function()

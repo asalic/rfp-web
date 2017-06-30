@@ -11,6 +11,10 @@ var argv = require('yargs')
     //.required( 1, "URL is required" )
     .option( "p", { alias: "path", demand: true, describe:
         "project's root directory", type: "string" } )
+    .option( "v", { alias: "appver", demand: true, describe:
+        "Application version", type: "string" } )
+    .option( "w", { alias: "webserviceroot", demand: true, describe:
+        "The root URL of the webservice, i.e. the path that follows the ip/name+port. e.g. if the address is http://localhost:10100/webservice/stops/es/valencia then the root is /webservice", type: "string" } )
     //.help( "?" )
     //.alias( "?", "help" )
     //.example( "$0 https://example.com/api/posts", "Get a list of posts" )
@@ -19,11 +23,11 @@ var argv = require('yargs')
     .argv;
 
 
-var webserviceRoot = "/webservice";
-var gmapsKey = "AIzaSyCrI4yq9OwBhXFZtN6w_Ao5XU3nd5canKM";
-var gapiClientId = "671213718627-pki8eqljb7mllbvb8s6tle4jhbe0g1aa";
-var appVer = "1.1";
-var appBuild = "140031122016";
+var webserviceRoot = argv.w;
+var appVer = argv.v;
+var today = new Date();
+
+var appBuild = today.getFullYear() + "." + ("0" + (today.getMonth() + 1)).slice(-2) + "." + ("0" + today.getDate()).slice(-2)  + "." + ("0" + today.getHours()).slice(-2) + "." + ("0" + today.getMinutes()).slice(-2);
 
 var baseDir = argv.p;
 // Replace script tags
@@ -93,11 +97,32 @@ fs.removeSync(baseDir + "/release");
 fs.mkdirsSync(baseDir + "/release");
 fs.mkdirsSync(baseDir + "/release/res/");
 
+fs.copy(baseDir + "/www/vendors/leaflet/leaflet.css",
+  baseDir + "/release/vendors/leaflet/leaflet.css", function(err) {console.log("leaflet.css copied successfully")});
+fs.copy(baseDir + "/www/vendors/leaflet/leaflet.js",
+  baseDir + "/release/vendors/leaflet/leaflet.js", function(err) {console.log("leaflet.js copied successfully")});
+fs.copy(baseDir + "/www/vendors/leaflet/images",
+  baseDir + "/release/vendors/leaflet/images", function(err) {console.log("leaflet.css copied successfully")});
+fs.copy(baseDir + "/www/vendors/leaflet/marker_cluster/leaflet.markercluster.js",
+  baseDir + "/release/vendors/leaflet/marker_cluster/leaflet.markercluster.js", function(err) {console.log("leaflet.markercluster.js copied successfully")});
+fs.copy(baseDir + "/www/vendors/leaflet/marker_cluster/MarkerCluster.css",
+  baseDir + "/release/vendors/leaflet/marker_cluster/MarkerCluster.css", function(err) {console.log("MarkerCluster.css copied successfully")});
+fs.copy(baseDir + "/www/vendors/leaflet/marker_cluster/MarkerCluster.Default.css",
+  baseDir + "/release/vendors/leaflet/marker_cluster/MarkerCluster.Default.css", function(err) {console.log("MarkerCluster.Default.css copied successfully")});
 
-fs.copy(baseDir + "/www/vendors/markerclusterer",
-  baseDir + "/release/vendors/markerclusterer", function(err) {console.log("markerclusterer copied successfully")});
+fs.copy(baseDir + "/www/vendors/bootstrap3-typeahead.min.js",
+  baseDir + "/release/vendors/bootstrap3-typeahead.min.js", function(err) {console.log("bootstrap3-typeahead.min.js copied successfully")});
+
+fs.copy(baseDir + "/www/vendors/jsrender.min.js",
+  baseDir + "/release/vendors/jsrender.min.js", function(err) {console.log("jsrender.min.js copied successfully")});
+
+fs.copy(baseDir + "/www/vendors/fonts",
+    baseDir + "/release/vendors/fonts", function(err) {console.log("fonts copied successfully")});
+
+
 fs.copy(baseDir + "/www/vendors/l20n.js",
   baseDir + "/release/vendors/l20n.js", function(err) {console.log("l20n.js copied successfully")});
+
 fs.copy(baseDir + "/www/vendors/bootstrap-datetimepicker",
   baseDir + "/release/vendors/bootstrap-datetimepicker", function(err) {console.log("bootstrap-datetimepicker copied successfully")});
 
@@ -141,11 +166,9 @@ for (var idx=lstMergeScripts.length-1; idx>=0; --idx)
 }
 
 var appConfTxt = fs.readFileSync(baseDir + "/release/res/app.js.tmp").toString();
-appConfTxt = appConfTxt.replace(/this\.appVer\s*=\s*".+";/, "this.appVer = \"" + appVer + "\";");
-appConfTxt = appConfTxt.replace(/this\.appBuild\s*=\s*".+";/, "this.appBuild = \"" + appBuild + "\";");
-appConfTxt = appConfTxt.replace(/this\.gmapsKey\s*=\s*".+";/, "this.gmapsKey = \"" + gmapsKey + "\";");
-appConfTxt = appConfTxt.replace(/this\.gapiClientId\s*=\s*".+";/, "this.gapiClientId = \"" + gapiClientId + "\";");
-appConfTxt = appConfTxt.replace(/this\.webserviceRoot\s*=\s*".+";/, "this.webserviceRoot = \"" + webserviceRoot + "\";");
+appConfTxt = appConfTxt.replace(/this\.appVer\s*=\s*".*";/, "this.appVer = \"" + appVer + "\";");
+appConfTxt = appConfTxt.replace(/this\.appBuild\s*=\s*".*";/, "this.appBuild = \"" + appBuild + "\";");
+appConfTxt = appConfTxt.replace(/this\.webserviceRoot\s*=\s*".*";/, "this.webserviceRoot = \"" + webserviceRoot + "\";");
 //appConfTxt = "var gl = 1;" + appConfTxt;
 fs.writeFileSync(baseDir + "/release/res/app.js.tmp", appConfTxt);
 

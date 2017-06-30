@@ -1,8 +1,8 @@
 function RFPWUser(userJSON)
 {
-  this._lName = userJSON["lname"];
-  this._userName = userJSON["username"];
-  this._fName = userJSON["fname"];
+  this._lName = userJSON["lName"];
+  this._userName = userJSON["userName"];
+  this._fName = userJSON["fName"];
   this._email = userJSON["email"];
 }
 

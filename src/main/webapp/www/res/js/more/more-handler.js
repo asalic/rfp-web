@@ -38,7 +38,6 @@ RFPWMoreHandler.prototype.reqRetrieveRegions = function()
 
 RFPWMoreHandler.prototype._sucRetrieveRegions = function(data)
 {
-  console.log(data);
   this.countriesCities = [];
   for (var idxC=0; idxC<data.length; ++idxC)
   {

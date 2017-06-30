@@ -1,10 +1,3 @@
-if( typeof exports !== 'undefined' ) {
-  if( typeof module !== 'undefined' && module.exports ) {
-    console.log("City nodeJs");
-    module.exports = RFPWCity;
-  }
-}
-
 function RFPWCity(cityInstance)
 {
   this._id = cityInstance.id;

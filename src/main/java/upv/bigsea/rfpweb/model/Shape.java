@@ -11,17 +11,17 @@ public class Shape {
     @JsonProperty
     protected String type;
     @JsonProperty
-    protected String [][]coords;
+    protected String [][]coordinates;
     
     public Geometry() 
     {
       this(null, null);
     }
     
-    public Geometry(String type, String [][]coords) 
+    public Geometry(String type, String [][]coordinates) 
     {
       this.type = type;
-      this.coords = coords;
+      this.coordinates = coordinates;
     }    
     
     public String getType() {
@@ -30,11 +30,11 @@ public class Shape {
     public void setType(String type) {
       this.type = type;
     }
-    public String [][]getCoords() {
-      return coords;
+    public String [][]getCoordinates() {
+      return coordinates;
     }
-    public void setCoords(String [][]coords) {
-      this.coords = coords;
+    public void setCoordinates(String [][]coordinates) {
+      this.coordinates = coordinates;
     }    
   }
   

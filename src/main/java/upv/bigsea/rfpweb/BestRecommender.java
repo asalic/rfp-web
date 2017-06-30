@@ -1,8 +1,13 @@
 package upv.bigsea.rfpweb;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.ws.rs.PathParam;
+import javax.ws.rs.core.Response;
+
 import upv.bigsea.rfpweb.model.Route;
+import upv.bigsea.rfpweb.model.StopRouteRec;
 
 public class BestRecommender {
   
@@ -12,6 +17,8 @@ public class BestRecommender {
   {
     this.params = params;
   }
+  
+  
   
   public void fillRoutesEvaluation(List<Route> routes)
   {
@@ -24,6 +31,18 @@ public class BestRecommender {
       r.setStars(Math.floor(Math.random() * 6));
       
     }
+  }
+  
+  public List<StopRouteRec> getStopRouteRecs(String countryCode,
+      String cityCode,
+      String stopID,
+      String routeShortName,
+      String dateTime,
+      String utc) {
+    
+    List<StopRouteRec> result = new ArrayList<>();
+    
+    return result;
   }
 
 }

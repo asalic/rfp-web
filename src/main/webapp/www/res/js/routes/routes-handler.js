@@ -44,7 +44,7 @@ RFPWRoutesHandler.prototype._reqSchedByRouteIdDate = function(routeId)
     getDateTimeMinutesUTC();
   applicationContext.asyncReq($.proxy(this._sucSchedByRouteIdDate, this, routeId),
     $.proxy(this._errSchedByRouteIdDate, this, routeId),
-    "schedroutestops",
+    "schedroutestop",
     [applicationContext.moreHandler.getCurrentCountryCode(),
       applicationContext.moreHandler.getCurrentCityCode(), routeId, dt.dt.toString(),
       dt.utc.toString()]
@@ -57,7 +57,7 @@ RFPWRoutesHandler.prototype._sucSchedByRouteIdDate = function(routeId, data)
   if (!this._cancelSchedByRouteIdDate)
   {//   If the user didn't cancel the dialog, add the data
     //console.log(data);
-    this._displRouteSchedule = new RFPWRouteSchedule(data);
+    this._displRouteSchedule = new RFPWRouteSchedule(data.data);
     var tripsSel = $("#sel-routes-sched-trip");
     tripsSel.empty();
     for (var idx=0; idx<this._displRouteSchedule.getNumTrips(); ++idx)
@@ -119,18 +119,19 @@ RFPWRoutesHandler.prototype.reqAllRoutes = function()
 }
 
 
-RFPWRoutesHandler.prototype._sucAllRoutes = function( routesLst )
+RFPWRoutesHandler.prototype._sucAllRoutes = function(srvRoutesLst)
 {
   //var routesObj = this.routesObj;
+  var routesLstSrv = srvRoutesLst.data;
   this.routesLst = [];
   $("#routes-lst-empty").hide();
   //console.log(routesLst);
   //var lines = JSON.parse(data);
-  for (var bl in routesLst)
+  for (var bl in routesLstSrv)
   {
-    var r = new RFPWRoute(routesLst[bl]);
+    var r = new RFPWRoute(routesLstSrv[bl]);
     //console.log(routesLst[bl]);
-    delete routesLst[bl];
+    //delete routesLstSrv[bl];
     //console.log(r.id);
     this.routesLst.push(r);
     this.routesTabDOM.append(this.genRouteRow(r));
@@ -199,13 +200,13 @@ RFPWRoutesHandler.prototype._reqShapesByRouteId = function(route)
 RFPWRoutesHandler.prototype._sucShapesByRouteId = function(route, data)
 {
   //console.log(data.length);
-  var dJ = JSON.parse(data);
-
+  var dJ = data.data;
+  console.log(dJ);
   applicationContext.hideLoadingPnl("routes-main-lst");
   applicationContext.switchTab(RFPWApplicationContext.TAB_TRIPS);
   //console.log(data);
   //var dataJson = JSON.parse(data);
-  console.log(dJ.length);
+  //console.log(dJ.length);
   route.setPaths(dJ);
   applicationContext.mapHandler.drawRoute(route);
 }
@@ -333,8 +334,8 @@ RFPWRoutesHandler.prototype.getRouteColorById = function(routeId)
 RFPWRoutesHandler.prototype.getRouteShortNmById = function(routeId)
 {
   for (var routeIdx in this.routesLst)
-    if (this.routesLst[routeIdx].id === routeId)
-      return this.routesLst[routeIdx].shortNm;
+    if (this.routesLst[routeIdx].getId() === routeId)
+      return this.routesLst[routeIdx].getShortNm();
   console.log("Unable to find route id " + routeId);
   return null;
 }
@@ -342,7 +343,7 @@ RFPWRoutesHandler.prototype.getRouteShortNmById = function(routeId)
 RFPWRoutesHandler.prototype.getRouteById = function(routeId)
 {
   for (var routeIdx in this.routesLst)
-    if (this.routesLst[routeIdx].id === routeId)
+    if (this.routesLst[routeIdx].getId() === routeId)
       return this.routesLst[routeIdx];
   console.log("Unable to find route id " + routeId);
   return null;
@@ -351,7 +352,7 @@ RFPWRoutesHandler.prototype.getRouteById = function(routeId)
 RFPWRoutesHandler.prototype.getRouteTypeStrById = function(routeId)
 {
   for (var routeIdx in this.routesLst)
-    if (this.routesLst[routeIdx].id === routeId)
+    if (this.routesLst[routeIdx].getId() === routeId)
       return RFPWRoutesHandler.ROUTE_TYPE_STR[this.routesLst[routeIdx].type][0];
   console.log("Unable to find route id " + routeId);
   return null;

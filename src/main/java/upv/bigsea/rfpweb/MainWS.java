@@ -5,6 +5,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
+
+import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -18,9 +20,13 @@ import upv.bigsea.rfpweb.model.Route;
 import upv.bigsea.rfpweb.model.SchedRouteStop;
 import upv.bigsea.rfpweb.model.Shape;
 import upv.bigsea.rfpweb.model.Stop;
+import upv.bigsea.rfpweb.model.StopRouteRec;
+import upv.bigsea.rfpweb.model.User;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.URLDecoder;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -32,47 +38,19 @@ import java.util.Map;
 public class MainWS {
   
   protected static final String MSG_SRV_500_ERROR = "We are sorry. There has been an error, that's all we know, please contact the admin";
+  protected static final String URL_DECODER_ENC = "UTF-8";
   
-  protected static List<Country> regions;
-  protected static String regionsJsonTxt;
-  protected static Map<String, Country> regionsByCode;
 
-  protected Params params;
-  protected Gtfs gtfs;
-  protected BestRecommender bestRecommender;
 
-  static {
-    // Load regions
-    regionsByCode = new HashMap<String, Country>();
-    System.out.println("Loading regions");
-    ObjectMapper mapper = new ObjectMapper();
-    try {
-      ClassLoader classLoader = MainWS.class.getClassLoader();
-      String regionsPath = classLoader.getResource("regions.json").getFile();
-      regionsJsonTxt = new String(Files.readAllBytes(Paths.get(regionsPath)));
-      regions = Arrays.asList(mapper.readValue(new File(regionsPath), Country[].class));
-      // Let's improve the execution by grouping by code
-      for (Country c : regions)
-      {
-        regionsByCode.put(c.getCode(), c);
-        c.genCitiesByCode();
-      }
-    } catch (JsonGenerationException e) {
-      e.printStackTrace();
-    } catch (JsonMappingException e) {
-      e.printStackTrace();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
+  protected static Params params = WSContextListener.getParams();
+  protected static Gtfs gtfs = WSContextListener.getGtfs();
+  protected static BestRecommender bestRecommender = WSContextListener.getBestRecommender();
+  protected static Auth auth = WSContextListener.getAuth();
+  
+  static final Logger LOGGER = Logger.getLogger(MainWS.class);
 
-  }
 
   public MainWS() {
-    // String varValue = System.getenv("PATH");
-    params = new Params();
-    gtfs = new Gtfs(params);
-    bestRecommender = new BestRecommender(params);
-    System.out.println("mainWs constructor");
     // System.out.println(varValue);
   }
 
@@ -80,7 +58,26 @@ public class MainWS {
   @GET
   @Produces("application/json")
   public Response getStops() throws JSONException {
-    return Response.status(200).entity(regionsJsonTxt).build();
+    return Response.status(200).entity(WSContextListener.getRegions().getRegionsJsonTxt()).build();
+  }
+  
+  @Path("/auth/userdetails/{userToken}")
+  @GET
+  @Produces("application/json")
+  public Response getUserDetails(@PathParam("userToken") String userToken) {
+    try
+    {
+      User r = auth.getUserByToken(userToken);
+      Msg<User> m = new Msg<User>(200, "", r);
+      return this.respond(m);
+    } catch (JSONException e)
+    {
+      LOGGER.error(Arrays.toString(e.getStackTrace()));
+      return Response.status(500).entity(MSG_SRV_500_ERROR).build();
+    } catch (IOException e) {
+      LOGGER.error(Arrays.toString(e.getStackTrace()));
+      return Response.status(500).entity(MSG_SRV_500_ERROR).build();
+    }
   }
   
   @Path("/routes/{countryCode}/{cityCode}")
@@ -90,13 +87,14 @@ public class MainWS {
       @PathParam("cityCode") String cityCode) {
     try
     {
-      List<Route> r = gtfs.getRoutes(countryCode, cityCode);
+      List<Route> r = gtfs.getRoutes(URLDecoder.decode(countryCode, URL_DECODER_ENC), 
+          URLDecoder.decode(cityCode, URL_DECODER_ENC));
       bestRecommender.fillRoutesEvaluation(r);
       Msg<List<Route> > m = new Msg<List<Route> >(200, "", r);
       return this.respond(m);
     } catch (Exception e)
     {
-      e.printStackTrace();
+      LOGGER.error(Arrays.toString(e.getStackTrace()));
       return Response.status(500).entity(MSG_SRV_500_ERROR).build();
     }
    
@@ -109,13 +107,16 @@ public class MainWS {
       @PathParam("cityCode") String cityCode) {
     try
     {
-      List<Stop> r = gtfs.getStops(countryCode, cityCode);
+      List<Stop> r = gtfs.getStops(URLDecoder.decode(countryCode, URL_DECODER_ENC), 
+          URLDecoder.decode(cityCode, URL_DECODER_ENC));
       Msg<List<Stop> > m = new Msg<List<Stop> >(200, "", r);
       return this.respond(m);
     } catch (Exception e)
     {
-      e.printStackTrace();
-      return Response.status(500).entity(MSG_SRV_500_ERROR).build();
+      LOGGER.error(Arrays.toString(e.getStackTrace()));
+      return Response.status(500).entity(Arrays.toString(e.getStackTrace())
+          //MSG_SRV_500_ERROR
+          ).build();
     }   
   }
   
@@ -127,12 +128,14 @@ public class MainWS {
       @PathParam("routeId") String routeId) {
     try
     {
-      List<Shape> r = gtfs.getShapes(countryCode, cityCode, routeId);
+      List<Shape> r = gtfs.getShapes(URLDecoder.decode(countryCode, URL_DECODER_ENC), 
+          URLDecoder.decode(cityCode, URL_DECODER_ENC), 
+              URLDecoder.decode(routeId, URL_DECODER_ENC));
       Msg<List<Shape> > m = new Msg<List<Shape> >(200, "", r);
       return this.respond(m);
     } catch (Exception e)
     {
-      e.printStackTrace();
+      LOGGER.error(Arrays.toString(e.getStackTrace()));
       return Response.status(500).entity(MSG_SRV_500_ERROR).build();
     }   
   }
@@ -147,14 +150,49 @@ public class MainWS {
       @PathParam("utc") String utc) {
     try
     {
-      List<SchedRouteStop> r = gtfs.getSchedRouteStop(countryCode, cityCode, routeId, dateTime, utc);
+      List<SchedRouteStop> r = gtfs.getSchedRouteStop(URLDecoder.decode(countryCode, URL_DECODER_ENC), 
+          URLDecoder.decode(cityCode, URL_DECODER_ENC), 
+          URLDecoder.decode(routeId, URL_DECODER_ENC), 
+          URLDecoder.decode(dateTime, URL_DECODER_ENC), 
+          URLDecoder.decode(utc, URL_DECODER_ENC));
       Msg<List<SchedRouteStop> > m = new Msg<List<SchedRouteStop> >(200, "", r);
       return this.respond(m);
     } catch (Exception e)
     {
-      e.printStackTrace();
-      return Response.status(500).entity(MSG_SRV_500_ERROR).build();
+      LOGGER.error(Arrays.toString(e.getStackTrace()));
+      return Response.status(500).entity(Arrays.toString(e.getStackTrace())
+          //MSG_SRV_500_ERROR
+          ).build();
     }   
+  }
+  
+  @Path("/stoprouterecs/{countryCode}/{cityCode}/{stopID}/{routeShortName}/{dateTime}/{utc}")
+  @GET
+  @Produces("application/json")
+  public Response getStopRouteRecs(@PathParam("countryCode") String countryCode,
+      @PathParam("cityCode") String cityCode,
+      @PathParam("stopID") String stopID,
+      @PathParam("routeShortName") String routeShortName,
+      @PathParam("dateTime") String dateTime,
+      @PathParam("utc") String utc) {
+    try
+    {
+      List<StopRouteRec> r = bestRecommender.getStopRouteRecs(
+          URLDecoder.decode(countryCode, URL_DECODER_ENC), 
+          URLDecoder.decode(cityCode, URL_DECODER_ENC), 
+          URLDecoder.decode(stopID, URL_DECODER_ENC), 
+          URLDecoder.decode(routeShortName, URL_DECODER_ENC), 
+          URLDecoder.decode(dateTime, URL_DECODER_ENC),
+          URLDecoder.decode(utc, URL_DECODER_ENC));
+      Msg<List<StopRouteRec> > m = new Msg<List<StopRouteRec> >(200, "", r);
+      return this.respond(m);
+    } catch (Exception e)
+    {
+      LOGGER.error(Arrays.toString(e.getStackTrace()));
+      return Response.status(500).entity(Arrays.toString(e.getStackTrace())
+          //MSG_SRV_500_ERROR
+          ).build();
+    }
   }
   
   protected <MSG_TYPE> Response respond(MSG_TYPE m)
@@ -165,7 +203,7 @@ public class MainWS {
       return Response.status(200).entity(mapper.writeValueAsString(m)).build();
     } catch(Exception e)
     {
-      e.printStackTrace();
+      LOGGER.error(Arrays.toString(e.getStackTrace()));
       return Response.status(500).entity(MSG_SRV_500_ERROR).build();
     }
   }

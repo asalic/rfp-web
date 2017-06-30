@@ -1,0 +1,9 @@
+<h4>General</h4>
+This repository contains two projects:
+
+1. The web application which exposes the background services to the normal user
+2. The server which orchestrates the connection between the web application and the background services
+
+<h4>Description</h4>
+
+1. The release version of the web application is generated using the build.js script from the webapp/www folder

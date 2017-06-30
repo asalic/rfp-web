@@ -1,10 +1,3 @@
-if( typeof exports !== 'undefined' ) {
-  if( typeof module !== 'undefined' && module.exports ) {
-    console.log("Country nodeJs");
-    module.exports = RFPWCountry;
-    var RFPWCity = require("./city");
-  }
-}
 
 function RFPWCountry(countryInstance)
 {

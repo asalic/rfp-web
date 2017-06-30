@@ -1,0 +1,143 @@
+[
+  {
+    "id": 1,
+    "code": "be",
+    "name": "Belgium",
+    "cities":
+      [
+        {
+          "id": 2,
+          "code": "brussels",
+          "name": "Brussels",
+          "lat": 50.8503,
+          "lng": 4.3517,
+          "portBRRoutes": 123,
+          "hostBRRoutes": "localhost",
+          "portBRTrips": 123,
+          "hostBRTrips": "localhost",
+          "mesosDNSBRRoutes": "_rfp-br-route-be-brussels-rfp._tcp.marathon.mesos",
+          "mesosDNSBRTrips": "_rfp-br-trip-be-brussels-rfp._tcp.marathon.mesos"        
+        }
+      ]
+  },
+  {
+    "id": 3,
+    "code": "es",
+    "name": "Spain",
+    "cities":
+      [
+        {
+          "id": 4,
+          "code": "madrid",
+          "name": "Madrid",
+          "lat": 40.4168,
+          "lng": 3.7038,
+          "portBRRoutes": 123,
+          "hostBRRoutes": "localhost",
+          "portBRTrips": 123,
+          "hostBRTrips": "localhost",
+          "mesosDNSBRRoutes": "_rfp-br-route-es-madrid-rfp._tcp.marathon.mesos",
+          "mesosDNSBRTrips": "_rfp-br-trip-es-madrid-rfp._tcp.marathon.mesos"
+        },
+        {
+          "id": 5,
+          "code": "valencia",
+          "name": "Valencia",
+          "lat": 39.4699,
+          "lng": 0.3763,
+          "portBRRoutes": 123,
+          "hostBRRoutes": "localhost",
+          "portBRTrips": 123,
+          "hostBRTrips": "localhost",
+          "mesosDNSBRRoutes": "_rfp-br-route-es-valencia-rfp._tcp.marathon.mesos",
+          "mesosDNSBRTrips": "_rfp-br-trip-es-valencia-rfp._tcp.marathon.mesos"
+        }
+      ]
+  },
+  {
+    "id": 6,
+    "code": "br",
+    "name": "Brazil",
+    "cities":
+      [
+        {
+          "id": 7,
+          "code": "belo_horizonte",
+          "name": "Belo Horizonte",
+          "lat": -19.9245,
+          "lng": -43.9352,
+          "portBRRoutes": 123,
+          "hostBRRoutes": "localhost",
+          "portBRTrips": 123,
+          "hostBRTrips": "localhost",
+          "mesosDNSBRRoutes": "_rfp-br-route-belo_horizonte-rfp._tcp.marathon.mesos",
+          "mesosDNSBRTrips": "_rfp-br-trip-belo_horizonte-rfp._tcp.marathon.mesos"
+        },
+        {
+          "id": 8,
+          "code": "campina_grande",
+          "name": "Campina-Grande",
+          "lat": -7.2291,
+          "lng": -35.8808,
+          "portBRRoutes": 123,
+          "hostBRRoutes": "localhost",
+          "portBRTrips": 123,
+          "hostBRTrips": "localhost",
+          "mesosDNSBRRoutes": "_rfp-br-route-campina_grande-rfp._tcp.marathon.mesos",
+          "mesosDNSBRTrips": "_rfp-br-trip-campina_grande-rfp._tcp.marathon.mesos"
+        },
+        {
+          "id": 9,
+          "code": "curitiba",
+          "name": "Curitiba",
+          "lat": -25.4244,
+          "lng": -49.2654,
+          "portBRRoutes": 123,
+          "hostBRRoutes": "localhost",
+          "portBRTrips": 123,
+          "hostBRTrips": "localhost",
+          "mesosDNSBRRoutes": "_rfp-br-route-curitiba-rfp._tcp.marathon.mesos",
+          "mesosDNSBRTrips": "_rfp-br-trip-curitiba-rfp._tcp.marathon.mesos"
+        },
+        {
+          "id": 10,
+          "code": "fortaleza",
+          "name": "Fortaleza",
+          "lat": -3.7319,
+          "lng": -38.5267,
+          "portBRRoutes": 123,
+          "hostBRRoutes": "localhost",
+          "portBRTrips": 123,
+          "hostBRTrips": "localhost",
+          "mesosDNSBRRoutes": "_rfp-br-route-fortaleza-rfp._tcp.marathon.mesos",
+          "mesosDNSBRTrips": "_rfp-br-trip-fortaleza-rfp._tcp.marathon.mesos"
+        },
+        {
+          "id": 11,
+          "code": "porto_alegre",
+          "name": "Porto Alegre",
+          "lat": -30.0346,
+          "lng": -51.2177,
+          "portBRRoutes": 123,
+          "hostBRRoutes": "localhost",
+          "portBRTrips": 123,
+          "hostBRTrips": "localhost",
+          "mesosDNSBRRoutes": "_rfp-br-route-porto_alegre-rfp._tcp.marathon.mesos",
+          "mesosDNSBRTrips": "_rfp-br-trip-porto_alegre-rfp._tcp.marathon.mesos"
+        },
+        {
+          "id": 12,
+          "code": "rio_de_janeiro",
+          "name": "Rio de Janeiro",
+          "lat": -22.9068,
+          "lng": -43.1729,
+          "portBRRoutes": 123,
+          "hostBRRoutes": "localhost",
+          "portBRTrips": 123,
+          "hostBRTrips": "localhost",
+          "mesosDNSBRRoutes": "_rfp-br-route-rio_de_janeiro-rfp._tcp.marathon.mesos",
+          "mesosDNSBRTrips": "_rfp-br-trip-rio_de_janeiro-rfp._tcp.marathon.mesos"
+        }
+      ]
+  }
+]
