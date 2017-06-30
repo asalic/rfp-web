@@ -77,7 +77,7 @@ RUN rm -rf ${TOMCAT_ROOT}/webapps/ROOT.war ${TOMCAT_ROOT}/webapps/ROOT || true
 RUN cat ${APP_PATH}/pom.xml | sed "s|<outputDirectory>[^ ]*</outputDirectory>|<outputDirectory>${TOMCAT_ROOT}/webapps/</outputDirectory>|" > ${APP_PATH}/pom.xml.tmp &&\
 	mv ${APP_PATH}/pom.xml.tmp ${APP_PATH}/pom.xml
 RUN node ${APP_PATH}/src/main/webapp/build.js -p "${APP_PATH}/src/main/webapp/" -v "2.0beta" -w "/webservice"
-RUN mvn -e -f ${APP_PATH}/pom.xml -P debug clean package
+RUN mvn -e -f ${APP_PATH}/pom.xml -P release clean package
 #RUN chown -R tomcat ${TOMCAT_ROOT}/webapps/ ${TOMCAT_ROOT}/work/ ${TOMCAT_ROOT}/temp/ ${TOMCAT_ROOT}/logs/
 
 ENTRYPOINT python2 ${APP_PATH}/mesos-dns-discover.py --mesosdns "${MESOS_DNS_IP_PORT}" \
