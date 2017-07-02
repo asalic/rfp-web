@@ -32,7 +32,7 @@ RUN chown -R ${tomcat_user}:${tomcat_group} ${tomcat_root}
 # Install custom version of Tomcat (the one from the repo has bugs)
 RUN curl -o /tmp/apache-tomcat-8.0.44.tar.gz http://apache.uvigo.es/tomcat/tomcat-8/v8.0.44/bin/apache-tomcat-8.0.44.tar.gz
 RUN tar xzvf /tmp/apache-tomcat-8*tar.gz -C ${tomcat_root} --strip-components=1
-COPY ./tomcat-users_template.xml ${tomcat_root}/conf/tomcat-users.xml
+#COPY ./tomcat-users_template.xml ${tomcat_root}/conf/tomcat-users.xml
 
 RUN chmod -R g+r ${tomcat_root}/conf
 RUN chmod -R +x ${tomcat_root}/bin/
@@ -77,7 +77,7 @@ RUN rm -rf ${TOMCAT_ROOT}/webapps/ROOT.war ${TOMCAT_ROOT}/webapps/ROOT || true
 RUN cat ${APP_PATH}/pom.xml | sed "s|<outputDirectory>[^ ]*</outputDirectory>|<outputDirectory>${TOMCAT_ROOT}/webapps/</outputDirectory>|" > ${APP_PATH}/pom.xml.tmp &&\
 	mv ${APP_PATH}/pom.xml.tmp ${APP_PATH}/pom.xml
 RUN node ${APP_PATH}/src/main/webapp/build.js -p "${APP_PATH}/src/main/webapp/" -v "2.0beta" -w "/webservice"
-RUN mvn -e -f ${APP_PATH}/pom.xml -P release clean package
+RUN mvn -e -f ${APP_PATH}/pom.xml -P debug clean package
 #RUN chown -R tomcat ${TOMCAT_ROOT}/webapps/ ${TOMCAT_ROOT}/work/ ${TOMCAT_ROOT}/temp/ ${TOMCAT_ROOT}/logs/
 
 ENTRYPOINT python2 ${APP_PATH}/mesos-dns-discover.py --mesosdns "${MESOS_DNS_IP_PORT}" \
