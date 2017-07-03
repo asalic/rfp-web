@@ -41,8 +41,8 @@ RUN chown -R ${tomcat_user} ${tomcat_root}/conf/ ${tomcat_root}/webapps/ ${tomca
 
 # Create the app folder and giver full permission to the tomcat user
 RUN mkdir -p ${app_path}
-COPY ./mesos-dns-discover.sh ${app_base_path}
-RUN chmod +x ${app_base_path}/mesos-dns-discover.sh
+COPY ./mesos-dns-discover.py ${app_base_path}
+RUN chmod +x ${app_base_path}/mesos-dns-discover.py
 ADD ./ ${app_path}/
 #COPY ./regions.json ${app_base_path}
 RUN chown -R ${tomcat_user} ${app_base_path}
