@@ -1,19 +1,21 @@
 function RFPWRouteSchedule(data)
 {
   this._trips = [];
-  var servData = JSON.parse(data);
-  for (var idx=0; idx<servData.length; ++idx)
+  //console.log(JSON.stringify(data));
+  //console.log("boom");
+  for (var idx=0; idx<data.length; ++idx)
   {
-    var t = new RFPWRouteTrip(servData[idx]["shape_id"]);
-    var sin = servData[idx]["stops_ids_nms"];
+    var t = new RFPWRouteTrip(data[idx]["shapeId"]);
+    var sin = data[idx]["stopsIdsNms"];
     for (var idxSt=0; idxSt<sin.length; ++idxSt)
     {
-      t.addStop(new RFPWRouteStop(sin[idxSt]["id"], sin[idxSt]["name"],
-        sin[idxSt]["arrival_times"]))
+      t.addStop(new RFPWRouteStop(sin[idxSt]["id"], sin[idxSt]["stopName"],
+        sin[idxSt]["arrivalTimes"]))
     }
     this._trips.push(t);
   }
 }
+
 
 RFPWRouteSchedule.prototype.getTripsIdxNames = function()
 {
@@ -28,6 +30,7 @@ RFPWRouteSchedule.prototype.getTripsIdxNames = function()
 
 RFPWRouteSchedule.prototype.getStopsByTripIdx = function(idx)
 {
+  console.log(this._trips);
   return this._trips[idx].getStops();
 }
 

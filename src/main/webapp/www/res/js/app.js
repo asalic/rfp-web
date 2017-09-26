@@ -3,22 +3,6 @@ var applicationContext = null;
 // Wait until HTML-Document is loaded and DOM is ready
 $(document).ready(function()
 {
-//   var defRoutes = new $.Deferred();
-//   var defLines = new $.Deferred();
-//   var defFavs = new $.Deferred();
-//   var defMore = new $.Deferred();
-//
-//   // Listen for the moment loading is complete
-// $.when(defRoutes, defLines, defFavs, defMore).then(onCompleteLoadApp);
-//
-//   $( "#div-trips" ).load( "routes.html", function() { defRoutes.resolve(); } );
-//   $( "#div-lines" ).load( "routes.html", function() { defLines.resolve(); } );
-//   $( "#div-favs" ).load( "routes.html", function() { defFavs.resolve(); } );
-//   $( "#div-more" ).load( "routes.html", function() { defMore.resolve(); } );
-console.log("document ready");
-
-  //   Location fragment hashing
-  //   https://stackoverflow.com/questions/9685968/best-way-to-make-twitter-bootstrap-tabs-persistent
   if (location.hash !== '') $('a[href="' + location.hash + '"]').tab('show');
 
   // remember the hash in the URL without jumping
@@ -30,36 +14,19 @@ console.log("document ready");
      }
   });
   RFPWMapHandler.prototype.setHeightMap();
-  // MarkerClusterer.prototype.onRemove = function () {
-  //   this.setReady_(true);
-  // };
-
-  $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-    var target = $(e.target).attr("href") ;// activated tab
-    //alert(target);
-    //    Invalidate the map when the tab changes otherwise the map gets corrupted
-    if (target === "#div-trips" && applicationContext !== null)
-      var gmapsRefresh = setInterval(function()
-        {
-          try {
-            applicationContext.mapHandler.onResize();
-            clearInterval(gmapsRefresh);
-            console.log("GMaps successfully refreshed when tab switched");
-          } catch (e) {
-            //console.log(e);
-          } finally {}
-        }, 100);
-  });
-  //L20n.getContext().requestLocales('es');
-//  console.log(L20n);
-var today = new Date();
- console.log(today);
+  
 });
 
 // Wait until everything has been loaded
 $(window).on('load', function() {
   //$.i18n().load( 'i18n/' + $.i18n().locale + '.json', $.i18n().locale );
-  console.log("All resources and pages have been loaded")
+  console.log("All resources and pages have been loaded");
+  
+  // Extend classes
+  // TODO: check if they work well without this code
+//  RFPWUtils.extend(RFPWFav, RFPWFavRoute);
+//  RFPWUtils.extend(RFPWFav, RFPWFavTrip);
+  
   //var linesObj = new Lines($("#lines-main-lst"));
   //  You have to first create the object and then to init it
   applicationContext = new RFPWApplicationContext();
@@ -114,20 +81,46 @@ RFPWApplicationContext.prototype._tokenAuthenticate = function()
       $.proxy(this._tokenAuthenticateErr, this));
 }
 
-RFPWApplicationContext.prototype._tokenAuthenticateSucc = function()
+RFPWApplicationContext.prototype._tokenAuthenticateSucc = function(data)
 {
-  console.log(this);
+  console.log("Token authenticated, get user data");
+  console.log(data);
+  this.moreHandler.getUserAuth().sucTokenAuthenticate(data,
+        $.proxy(this._sucGetUserInfo, this),
+        $.proxy(this._errGetUserInfo, this)
+      );
+}
+
+RFPWApplicationContext.prototype._tokenAuthenticateErr = function(data)
+{
+  this._errAuth(data);
+}
+
+RFPWApplicationContext.prototype._sucGetUserInfo = function(data)
+{
+  console.log("user data retrieved, init handlers");
+  console.log(data);
+  this.moreHandler.getUserAuth().sucUserInfo(data);
+  this.moreHandler.getFeedbackHandler().enableFeedback();
   this._initHandlers();
 }
 
-RFPWApplicationContext.prototype._tokenAuthenticateErr = function()
+RFPWApplicationContext.prototype._errGetUserInfo = function(data)
 {
+  this._errAuth(data);
+}
+
+RFPWApplicationContext.prototype._errAuth = function(data)
+{
+  console.log("User not authenticated, init handlers");
+  this.moreHandler.getUserAuth().errTokenAuthenticate(data);
   this._initHandlers();
 }
 
 RFPWApplicationContext.prototype._initHandlers = function()
 {
-  this.moreHandler.reqRetrieveRegions();
+  //this.moreHandler.reqRetrieveRegions();
+  this.moreHandler.initAfterAuth();
   this._initHandlersWaitIntv = setInterval($.proxy(this._initHandlersImpl,
     this), 1000);
 }
@@ -146,10 +139,69 @@ RFPWApplicationContext.prototype._initHandlersImpl = function()
     this._initHandlersWaitIntvCnt = 0;
     clearInterval(this._initHandlersWaitIntv);
     this.mapHandler.init();
-    this.moreHandler.changeLocation();
+    this.mapHandler.addStops2Map(null, null);
+    //this.mapHandler.reqSentimentAnalysis(null, null);
+    //this.mapHandler.reqTrafficJam(null, null);
+    this.routesHandler.reqAllRoutes(null, null);
+    this._initHandlersWaitIntv = setInterval($.proxy(this._afterMapRoutesHandlersLoaded,
+        this), 500);
+  }
+}  
+
+RFPWApplicationContext.prototype._afterMapRoutesHandlersLoaded = function()
+{
+  this._initHandlersWaitIntvCnt++;
+  if (this._initHandlersWaitIntvCnt > RFPWApplicationContext.INIT_HANDLERS_WAIT_MAX_CNT)
+  {
+    this._initHandlersWaitIntvCnt = 0;
+    clearInterval(this._initHandlersWaitIntv);
+    console.error("Unable to initialize the trips and routes tabs. Try again later or contact us.");
+    $.notify($("#notify-e-app-unable-init-maps-routes").text(), 
+        {
+          className: "error",
+          globalPosition: 'top left'
+        }
+      );
+  }
+  if (this.mapHandler.isMapLoaded() 
+      && this.mapHandler.isStopsLoaded()
+      && this.routesHandler.isRoutesLoaded())
+  {
+    console.log("maps/Routes init success");
+    this._initHandlersWaitIntvCnt = 0;
+    clearInterval(this._initHandlersWaitIntv);
     this.favsHandler.init();
+    this._initHandlersWaitIntv = this._initHandlersWaitIntv = setInterval($.proxy(this._afterFavsHandlerLoaded,
+        this), 500);
   }
 }
+
+RFPWApplicationContext.prototype._afterFavsHandlerLoaded = function()
+{
+  this._initHandlersWaitIntvCnt++;
+  if (this._initHandlersWaitIntvCnt > RFPWApplicationContext.INIT_HANDLERS_WAIT_MAX_CNT)
+  {
+    this._initHandlersWaitIntvCnt = 0;
+    clearInterval(this._initHandlersWaitIntv);
+    console.error("Unable to initialize the favs tab. Try again later or contact us.");
+    $.notify($("#notify-e-app-unable-init-favs").text(), 
+        {
+          className: "error",
+          globalPosition: 'top left'
+        }
+      );
+    
+  }
+  if (this.mapHandler.isMapLoaded() 
+      && this.mapHandler.isStopsLoaded())
+  {
+    console.log("Favs init success");
+    this._initHandlersWaitIntvCnt = 0;
+    clearInterval(this._initHandlersWaitIntv);
+    //this.moreHandler.changeRegion();
+  }
+}
+
 
 RFPWApplicationContext.prototype.isRoutesLoaded = function()
 {
@@ -288,4 +340,4 @@ RFPWApplicationContext.prototype.reloadApp = function() {location.reload();}
  * How many times should we check if the regions have been loaded
  * @type {Number}
  */
-RFPWApplicationContext.INIT_HANDLERS_WAIT_MAX_CNT = 15;
+RFPWApplicationContext.INIT_HANDLERS_WAIT_MAX_CNT = 100;

@@ -9,6 +9,32 @@
   color: #66CCFF;
 }*/
 
+.spa-rfpw-hover {
+    position:relative;
+    /*top:50px;
+    left:50px;*/
+}
+
+.spa-rfpw-tooltip { /* hide and position tooltip */
+  margin-top: 1em;
+  z-index: 1000;
+  background-color:black;
+  color:white;
+  border-radius:5px;
+  opacity:0;
+  padding: 0.2em;
+  position:absolute;
+  -webkit-transition: opacity 0.5s;
+  -moz-transition: opacity 0.5s;
+  -ms-transition: opacity 0.5s;
+  -o-transition: opacity 0.5s;
+  transition: opacity 0.5s;
+}
+
+.spa-rfpw-hover:hover .spa-rfpw-tooltip { /* display tooltip on hover */
+    opacity:1;
+}
+
 .spa-rfpw-take-all-space {
     width: 25%;
     text-align: center;
@@ -100,6 +126,15 @@
   margin-right: 0.6em;
   padding-left: 0;
   /*background-color: black;*/
+}
+
+.spa-rfpw-route-fav
+{
+	
+  position: relative;
+  height: 2.5em;
+  display: block;
+  float: right;
 }
 
 .spa-rfpw-nm-star
@@ -341,4 +376,9 @@ animation: spin 2s linear infinite;
   width: 100%;
   opacity:1;
   background-color: white;
+}
+
+.spa-rfpw-full-parent-width
+{
+	width: 100%;
 }

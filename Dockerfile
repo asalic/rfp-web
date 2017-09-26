@@ -12,6 +12,7 @@ EXPOSE 8080
 ARG tomcat_group=tomcat
 ARG tomcat_user=tomcat
 ARG tomcat_root=/opt/tomcat
+ARG tomcat_minor_version=0.46
 ARG app_base_path=/eubrabigsea
 ARG app_path=${app_base_path}/rfp-web
 
@@ -30,8 +31,8 @@ RUN chown -R ${tomcat_user}:${tomcat_group} ${tomcat_root}
 #RUN echo ${TOMCAT_USER_PASSW} | passwd ${TOMCAT_USER} --stdin
 
 # Install custom version of Tomcat (the one from the repo has bugs)
-RUN curl -o /tmp/apache-tomcat-8.0.44.tar.gz http://apache.uvigo.es/tomcat/tomcat-8/v8.0.44/bin/apache-tomcat-8.0.44.tar.gz
-RUN tar xzvf /tmp/apache-tomcat-8*tar.gz -C ${tomcat_root} --strip-components=1
+RUN curl -o /tmp/apache-tomcat-8.tar.gz http://apache.uvigo.es/tomcat/tomcat-8/v8.${tomcat_minor_version}/bin/apache-tomcat-8.${tomcat_minor_version}.tar.gz
+RUN tar xzvf /tmp/apache-tomcat-8.tar.gz -C ${tomcat_root} --strip-components=1
 #COPY ./tomcat-users_template.xml ${tomcat_root}/conf/tomcat-users.xml
 
 RUN chmod -R g+r ${tomcat_root}/conf
@@ -55,20 +56,25 @@ ENV USER ${tomcat_user}
 ENV APP_BASE_PATH ${app_base_path}
 ENV APP_PATH ${app_path}
 ENV TOMCAT_ROOT ${tomcat_root}
+ENV NTP_SERVER time-a.nist.gov
 ENV PFX default
 ENV PSQL_USER postgres
 ENV PSQL_PASSW default
 ENV PSQL_PORT 5432
 ENV PSQL_HOST localhost
 ENV MESOS_DNS_IP_PORT http://127.0.0.1:8123
-ENV MESOS_DNS_RFP_DB_ID _rfp-db-rfp._tcp.marathon.mesos
+ENV MESOS_DNS_RFP_DB_ID _rfp-db-lb-rfp._tcp.marathon.mesos
 ENV AUTH_SERVICE_URL https://eubrabigsea.dei.uc.pt/engine/api/verify_token
 ENV AUTH_SERVICE_INVALID_TOKEN_RESP "invalid token"
-ENV MESOS_DNS_AUTH_SERVICE_ID _rfp-db-rfp._tcp.marathon.mesos
+ENV MESOS_DNS_AUTH_SERVICE_ID _auth._tcp.marathon.mesos
 #ENV REGIONS_PATH ${app_base_path}/regions.json
 ENV CMD_KEEP_ALIVE tail -f /dev/null
 ENV REGIONS_URL ftp://ftpgrycap.i3m.upv.es/public/eubrabigsea/data/regions.json
 ENV REGIONS_LOCAL_PATH ${app_path}/regions.json
+ENV CONTACT_MAIL_ADDR default@mail.com
+#ENV CONTACT_MAIL_PASSW default
+#ENV CONTACT_MAIL_SMTP_HOST default
+#ENV CONTACT_MAIL_SMTP_PORT 587
 
 # Prepare and deploy app 
 RUN rm -rf ${TOMCAT_ROOT}/webapps/ROOT.war ${TOMCAT_ROOT}/webapps/ROOT || true
@@ -77,7 +83,7 @@ RUN rm -rf ${TOMCAT_ROOT}/webapps/ROOT.war ${TOMCAT_ROOT}/webapps/ROOT || true
 RUN cat ${APP_PATH}/pom.xml | sed "s|<outputDirectory>[^ ]*</outputDirectory>|<outputDirectory>${TOMCAT_ROOT}/webapps/</outputDirectory>|" > ${APP_PATH}/pom.xml.tmp &&\
 	mv ${APP_PATH}/pom.xml.tmp ${APP_PATH}/pom.xml
 RUN node ${APP_PATH}/src/main/webapp/build.js -p "${APP_PATH}/src/main/webapp/" -v "2.0beta" -w "/webservice"
-RUN mvn -e -f ${APP_PATH}/pom.xml -P debug clean package
+RUN mvn -e -f ${APP_PATH}/pom.xml -P release clean package
 #RUN chown -R tomcat ${TOMCAT_ROOT}/webapps/ ${TOMCAT_ROOT}/work/ ${TOMCAT_ROOT}/temp/ ${TOMCAT_ROOT}/logs/
 
 ENTRYPOINT python2 ${APP_PATH}/mesos-dns-discover.py --mesosdns "${MESOS_DNS_IP_PORT}" \

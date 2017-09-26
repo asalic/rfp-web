@@ -35,6 +35,15 @@ public class Country {
   }
   public void setCities(List<City> cities) {
     this.cities = cities;
+    genCitiesByCode();
+  }
+  
+  public City getCity(String cityCode)
+  {
+    if (citiesByCode != null)
+      return citiesByCode.get(cityCode);
+    else 
+      return null;
   }
   
   public void genCitiesByCode()

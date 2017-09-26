@@ -113,7 +113,6 @@ public class Gtfs {
         if (a[idx].endsWith("\""))
           a[idx] = a[idx].substring(0, a[idx].length() - 1);
       }
-      System.out.println();
       stop.setRoutesIds(a);
       stops.add(stop);
     }
@@ -167,11 +166,15 @@ public class Gtfs {
       Map<String, List<String>> stopMap = tmpResults.get(sid);
       String stopId = rs.getString("stop_id");
       if (!stopMap.containsKey(stopId))
-        stopMap.put(stopId, new ArrayList<String>());
+      {
+        List<String> aTimeLstTmp = new ArrayList<String>();
+        aTimeLstTmp.add(rs.getString("stop_name"));
+        stopMap.put(stopId, aTimeLstTmp);
+      }
 
       List<String> aTimeLst = stopMap.get(stopId);
       String aTime = rs.getString("arrival_time");
-      aTimeLst.add(aTime.substring(0, aTime.indexOf(':')));
+      aTimeLst.add(aTime);
     }
 
     int uid = 0;
@@ -191,12 +194,13 @@ public class Gtfs {
         String sName = aTimes.get(0);
         aTimes.remove(0);
         Set<String> aTimesTmp = new HashSet<>(aTimes);
-        String []aTimesArr = (String[]) aTimesTmp.toArray();
+        String []aTimesArr = aTimesTmp.toArray(new String[aTimesTmp.size()]);
         Arrays.sort(aTimesArr);
         stopsIdsNms.add(new SchedRouteStop.StopsIdsNms(uidSIM, stopId, sName, aTimesArr));
       }
       
       srs.setStopsIdsNms(stopsIdsNms);
+      schedRouteStop.add(srs);
     }
 
     rs.close();

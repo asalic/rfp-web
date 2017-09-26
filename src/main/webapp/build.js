@@ -113,8 +113,11 @@ fs.copy(baseDir + "/www/vendors/leaflet/marker_cluster/MarkerCluster.Default.css
 fs.copy(baseDir + "/www/vendors/bootstrap3-typeahead.min.js",
   baseDir + "/release/vendors/bootstrap3-typeahead.min.js", function(err) {console.log("bootstrap3-typeahead.min.js copied successfully")});
 
+fs.copy(baseDir + "/www/vendors/leaflet-heat.js",
+  baseDir + "/release/vendors/leaflet-heat.js", function(err) {console.log("leaflet-heat.js copied successfully")});
+
 fs.copy(baseDir + "/www/vendors/jsrender.min.js",
-  baseDir + "/release/vendors/jsrender.min.js", function(err) {console.log("jsrender.min.js copied successfully")});
+    baseDir + "/release/vendors/jsrender.min.js", function(err) {console.log("jsrender.min.js copied successfully")});
 
 fs.copy(baseDir + "/www/vendors/fonts",
     baseDir + "/release/vendors/fonts", function(err) {console.log("fonts copied successfully")});
@@ -171,6 +174,7 @@ appConfTxt = appConfTxt.replace(/this\.appBuild\s*=\s*".*";/, "this.appBuild = \
 appConfTxt = appConfTxt.replace(/this\.webserviceRoot\s*=\s*".*";/, "this.webserviceRoot = \"" + webserviceRoot + "\";");
 //appConfTxt = "var gl = 1;" + appConfTxt;
 fs.writeFileSync(baseDir + "/release/res/app.js.tmp", appConfTxt);
+//fs.writeFileSync(baseDir + "/release/res/app.min.js", appConfTxt);
 
 console.log("Compress");
 compressor.minify({

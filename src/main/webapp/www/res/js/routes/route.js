@@ -30,6 +30,7 @@ RFPWRoute.prototype.setPaths = function(data)
 RFPWRoute.prototype.getUId = function() {return this.uid;}
 RFPWRoute.prototype.getId = function() {return this.id;}
 RFPWRoute.prototype.getShortNm = function() {return this.shortNm;}
+RFPWRoute.prototype.getLongNm = function() {return this.longNm;}
 RFPWRoute.prototype.getPaths = function() {return this.paths;}
 RFPWRoute.prototype.getColor = function() {return this.color;}
 RFPWRoute.prototype.getDrawnPaths = function() {return this.drawnPaths;}

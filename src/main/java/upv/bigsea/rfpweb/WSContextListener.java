@@ -27,6 +27,7 @@ public class WSContextListener implements ServletContextListener {
   protected static Params params;
   protected static Gtfs gtfs;
   protected static BestRecommender bestRecommender;
+  protected static OTPTrips otpTrips;
   protected static Auth auth;
  
     /**
@@ -45,14 +46,15 @@ public class WSContextListener implements ServletContextListener {
         try {
           params = new Params(); 
 
-          logger.info("Regions path is: " + System.getenv("REGIONS_LOCAL_PATH"));
+          logger.info(params.toString());
           regions = new Regions(params);
           //ClassLoader classLoader = MainWS.class.getClassLoader();
          
           gtfs = new Gtfs(params);
-          bestRecommender = new BestRecommender(params);   
+          bestRecommender = new BestRecommender(params, regions);  
+          otpTrips = new OTPTrips(params, regions);
           auth = new Auth(params);
-          logger.info("Constext init done");  
+          logger.info("Context init done");  
           
         } catch (JsonGenerationException e) {
           logger.error(Arrays.toString(e.getStackTrace()));
@@ -92,6 +94,11 @@ public class WSContextListener implements ServletContextListener {
     public static BestRecommender getBestRecommender()
     {
       return bestRecommender;
+    }
+    
+    public static OTPTrips getOTPTrips()
+    {
+      return otpTrips;
     }
     
 

@@ -10,21 +10,32 @@
 
   <div id="map-container" class="custom-popup">
     <div id="div-trips-more-btns" class="collapse in" style="z-index: 1000; position: absolute;">
-      <button id="btn-trips-my-loc" type="button"
-        data-toggle="tooltip" title="" disabled="disabled"
-        class="btn btn-default spa-rfpw-round-button glyphicon glyphicon-screenshot">
+      <button id="btn-trips-my-loc" type="button" title="" disabled="disabled"
+        class="btn btn-default spa-rfpw-hover spa-rfpw-round-button glyphicon glyphicon-screenshot">
+        <div class="spa-rfpw-tooltip" data-l10n-id="btn-trips-my-loc"></div>
       </button>
       <button id="btn-trips-create-trip"  type="button" data-toggle="tooltip"
         title="" disabled="disabled"
-        class="btn btn-default spa-rfpw-round-button glyphicon glyphicon-send">
+        class="btn btn-default spa-rfpw-hover spa-rfpw-round-button glyphicon glyphicon-send">
+        <div class="spa-rfpw-tooltip" data-l10n-id="btn-trips-create-trip"></div>
       </button>
-      <button id="btn-trips-layers" type="button" data-toggle="tooltip"
-        title="" disabled="disabled"
-        class="btn btn-default spa-rfpw-round-button glyphicon glyphicon-tasks">
+      <button id="btn-trips-layers" type="button" disabled="disabled"
+        class="btn btn-default spa-rfpw-hover spa-rfpw-round-button glyphicon glyphicon-tasks">
+        <div class="spa-rfpw-tooltip" data-l10n-id="btn-trips-layers"></div>
       </button>
-      <button id="btn-trips-back-city" type="button" data-toggle="tooltip"
+      <button id="btn-trips-back-city" type="button"  disabled="disabled"
+        class="btn btn-default spa-rfpw-hover spa-rfpw-round-button glyphicon glyphicon-globe">
+        <div class="spa-rfpw-tooltip" data-l10n-id="btn-trips-back-city"></div>
+      </button>
+      <button id="btn-trips-sentiment-analysis" type="button" 
+        disabled="disabled"
+        class="btn btn-default spa-rfpw-hover  spa-rfpw-round-button glyphicon glyphicon-fire">
+        <div class="spa-rfpw-tooltip" data-l10n-id="btn-trips-sentiment-analysis"></div>
+      </button>
+      <button id="btn-trips-traffic-jam" type="button" data-toggle="tooltip"
         title="" disabled="disabled"
-        class="btn btn-default spa-rfpw-round-button glyphicon glyphicon-globe">
+        class="btn btn-default spa-rfpw-hover spa-rfpw-round-button glyphicon glyphicon-transfer">
+        <div class="spa-rfpw-tooltip" data-l10n-id="btn-trips-traffic-jam"></div>
       </button>
     </div>
     <div id="map-canvas"></div>
@@ -136,7 +147,7 @@
           </div>
 
           <hr />
-          <ul class="list-group">
+          <ul id="ul-trips-br-trips-create" class="list-group">
           </ul>
         </div>
 
@@ -145,3 +156,13 @@
   </div>
 
 </div>
+
+<span id="notify-w-trips-favs-not-load" data-l10n-id="notify-w-trips-favs-not-load" class="spa-rfpw-diplay-none" data-notify-html="title"></span>
+<span id="notify-i-trips-fav-add-suc" data-l10n-id="notify-i-trips-fav-add-suc" class="spa-rfpw-diplay-none" data-notify-html="title"></span>
+<span id="notify-w-trips-fav-add-err" data-l10n-id="notify-w-trips-fav-add-err" class="spa-rfpw-diplay-none" data-notify-html="title"></span>
+<span id="notify-i-trips-sentiment-analysis-non" data-l10n-id="notify-i-trips-sentiment-analysis-non" class="spa-rfpw-diplay-none" data-notify-html="title"></span>
+<span id="notify-e-trips-sentiment-analysis-req-err" data-l10n-id="notify-e-trips-sentiment-analysis-req-err" class="spa-rfpw-diplay-none" data-notify-html="title"></span>
+<span id="notify-i-trips-traffic-jam-non" data-l10n-id="notify-i-trips-traffic-jam-non" class="spa-rfpw-diplay-none" data-notify-html="title"></span>
+<span id="notify-e-trips-traffic-jam-req-err" data-l10n-id="notify-e-trips-traffic-jam-req-err" class="spa-rfpw-diplay-none" data-notify-html="title"></span>
+<span id="notify-e-trips-create-trip-err" data-l10n-id="notify-e-trips-create-trip-err" class="spa-rfpw-diplay-none" data-notify-html="title"></span>
+

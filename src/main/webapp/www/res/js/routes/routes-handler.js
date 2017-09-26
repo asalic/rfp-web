@@ -2,27 +2,40 @@
 //   In GTFS, these names have ids ranging from 0 to 7, therefore
 //   there is no need for a map to store the types
 RFPWRoutesHandler.ROUTE_TYPE_STR = ["Tram", "Metro", "Rail", "Bus", "Ferry",
-  "Cable car", "Gondola", "Funicular"];
+  "Cable car", "Gondola", "Funicular", "Walk"];
 
 function RFPWRoutesHandler(routesTabDOM)
 {
-  "use strict";
-  this.routesTabDOM = routesTabDOM;
-  this.routesLoaded = false;
-  this.MAX_STARS = 5;
-  this.routesLst = [];
+  //console.log("RFPWUtils.toValidHTMLId: " + RFPWUtils.toValidHTMLId("+/="));
+  //console.log("RFPWUtils.fromValidHTMLId: " + RFPWUtils.fromValidHTMLId(RFPWUtils.toValidHTMLId("+/=")));
+  
+//  this.routesTabDOM = routesTabDOM;
+//  this.routesLoaded = false;
+//  this.MAX_STARS = 5;
+//  this.routesLst = [];
+//  this._routesLstByUId = Object.create(null);
+//  this._routesLstById = Object.create(null);
   $("#inp-filter-routes-by-nm").on("input paste change",
     $.proxy(this._filterRoutesByNm, this));
   // this.routeTypesStr = ["T", "M", "R", "B", "F",
   //   "C", "G", "F"];
   //this.idCountRoutes = new Map();
-  this._cancelSchedByRouteIdDate = true;
+  //this._cancelSchedByRouteIdDate = true;
   $('#dlg-routes-sched').on('hidden.bs.modal',
     $.proxy(this._hideDlgShowSched, this));
   $("#sel-routes-sched-trip").on("change",
     $.proxy(this._onTripSchedChg, this));
+  this.routesTabDOM = routesTabDOM;
+  this.routesLoaded = false;
+  this.MAX_STARS = 5;
+  this.routesLst = [];
+  this._routesLstByUId = Object.create(null);
+  this._routesLstById = Object.create(null);
   this._displRouteSchedule = null;
+  this._cancelSchedByRouteIdDate = true;
+  //this._displRouteSchedule = null;
 }
+
 
 RFPWRoutesHandler.prototype._hideDlgShowSched = function()
 {
@@ -56,7 +69,7 @@ RFPWRoutesHandler.prototype._sucSchedByRouteIdDate = function(routeId, data)
   //console.log(routeId);
   if (!this._cancelSchedByRouteIdDate)
   {//   If the user didn't cancel the dialog, add the data
-    //console.log(data);
+    console.log(data);
     this._displRouteSchedule = new RFPWRouteSchedule(data.data);
     var tripsSel = $("#sel-routes-sched-trip");
     tripsSel.empty();
@@ -105,13 +118,19 @@ RFPWRoutesHandler.prototype._onTripSchedChg = function()
   }
 }
 
-RFPWRoutesHandler.prototype.reqAllRoutes = function()
+RFPWRoutesHandler.prototype.changeRegion = function(callBSuc, callBErr)
+{
+  this.rmAlRoutes();
+  this.reqAllRoutes(callBSuc, callBErr);
+}
+
+RFPWRoutesHandler.prototype.reqAllRoutes = function(callBSuc, callBErr)
 {
   applicationContext.showLoadingPnl("routes-main-lst");
 
   $("#spn-routes-err-req").addClass("spa-rfpw-hidden");
-  applicationContext.asyncReq($.proxy(this._sucAllRoutes, this),
-    $.proxy(this._errAllRoutes, this),
+  applicationContext.asyncReq($.proxy(this._sucAllRoutes, this, callBSuc),
+    $.proxy(this._errAllRoutes, this, callBErr),
     "routes",
     [applicationContext.moreHandler.getCurrentCountryCode(),
       applicationContext.moreHandler.getCurrentCityCode()]
@@ -119,11 +138,13 @@ RFPWRoutesHandler.prototype.reqAllRoutes = function()
 }
 
 
-RFPWRoutesHandler.prototype._sucAllRoutes = function(srvRoutesLst)
+RFPWRoutesHandler.prototype._sucAllRoutes = function(callBSuc, srvRoutesLst)
 {
   //var routesObj = this.routesObj;
   var routesLstSrv = srvRoutesLst.data;
   this.routesLst = [];
+  this._routesLstByUId = Object.create(null);
+  this._routesLstById = Object.create(null);
   $("#routes-lst-empty").hide();
   //console.log(routesLst);
   //var lines = JSON.parse(data);
@@ -134,6 +155,8 @@ RFPWRoutesHandler.prototype._sucAllRoutes = function(srvRoutesLst)
     //delete routesLstSrv[bl];
     //console.log(r.id);
     this.routesLst.push(r);
+    this._routesLstByUId[r.getUId()] = r;
+    this._routesLstById[RFPWUtils.strA2H(r.getId())] = r;
     this.routesTabDOM.append(this.genRouteRow(r));
     //   Listen to clicks/taps on show routes on the map
     $("#btn-show-route-map" + r.getUId()).
@@ -144,6 +167,14 @@ RFPWRoutesHandler.prototype._sucAllRoutes = function(srvRoutesLst)
        on("click tap",
         $.proxy(this._reqSchedByRouteIdDate, this, r.getId())
       );
+    $("#btn-routes-fav-add-rm" + r.getUId()).
+      on("click tap",
+       $.proxy(this._favAddRmRoute, this, r.getUId())
+     );
+//    var btnJQId = "btn-show-route-map" + r.getUId();
+//    applicationContext.getLocalization().formatValues("btnroutesshowonmap", btnJQId).then(
+//        ([btnroutesshowonmap, btnJQId]) =>  $("#" + btnJQId).prop("title", btnroutesshowonmap)
+//      );
   }
   //   The data has been loaded, signal that
   this.routesLoaded = true;
@@ -151,14 +182,18 @@ RFPWRoutesHandler.prototype._sucAllRoutes = function(srvRoutesLst)
   //routesObj = null;
 
   applicationContext.hideLoadingPnl("routes-main-lst");
+  if (callBSuc != null)
+    callBSuc();
 }
 
-RFPWRoutesHandler.prototype._errAllRoutes = function(request,
+RFPWRoutesHandler.prototype._errAllRoutes = function(callBErr, request,
     textStatus, errorThrown)
 {
   $("#spn-routes-err-req").removeClass("spa-rfpw-hidden");
   $('#spn-routes-err-req').append(document.createTextNode(request.responseText));
   applicationContext.hideLoadingPnl("routes-main-lst");
+  if (callBErr != null)
+    callBErr();
 }
 
 
@@ -182,6 +217,74 @@ RFPWRoutesHandler.prototype.rmAlRoutes = function()
   $("#routes-lst-empty").show();
 }
 
+RFPWRoutesHandler.prototype.favRouteRm = function(routeId)
+{
+  var rUId = this._routesLstById[routeId].getUId();
+  this._favAddRmRouteSuc(rUId, false);
+}
+
+RFPWRoutesHandler.prototype.favRoutesSet = function(routeIds) 
+{
+  try{
+    if (this.routesLoaded)
+    {
+      for (var idx=0; idx<routeIds.length; ++idx)
+      {
+        var rUId = this._routesLstById[routeIds[idx]].getUId();
+        this._favAddRmRouteSuc(rUId, true);
+      }
+      return true;
+    }
+    return false;
+  } catch (e)
+  {
+    console.log(e);
+    console.error("Bug in the code, quitting to avoid killing the resources");
+    return true;
+  }
+}
+
+
+RFPWRoutesHandler.prototype._favAddRmRoute = function(routeUId)
+{
+  console.log(routeUId);
+  if (applicationContext.favsHandler.isFavsLoaded())
+  {
+    $("#btn-routes-fav-add-rm" + routeUId).prop("disabled", true);
+    applicationContext.favsHandler.addRmFavRoute( 
+        this._routesLstByUId[routeUId], 
+        $.proxy(this._favAddRmRouteSuc, this, routeUId),
+        $.proxy(this._favAddRmRouteErr, this, routeUId));
+  } else
+    console.warn("Unable to fav route, the favorites are not yet loaded. Please wait for them to load and try again.")
+    
+}
+
+RFPWRoutesHandler.prototype._favAddRmRouteSuc = function(routeUId, isFav)
+{
+  if (isFav)
+  {
+    $("#btn-routes-fav-add-rm" + routeUId).removeClass("glyphicon-heart-empty");
+    $("#btn-routes-fav-add-rm" + routeUId).addClass("glyphicon-heart");
+  } else
+  {
+    $("#btn-routes-fav-add-rm" + routeUId).removeClass("glyphicon-heart");
+    $("#btn-routes-fav-add-rm" + routeUId).addClass("glyphicon-heart-empty");
+  }
+  $("#btn-routes-fav-add-rm" + routeUId).prop("disabled", false);
+}
+
+RFPWRoutesHandler.prototype._favAddRmRouteErr = function(routeUId)
+{
+  console.log("_favAddRmRouteErr " + routeUId);
+  $("#btn-routes-fav-add-rm" + routeUId).prop("disabled", false);
+  $.notify($("#notify-w-routes-favs-not-add-rm").text(), 
+      {
+        className: "warn",
+        globalPosition: 'top left'
+      }
+    );
+}
 
 RFPWRoutesHandler.prototype._reqShapesByRouteId = function(route)
 {
@@ -259,57 +362,54 @@ RFPWRoutesHandler.prototype.genRouteRow = function(routeInfo)
 {
   var showStartStopStop = (routeInfo.startStop === null ||
     routeInfo.endStop === null ? "spa-rfpw-diplay-none" : "");
+  var showFavs = "spa-rfpw-diplay-none";
+  var routeFavIco;
+  if (applicationContext.moreHandler.getUserAuth().isUserAuth())
+  {
+    showFavs = "";
+    if (applicationContext.favsHandler.isRouteFav(routeInfo.getId()))
+      routeFavIco = "glyphicon-heart";
+    else
+      routeFavIco = "glyphicon-heart-empty";
+  }
   return '<div id="div-route-row'+ routeInfo.getUId() +
             '" class="panel panel-default">'+
-      '<div data-toggle="collapse" data-target="#collapse' +
-        routeInfo.getUId() + '" class="panel-heading">'+
+      '<div class="panel-heading">'+
         '<div style="background-color: ' + routeInfo.color + ';" class="spa-rfpw-vert-bar" ></div>'+
         '<div class="spa-rfpw-nm-star pull-left">' +
           routeInfo.shortNm + '<br />'+
-          this.genStarsDOM(routeInfo.stars) +
-        '</div>' +
+        '</div>' +    
+        
         '<div class="' + showStartStopStop + ' pull-right">' +
           '<span class="glyphicon glyphicon-triangle-right"></span>' +
             routeInfo.startStop + '<br />' +
           '<span class="glyphicon glyphicon-triangle-left"></span>' +
             routeInfo.endStop +
         '</div>' +
-        '<div class="clearfix"></div>' +
-      '</div>'+
-      '<div id="collapse' + routeInfo.getUId() +
-        '" class="panel-collapse collapse">'+
-        '<div class="panel-body">'+
-          '<div class="spa-rfpw-progress-graph">'+
-            '<div class="spa-rfpw-progress-bar" style="width:' +
-              routeInfo.crowdedness + '%">' +
-              '<p class="spa-rfpw-progress-text">Crowdedness:&nbsp;' +
-                routeInfo.crowdedness + '%</p>'+
-            '</div>'+
-          '</div>'+
-          '<div class="spa-rfpw-progress-graph">'+
-            '<div class="spa-rfpw-progress-bar" style="width:' +
-              routeInfo.responsivness + '%">'+
-              '<p class="spa-rfpw-progress-text">Responsiveness:&nbsp;' +
-                routeInfo.responsivness + '%</p>'+
-            '</div>'+
-          '</div>'+
-          '<div class="spa-rfpw-progress-graph">'+
-            '<div class="spa-rfpw-progress-bar" style="width:' +
-              routeInfo.conservation + '%">'+
-              '<p class="spa-rfpw-progress-text">Conservation:&nbsp;' +
-                routeInfo.conservation + '%</p>'+
-            '</div>'+
-          '</div>'+
+        
+        '<div class="pull-right">' + 
+          '<div class="' +  showFavs + ' spa-rfpw-route-fav pull-left">' +
+            '<button id="btn-routes-fav-add-rm'+ routeInfo.getUId() + '"class="spa-rfpw-hover btn btn-default glyphicon ' + routeFavIco + '"><div class="spa-rfpw-tooltip" data-l10n-id="btnroutesfav"></div></button>' +
+          '</div>' +
           '<button id="btn-show-route-map'+ routeInfo.getUId() +
-          '" class="btn btn-default bus-line-btn">Show On Map</button>'+
-          '<button id="btn-routes-show-sched'+ routeInfo.getUId() +
-          '" class="btn btn-default bus-line-btn schedule-btn pull-right">Schedule</button>'+
+            '" class="btn btn-default bus-line-btn spa-rfpw-hover glyphicon glyphicon-picture"><div class="spa-rfpw-tooltip" data-l10n-id="btnroutesshowonmap"></div></button>'+
+          '<button id="btn-routes-show-sched'+ routeInfo.getUId() + 
+            '" class="btn btn-default bus-line-btn schedule-btn spa-rfpw-hover glyphicon glyphicon-time"><div class="spa-rfpw-tooltip" data-l10n-id="btnroutesschedule"></div></button>'+   
+          
+        '</div>' +
+        '<div class="clearfix"></div>' + 
+      '</div>' +
         '</div>'+
       '</div>';
 }
 
 
-RFPWRoutesHandler.prototype.hasRoutes = function(routeID)
+RFPWRoutesHandler.prototype.isRoutesLoaded = function()
+{
+  return this.routesLoaded;
+}
+
+RFPWRoutesHandler.prototype.hasRoutes = function()
 {
   return this.routesLoaded;
 }
@@ -347,6 +447,25 @@ RFPWRoutesHandler.prototype.getRouteById = function(routeId)
       return this.routesLst[routeIdx];
   console.log("Unable to find route id " + routeId);
   return null;
+}
+
+RFPWRoutesHandler.prototype.getRouteByUId = function(routeUId)
+{
+  if (Object.prototype.hasOwnProperty.call(this._routesLstByUId, routeUId))
+    return this._routesLstByUId[routeUId];
+  else
+    return null;
+}
+
+RFPWRoutesHandler.prototype.getRouteTypeStrByType = function(routeType)
+{
+  if (routeType < RFPWRoutesHandler.ROUTE_TYPE_STR.length)
+    return RFPWRoutesHandler.ROUTE_TYPE_STR[routeType][0];
+  else
+  {
+    console.log("Unable to find route type " + routeType);
+    return null;
+  }
 }
 
 RFPWRoutesHandler.prototype.getRouteTypeStrById = function(routeId)
@@ -389,4 +508,9 @@ RFPWRoutesHandler.prototype.getRouteTypeStrByPos = function(routePos)
 RFPWRoutesHandler.prototype.getRouteIDByPos = function(routePos)
 {
   this.routesLst[routePos].getId();
+}
+
+RFPWRoutesHandler.prototype.isRouteWalking = function(routeType)
+{
+  return (RFPWRoutesHandler.ROUTE_TYPE_STR.length - 1) === routeType;
 }

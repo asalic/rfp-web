@@ -5,6 +5,8 @@ function RFPWMoreHandler()
 {
 
   this._userAuth = new RFPWUserAuth();
+  this._feedbackHandler = new RFPWFeedbackHandler();
+  this._contactHandler = new RFPWContactHandler();
 
 
   $("#btn-more-about").on("click tap", $.proxy(this.showAboutDlg, this));
@@ -25,6 +27,12 @@ function RFPWMoreHandler()
 
   // $(window).on("resize",
   //   $.proxy(this._onResizeWait, this));
+}
+
+RFPWMoreHandler.prototype.initAfterAuth = function()
+{
+  this._contactHandler.init();
+  this.reqRetrieveRegions();
 }
 
 RFPWMoreHandler.prototype.reqRetrieveRegions = function()
@@ -65,36 +73,93 @@ RFPWMoreHandler.prototype.handlePopupResult = function(answerData, action)
 
 RFPWMoreHandler.prototype.getDateTimeHandler = function() {return this._dateTimeHandler;}
 
-RFPWMoreHandler.prototype.changeLocation = function()
+//RFPWMoreHandler.prototype.changeLocation = function()
+//{
+//  this.isMapLoadedIntv = setInterval($.proxy(this.changeLocationImpl,
+//    this), 1000);
+//}
+//
+//RFPWMoreHandler.prototype.changeLocationImpl = function()
+//{
+//  this.isMapLoadedIntvCnt++;
+//  if (this.isMapLoadedIntvCnt > RFPWMoreHandler.IS_MAP_LOADED_MAX_CNT)
+//  {
+//    this.isMapLoadedIntvCnt = 0;
+//    clearInterval(this.isMapLoadedIntv);
+//    console.log("Change location: Unable to load the map completely, cannot continue");
+//  }
+//  if (applicationContext.mapHandler.isMapLoaded())
+//  {
+//    //this.currentCityId = this.currentCountry["cities"][idx];
+//    applicationContext.mapHandler.clearLocation();
+//    applicationContext.routesHandler.rmAlRoutes();
+//    applicationContext.mapHandler.addStops2Map();
+//    applicationContext.routesHandler.reqAllRoutes();
+//    this.isMapLoadedIntvCnt = 0;
+//    clearInterval(this.isMapLoadedIntv);
+//  }
+//}
+
+RFPWMoreHandler.prototype.toggleUI = function(disabled)
 {
-  this.isMapLoadedIntv = setInterval($.proxy(this.changeLocationImpl,
-    this), 1000);
+  $("#div-more-wrapper").children("button, a").prop("disabled", disabled);
+  $("#div-more-region").prop("disabled", disabled);
 }
 
-RFPWMoreHandler.prototype.changeLocationImpl = function()
+RFPWMoreHandler.prototype.changeRegion = function()
 {
-  this.isMapLoadedIntvCnt++;
-  if (this.isMapLoadedIntvCnt > RFPWMoreHandler.IS_MAP_LOADED_MAX_CNT)
+  // In the case of favs we have to check if the user is authenticated; if (s)he's not
+  // then we consider the favorites loaded
+  var isFavsLoaded = this._userAuth.isUserAuth() ? applicationContext.favsHandler.isFavsLoaded() : true;
+  console.log("favs loaded: " + isFavsLoaded);
+  console.log("mapHandler.isMapLoaded(): " + applicationContext.mapHandler.isMapLoaded());
+  console.log("mapHandler.isStopsLoaded(): " + applicationContext.mapHandler.isStopsLoaded());
+  console.log("applicationContext.routesHandler: " + applicationContext.routesHandler.isRoutesLoaded());
+  if (applicationContext.mapHandler.isMapLoaded()
+      && applicationContext.mapHandler.isStopsLoaded()
+      && applicationContext.routesHandler.isRoutesLoaded()
+      && isFavsLoaded)
   {
-    this.isMapLoadedIntvCnt = 0;
-    clearInterval(this.isMapLoadedIntv);
-    console.log("Change location: Unable to load the map completely, cannot continue");
-  }
-  if (applicationContext.mapHandler.isMapLoaded())
+    this.toggleUI(true);
+    applicationContext.mapHandler.changeRegion(
+        $.proxy(this._afterChangeRegionMapHandlerSuc, this), 
+        $.proxy(this._afterChangeRegionMapHandlerErr, this));
+  } else
   {
-    //this.currentCityId = this.currentCountry["cities"][idx];
-    applicationContext.mapHandler.clearLocation();
-    applicationContext.routesHandler.rmAlRoutes();
-    applicationContext.mapHandler.addStops2Map();
-    applicationContext.routesHandler.reqAllRoutes();
-    this.isMapLoadedIntvCnt = 0;
-    clearInterval(this.isMapLoadedIntv);
+    $.notify($("#notify-i-more-change-region-not-avail").text(), 
+        {
+          className: "info",
+          globalPosition: 'top left'
+        }
+      );
   }
+}
+
+RFPWMoreHandler.prototype._afterChangeRegionMapHandlerSuc = function() {
+  console.log("_afterChangeRegionMapHandlerSuc");
+  applicationContext.routesHandler.changeRegion($.proxy(this._afterChangeRegionRoutesHandlerSuc, this), null);
+}
+
+RFPWMoreHandler.prototype._afterChangeRegionMapHandlerErr = function() {
+  console.error("Unable to change region on map");
+}
+
+
+RFPWMoreHandler.prototype._afterChangeRegionRoutesHandlerSuc = function() {
+  console.log("_afterChangeRegionRoutesHandlerSuc");
+  applicationContext.favsHandler.changeRegion($.proxy(this._changeRegionComplete, this), null);
+}
+
+RFPWMoreHandler.prototype._changeRegionComplete = function() {
+  console.log("_changeRegionComplete");
+  this.toggleUI(false);
+  applicationContext.switchTab(RFPWApplicationContext.TAB_TRIPS);
 }
 
 RFPWMoreHandler.prototype.onCitySel = function(countryIdx, cityIdx)
 {
   console.log(countryIdx + " " + cityIdx);
+  this.toggleUI(true);
   if (countryIdx !== this.currentCountryIdx || this.currentCityIdx !== cityIdx)
   {
     //   Change the selection in the HTML representation
@@ -112,21 +177,20 @@ RFPWMoreHandler.prototype.onCitySel = function(countryIdx, cityIdx)
     //   Save the current selection in storage
     applicationContext.storage.setCountryIdx(countryIdx);
     applicationContext.storage.setCityIdx(cityIdx);
-    this.changeLocation();
-    applicationContext.switchTab(RFPWApplicationContext.TAB_TRIPS);
+    this.changeRegion();
   }
 }
 
 RFPWMoreHandler.prototype.genCities = function(countryPos)
 {
-  var cities = this.countriesCities[countryPos]._cities;
+  var cities = this.countriesCities[countryPos].cities;
   var result = "";
   for (var cityIdx=0; cityIdx<cities.length; ++cityIdx)
   {
     var actv = (this.currentCityIdx == cityIdx && this.currentCountryIdx === countryPos) ?
       "active" : "";
     result += '<button id="btn-more-city-row-'+ countryPos + "-" + cityIdx +
-      '" class="list-group-item ' + actv + '">' + cities[cityIdx]._name + '</button>';
+      '" class="list-group-item ' + actv + '">' + cities[cityIdx].getName() + '</button>';
 
     //   Add click/tap listener for cities
     $("#div-more-region-lst").on("click tap",
@@ -144,7 +208,7 @@ RFPWMoreHandler.prototype.genCountryRow = function(countryPos)
             '" class="panel panel-default list-group-item">'+
       '<div data-toggle="collapse" data-target="#collapse-more-country-row-' +
         countryPos + '" class="panel-heading">'+
-        country._name +
+        country.getName() +
       '</div>'+
       '<div id="collapse-more-country-row-' + countryPos +
         '" class="panel-collapse collapse ' + collapse + '">'+
@@ -183,32 +247,34 @@ RFPWMapHandler.prototype._onResize = function()
 
 RFPWMoreHandler.prototype.getCurrentCountryNm = function()
 {
-  return this.countriesCities[this.currentCountryIdx]["_name"];
+  return this.countriesCities[this.currentCountryIdx]["name"];
 }
 
 RFPWMoreHandler.prototype.getCurrentCountryCode = function()
 {
-  return this.countriesCities[this.currentCountryIdx]["_code"];
+  return this.countriesCities[this.currentCountryIdx]["code"];
 }
+
+RFPWMoreHandler.prototype.getCurrentCity = function() {return this.countriesCities[this.currentCountryIdx].cities[this.currentCityIdx];}
 
 RFPWMoreHandler.prototype.getCurrentCityNm = function()
 {
-  return this.countriesCities[this.currentCountryIdx]._cities[this.currentCityIdx]["_name"];
+  return this.countriesCities[this.currentCountryIdx].cities[this.currentCityIdx]["name"];
 }
 
 RFPWMoreHandler.prototype.getCurrentCityCode = function()
 {
-  return this.countriesCities[this.currentCountryIdx]._cities[this.currentCityIdx]["_code"];
+  return this.countriesCities[this.currentCountryIdx].cities[this.currentCityIdx]["code"];
 }
 
 RFPWMoreHandler.prototype.getCurrentCityLat = function()
 {
-  return this.countriesCities[this.currentCountryIdx]._cities[this.currentCityIdx]["_lat"];
+  return this.countriesCities[this.currentCountryIdx].cities[this.currentCityIdx]["lat"];
 }
 
 RFPWMoreHandler.prototype.getCurrentCityLng = function()
 {
-  return this.countriesCities[this.currentCountryIdx]._cities[this.currentCityIdx]["_lng"];
+  return this.countriesCities[this.currentCountryIdx].cities[this.currentCityIdx]["lng"];
 }
 
 RFPWMoreHandler.prototype.showAboutDlg = function()
@@ -236,8 +302,11 @@ RFPWMoreHandler.prototype.getErrRetrieveRegionsMsg = function()
 RFPWMoreHandler.prototype.getUserAuth = function()
 {return this._userAuth;}
 
+RFPWMoreHandler.prototype.getFeedbackHandler = function()
+{return this._feedbackHandler;}
+
 RFPWMoreHandler.prototype.getCurrentCityId = function()
-{return this.countriesCities[this.currentCountryIdx]._cities[this.currentCityIdx]["_id"];}
+{return this.countriesCities[this.currentCountryIdx].cities[this.currentCityIdx].getId();}
 
 RFPWMoreHandler.prototype.getCurrentCountryId = function()
-{return this.countriesCities[this.currentCountryIdx]._id;}
+{return this.countriesCities[this.currentCountryIdx].id;}

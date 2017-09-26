@@ -1,5 +1,4 @@
 package upv.bigsea.rfpweb.model;
-import java.util.UUID;
 
 public class Msg<DATA_TYPE> {
   

@@ -17,10 +17,13 @@ RFPWUserAuth.prototype.tokenAuthenticate = function(callbSucc, callbErr)
   if (this._userToken.length > 0)
   {
     // We don't store user details on the device, get the details if the token exists
-    
-    this._reqTokenAuthenticate(this._userToken, callbSucc, callbErr);
+    console.log("check token expired");
+    this._reqTokenAuthenticate(this._userToken, 
+        callbSucc, 
+        callbErr);
   } else
   {
+    console.log("user not authenticated/ token expired");
     // User not authenticated (or token expired)
     this._user = null; // The Sign-In object.
     this._authenticated = false;
@@ -29,27 +32,67 @@ RFPWUserAuth.prototype.tokenAuthenticate = function(callbSucc, callbErr)
   }
 }
 
-RFPWUserAuth.prototype._reqTokenAuthenticate = function(userToken, callbSucc, callbErr)
+RFPWUserAuth.prototype._reqTokenAuthenticate = function(userToken, callbSuc, callbErr)
 {
-  applicationContext.asyncReq($.proxy(this._sucTokenAuthenticate, this, callbSucc),
-      $.proxy(this._errRetrieveRegions, this, callbErr),
-      "auth/userdetails/",
-      [applicationContext.storage.getUsrAuthToken()]
-    );
+  console.log("Auth with: ", userToken);
+  $.ajax({
+    url: applicationContext.conf.authBaseAddr + applicationContext.conf.authVerifyToken,
+    data: {token: userToken},
+    type: "POST",
+    crossDomain: true,
+    //dataType: 'jsonp',
+    success: callbSuc,
+    error: callbErr
+  });
 }
 
-RFPWUserAuth.prototype._sucTokenAuthenticate = function(data, callbSucc)
+RFPWUserAuth.prototype.sucTokenAuthenticate = function(data, callbSuc, callbErr)
 {
-  this._user = new RFPWUser(
-      {
-        "lName": applicationContext.storage.getUsrLName(),
-        "fName": applicationContext.storage.getUsrLName(),
-        "userName": data["userName"],
-        "email": "none"
-      }
-    );
+  if (data["response"] !== "invalid token")
+  {
+    console.log("Req user authenticate");
+    $.ajax({
+      url: applicationContext.conf.authBaseAddr + applicationContext.conf.authUserInfo,
+      data: {token: this._userToken},
+      type: "POST",
+      crossDomain: true,
+      //dataType: 'jsonp',
+      success: callbSuc,
+      error: callbErr
+    });
+    //this._updUI();
+  } else
+  {
+    console.log("Token authenticate: invalid response");
+    this._cleanUser();
+    this._updUI();
+    callbErr();
+  }
+}
 
-  this._authenticated = true;
+RFPWUserAuth.prototype.errTokenAuthenticate = function(data)
+{
+  this._user = null;
+  this._userToken = "";
+  this._authenticated = false;
+  applicationContext.storage.setUsrAuthToken("");
+  this._updUI();
+}
+
+RFPWUserAuth.prototype.sucUserInfo = function(data)
+{
+  if (data["response"] !== "invalid token")
+  {
+    this._user = new RFPWUser(
+        data["response"]
+      );
+  
+    this._authenticated = true;
+  } else
+  {
+    this._cleanUser();
+  }
+  this._updUI();
 }
 
 RFPWUserAuth.prototype._onSignRevoke = function()
@@ -73,8 +116,6 @@ RFPWUserAuth.prototype._onSignInReturn = function(answerData)
     this._userToken = answerData["user_info"]["user_token"];
     this._authenticated = true;
     applicationContext.storage.setUsrAuthToken(answerData["user_info"]["user_token"]);
-    applicationContext.storage.setUsrLName(answerData["user_info"]["user"]["lname"]);
-    applicationContext.storage.setUsrFName(answerData["user_info"]["user"]["fname"]);
     applicationContext.reloadApp();
     //applicationContext.favsHandler.onUserSignIn();
   }
@@ -84,12 +125,7 @@ RFPWUserAuth.prototype._onSignInReturn = function(answerData)
 RFPWUserAuth.prototype._onSignOut = function()
 {
   this._actionTriggered = RFPWUserAuth.ACTION_SIGN_OUT;
-  this._user = null;
-  this._userToken = null;
-  this._authenticated = false;
-  applicationContext.storage.setUsrAuthToken("");
-  applicationContext.storage.setUsrLName("");
-  applicationContext.storage.setUsrFName("");
+  this._cleanUser();
   applicationContext.reloadApp();
   //this._updUI();
   
@@ -136,8 +172,21 @@ RFPWUserAuth.prototype.handlePopupResult = function(answerData, action)
 
 }
 
+/**
+ * Remove all references to the user from the storage (including the token
+ * and set authenticated to false
+ */
+RFPWUserAuth.prototype._cleanUser = function()
+{
+  this._user = null;
+  this._userToken = null;
+  this._authenticated = false;
+  applicationContext.storage.setUsrAuthToken("");
+}
+
 RFPWUserAuth.prototype.isUserAuth = function() {return this._authenticated;}
 RFPWUserAuth.prototype.getUserToken = function() {return this._userToken;}
+RFPWUserAuth.prototype.getUser = function() {return this._user;}
 
 RFPWUserAuth.ACTION_UNK = 104;
 RFPWUserAuth.ACTION_SIGN_IN = 105;

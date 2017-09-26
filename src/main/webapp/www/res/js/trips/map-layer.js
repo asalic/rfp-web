@@ -1,9 +1,12 @@
 RFPWMapLayer.TYPE_ALL_STOPS = 10;
 RFPWMapLayer.TYPE_ROUTE_PATHS = 11;
 RFPWMapLayer.TYPE_TRIP = 12;
+RFPWMapLayer.TYPE_SENTIMENT_ANALYSIS = 13;
+RFPWMapLayer.TYPE_TRAFFIC_JAM = 14;
 
-function RFPWMapLayer(mltype, map, layerObj)
+function RFPWMapLayer(count, mltype, map, layerObj)
 {
+  this.count = count;
   this.nm = "";
   this.removable = false;
   this.map = map;
@@ -28,6 +31,9 @@ function RFPWMapLayer(mltype, map, layerObj)
   //   console.log("Unable to identify object type in MapLayer");
 }
 
+RFPWMapLayer.prototype.getCount = function() {return this.count;}
+RFPWMapLayer.prototype.setCount = function(c) {this.count = c;}
+
 RFPWMapLayer.prototype.isShown = function() {return this.shown;}
 RFPWMapLayer.prototype.setShown = function(shown) {this.shown = shown;}
 
@@ -38,3 +44,4 @@ RFPWMapLayer.prototype.isRemovable = function() {return this.removable;}
 RFPWMapLayer.prototype.setRemovable = function(r) {this.removable = r;}
 
 RFPWMapLayer.prototype.getLayerObject = function() {return this.layerObj;}
+RFPWMapLayer.prototype.getMLType = function() {return this.mltype;}

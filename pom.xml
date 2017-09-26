@@ -9,30 +9,40 @@
 	<url>http://maven.apache.org</url>
 	<properties>
 		<jackson-2-version>2.8.0</jackson-2-version>
-		<maven-compiler-plugin-version>3.6.1</maven-compiler-plugin-version>		
+		<maven-compiler-plugin-version>3.6.1</maven-compiler-plugin-version>
 	</properties>
-	
+
 	<profiles>
-	    <profile>
-	        <id>debug</id>
-	        <properties>
-	        	<warplugin-webresources-dir>src/main/webapp/www</warplugin-webresources-dir>	
+		<profile>
+			<id>debug</id>
+			<properties>
+				<warplugin-webresources-dir>src/main/webapp/www</warplugin-webresources-dir>
 			</properties>
-	    </profile>
-	    <profile>
-	        <id>release</id>
-	        <properties>
-	        	<warplugin-webresources-dir>src/main/webapp/release</warplugin-webresources-dir>	
+		</profile>
+		<profile>
+			<id>release</id>
+			<properties>
+				<warplugin-webresources-dir>src/main/webapp/release</warplugin-webresources-dir>
 			</properties>
-	    </profile>
-    </profiles>
-	
+		</profile>
+	</profiles>
+
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>3.8.1</version>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.5.3</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>fluent-hc</artifactId>
+			<version>4.5.3</version>
 		</dependency>
 		<dependency>
 			<groupId>org.postgresql</groupId>
@@ -100,22 +110,34 @@
 			<artifactId>maven-compiler-plugin</artifactId>
 			<version>${maven-compiler-plugin-version}</version>
 		</dependency>
-		
+
 		<!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
 		<dependency>
-		    <groupId>javax.servlet</groupId>
-		    <artifactId>javax.servlet-api</artifactId>
-		    <version>3.1.0</version>
-		    <scope>provided</scope>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.1.0</version>
+			<scope>provided</scope>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/log4j/log4j -->
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.17</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.google.maps/google-maps-services -->
+		<dependency>
+			<groupId>com.google.maps</groupId>
+			<artifactId>google-maps-services</artifactId>
+			<version>0.2.0</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/commons-net/commons-net -->
 <dependency>
-    <groupId>log4j</groupId>
-    <artifactId>log4j</artifactId>
-    <version>1.2.17</version>
+    <groupId>commons-net</groupId>
+    <artifactId>commons-net</artifactId>
+    <version>3.6</version>
 </dependency>
 		
-		
+
 	</dependencies>
 	<build>
 		<plugins>
@@ -124,8 +146,8 @@
 				<artifactId>maven-war-plugin</artifactId>
 				<version>3.1.0</version>
 				<configuration>
-					<outputDirectory>/opt/apache-tomcat/webapps</outputDirectory>
-          			<warName>ROOT</warName>
+					<outputDirectory>/opt/tomcat/webapps</outputDirectory>
+					<warName>ROOT</warName>
 					<webResources>
 						<resource>
 							<excludes>

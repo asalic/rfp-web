@@ -1,26 +1,26 @@
 
 function RFPWCountry(countryInstance)
 {
-  this._id = countryInstance.id;
-  this._name = countryInstance.name;
-  this._code = countryInstance.code;
-  this._cities = [];
-  this._citiesByCode = Object.create(null);
+  this.id = countryInstance.id;
+  this.name = countryInstance.name;
+  this.code = countryInstance.code;
+  this.cities = [];
+  this.citiesByCode = Object.create(null);
   for (var idxC=0; idxC<countryInstance.cities.length; ++idxC)
   {
-    this._cities.push(new RFPWCity(countryInstance.cities[idxC]));
-    this._citiesByCode[this._cities[idxC].getCode()] = this._cities[idxC];
+    this.cities.push(new RFPWCity(countryInstance.cities[idxC]));
+    this.citiesByCode[this.cities[idxC].getCode()] = this.cities[idxC];
   }
 }
 
-RFPWCountry.prototype.getId = function() {return this._id;}
-RFPWCountry.prototype.getName = function() {return this._name;}
-RFPWCountry.prototype.getCode = function() {return this._code;}
-RFPWCountry.prototype.getCities = function() {return this._cities;}
+RFPWCountry.prototype.getId = function() {return this.id;}
+RFPWCountry.prototype.getName = function() {return this.name;}
+RFPWCountry.prototype.getCode = function() {return this.code;}
+RFPWCountry.prototype.getCities = function() {return this.cities;}
 RFPWCountry.prototype.getCityByCode = function(c)
 {
-  if (this._citiesByCode.hasOwnProperty(c))
-    return this._citiesByCode[c];
+  if (this.citiesByCode.hasOwnProperty(c))
+    return this.citiesByCode[c];
   else
     return null;
 }

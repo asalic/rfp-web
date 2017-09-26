@@ -65,12 +65,16 @@ if __name__ == "__main__":
         for idxCountry in range(0, len(regions)):
             cities = regions[idxCountry]["cities"]
             for idxCity in range(0, len(cities)):
+               print("getting host/port for: " + cities[idxCity]["name"])
                ipPort = getIpPortDns(mesosDnsAddr, cities[idxCity]["mesosDNSBRRoutes"])
                cities[idxCity]["hostBRRoutes"] = ipPort[0]
                cities[idxCity]["portBRRoutes"] = ipPort[1]
                ipPort = getIpPortDns(mesosDnsAddr, cities[idxCity]["mesosDNSBRTrips"])
                cities[idxCity]["hostBRTrips"] = ipPort[0]
                cities[idxCity]["portBRTrips"] = ipPort[1]
+               ipPort = getIpPortDns(mesosDnsAddr, cities[idxCity]["mesosDNSOTP"])
+               cities[idxCity]["hostOTP"] = ipPort[0]
+               cities[idxCity]["portOTP"] = ipPort[1]
             
         
         with open(regionsLocalPath, "w") as regionsF:

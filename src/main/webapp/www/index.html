@@ -12,6 +12,9 @@
     <link devmoderfp
       cssreplhref="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
       href="vendors/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link devmoderfp
+      cssreplhref="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+      href="vendors/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
 
     <!--link devmoderfp
       cssreplhref="https://openlayers.org/en/v4.0.1/css/ol.css"
@@ -37,8 +40,8 @@
 
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script devmoderfp
-      jsreplsrc="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"
-      src="vendors/jquery-3.1.1.min.js"></script>
+      jsreplsrc="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"
+      src="vendors/jquery-3.2.1.js"></script>
     <script devmoderfp
       jsreplsrc="https://cdnjs.cloudflare.com/ajax/libs/jsrender/0.9.83/jsrender.min.js"
       src="vendors/jsrender.min.js"></script>
@@ -48,6 +51,7 @@
     <link rel="localization" name="main" href="res/l20n/app.{locale}.ftl">
     <script src="vendors/l20n.js"></script>
     <script src="vendors/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+    <!--script src="vendors/wtf-8.js"></script-->
 
     <!--script devmoderfp
       jsreplsrc="https://openlayers.org/en/v4.0.1/build/ol.js"
@@ -56,25 +60,28 @@
     <script devmoderfp
       jsreplsrc="http://cdn.leafletjs.com/leaflet/v1.0.3/leaflet.js"
       src="vendors/leaflet/leaflet.js"></script>
-
     <script devmoderfp
       jsreplsrc="https://unpkg.com/leaflet.markercluster@1.0.4/dist/leaflet.markercluster.js"
-      src="vendors/leaflet/marker_cluster/leaflet.markercluster.js"></script>
+      src="vendors/leaflet/marker_cluster/leaflet.markercluster.js"></script>     
+    <script src="vendors/leaflet-heat.js"></script>
 
 
-  <!-- Include all compiled plugins (below), or include individual files as needed -->
+  <!-- Include all compiled plugins (below), or include individual files as needed -->   
   <script devmoderfp
     jsreplsrc="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
     src="vendors/bootstrap/js/bootstrap.min.js"></script>
-  <script devmoderfp
-    jsreplsrc="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.2/bootstrap3-typeahead.min.js"
-    src="vendors/bootstrap3-typeahead.min.js"></script>
+   <script  src="vendors/bootstrap3-typeahead.min.js"></script>
+
   <!--script devmoderfp
     jsreplsrc="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.45/js/bootstrap-datetimepicker.min.js"
     src="vendors/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script-->
   <!--script src="vendors/markerclusterer/markerclusterer.js"></script>
   <script src="https://www.google.com/jsapi"></script>
   <script src="https://apis.google.com/js/platform.js"></script-->
+  
+  <script devmoderfp
+      jsreplsrc="https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min.js"
+      src="vendors/notify.min.js"></script>
   
   
     <script devmoderfp rfpmerge="11" src='res/js/utils.js'></script>
@@ -83,8 +90,12 @@
     <script devmoderfp rfpmerge="1" src='res/js/app-conf.js'></script>
     <script devmoderfp rfpmerge="2" src='res/js/routes/route.js'></script>
     <script devmoderfp rfpmerge="3" src='res/js/trips/stop.js'></script>
+    <script devmoderfp rfpmerge="3" src='res/js/trips/sa_value.js'></script>
+    <script devmoderfp rfpmerge="3" src='res/js/trips/tj_value.js'></script>
     <script devmoderfp rfpmerge="4" src='res/js/trips/map-layer.js'></script>
     <script devmoderfp rfpmerge="5" src='res/js/trips/best-rec-trip-stop.js'></script>
+    <script devmoderfp rfpmerge="5" src='res/js/trips/br/trip-rec.js'></script>
+    <script devmoderfp rfpmerge="5" src='res/js/trips/br/segment-rec.js'></script>
     <script devmoderfp rfpmerge="5" src='res/js/more/lang.js'></script>
     <script devmoderfp rfpmerge="7" src='res/js/more/user.js'></script>
     <script devmoderfp rfpmerge="1" src='res/js/more/city.js'></script>
@@ -95,18 +106,21 @@
     <script devmoderfp rfpmerge="1" src='res/js/favs/fav.js'></script>
     <script devmoderfp rfpmerge="1" src='res/js/favs/fav-route.js'></script>
     <script devmoderfp rfpmerge="1" src='res/js/favs/fav-trip.js'></script>
+    <script devmoderfp rfpmerge="1" src='res/js/favs/fav-feedback.js'></script>
     <!--script devmoderfp rfpmerge="6" src='res/js/more/rfpw-country.js'></script-->
 
     <!--Load the ctrlrs classes-->
     <script devmoderfp rfpmerge="5" src='res/js/trips/best-trips-stop-handler.js'></script>
     <script devmoderfp rfpmerge="7" src='res/js/trips/map-layer-factory.js'></script>
-    <script devmoderfp rfpmerge="8" src='res/js/trips/br-create-trip-handler.js'></script>
+    <script devmoderfp rfpmerge="8" src='res/js/trips/br/br-create-trip-handler.js'></script>
     <script devmoderfp rfpmerge="8" src='res/js/trips/map-handler.js'></script>
     <script devmoderfp rfpmerge="9" src='res/js/routes/routes-handler.js'></script>
     <script devmoderfp rfpmerge="7" src='res/js/more/date-time-handler.js'></script>
     <script devmoderfp rfpmerge="10" src='res/js/more/localization.js'></script>
     <script devmoderfp rfpmerge="7" src='res/js/more/user-auth.js'></script>
     <script devmoderfp rfpmerge="11" src='res/js/more/more-handler.js'></script>
+    <script devmoderfp rfpmerge="11" src='res/js/more/feedback-handler.js'></script>
+    <script devmoderfp rfpmerge="11" src='res/js/more/contact-handler.js'></script>
     <script devmoderfp rfpmerge="1" src='res/js/favs/favs-handler.js'></script>
 
     <!--Load base classes-->
@@ -182,7 +196,7 @@
             </li>
             <li class="spa-rfpw-take-all-space">
               <a href="#div-favs" data-toggle="tab">
-                <i class="glyphicon glyphicon-star"></i>
+                <i class="glyphicon glyphicon-heart"></i>
                 <span data-l10n-id="favs-ttl"></span>
               </a>
             </li>
@@ -237,6 +251,9 @@
 
     </div>
   </div>
+
+<span id="notify-e-app-unable-init-maps-routes" data-l10n-id="notify-e-app-unable-init-maps-routes" class="spa-rfpw-diplay-none" data-notify-html="title"></span>
+<span id="notify-e-app-unable-init-favs" data-l10n-id="notify-e-app-unable-init-favs" class="spa-rfpw-diplay-none" data-notify-html="title"></span>
 
 
   </body>
