@@ -1,4 +1,5 @@
 notify-e-trips-create-trip-err = Error creating trip
+notify-i-trips-create-trip-non = Create trips not supported for this city
 notify-e-favs-add-fav-err = Error adding favorite
 notify-e-favs-rm-fav-err = Unable to remove favorite
 notify-i-trips-sentiment-analysis-non = Sentiment analysis not supported for this city
@@ -12,6 +13,10 @@ notify-w-routes-favs-not-add-rm = Unable to add or remove favorite
 notify-w-trips-favs-not-load = Favorites have not finished loading yet, please wait until the loading is complete
 notify-i-trips-fav-add-suc = Favorite best recommender trip successfully added
 notify-w-trips-fav-add-err = Error adding favorite best recommender trip
+tblh-routes-sched-stop-names = Stop Name
+tblh-routes-sched-arrival-times = Arrival Time List
+spn-routes-dlg-scheduling-ttl = Schedule for route 
+spn-inp-routes-search-by-name = Tap/Click to search routes by short and long name
 btn-trips-create-trip = Create a Trip
 btn-trips-sentiment-analysis = Show Sentiment Analysis Layer
 btn-trips-traffic-jam = Show Traffic Jam Layer

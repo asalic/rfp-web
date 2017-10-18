@@ -116,6 +116,12 @@ fs.copy(baseDir + "/www/vendors/bootstrap3-typeahead.min.js",
 fs.copy(baseDir + "/www/vendors/leaflet-heat.js",
   baseDir + "/release/vendors/leaflet-heat.js", function(err) {console.log("leaflet-heat.js copied successfully")});
 
+fs.copy(baseDir + "/www/vendors/leaflet-regulargridcluster.js",
+    baseDir + "/release/vendors/leaflet-regulargridcluster.js", function(err) {console.log("leaflet-regulargridcluster.js copied successfully")});
+
+fs.copy(baseDir + "/www/vendors/leaflet-regulargridcluster.css",
+    baseDir + "/release/vendors/leaflet-regulargridcluster.css", function(err) {console.log("leaflet-regulargridcluster.css copied successfully")});
+
 fs.copy(baseDir + "/www/vendors/jsrender.min.js",
     baseDir + "/release/vendors/jsrender.min.js", function(err) {console.log("jsrender.min.js copied successfully")});
 

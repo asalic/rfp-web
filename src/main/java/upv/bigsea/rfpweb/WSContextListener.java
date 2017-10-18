@@ -28,10 +28,11 @@ public class WSContextListener implements ServletContextListener {
   protected static Gtfs gtfs;
   protected static BestRecommender bestRecommender;
   protected static OTPTrips otpTrips;
-  protected static Auth auth;
  
     /**
-     * Initialize log4j when the application is being started
+     * Initialize log4j when the application is being started,
+     * along with params, regions gtfs web service, best recommender
+     * web service, and OTP web service
      */
     @Override
     public void contextInitialized(ServletContextEvent event) {
@@ -53,7 +54,6 @@ public class WSContextListener implements ServletContextListener {
           gtfs = new Gtfs(params);
           bestRecommender = new BestRecommender(params, regions);  
           otpTrips = new OTPTrips(params, regions);
-          auth = new Auth(params);
           logger.info("Context init done");  
           
         } catch (JsonGenerationException e) {
@@ -101,9 +101,4 @@ public class WSContextListener implements ServletContextListener {
       return otpTrips;
     }
     
-
-    public static Auth getAuth()
-    {
-      return auth;
-    }
 }

@@ -33,6 +33,8 @@ RFPWRoute.prototype.getShortNm = function() {return this.shortNm;}
 RFPWRoute.prototype.getLongNm = function() {return this.longNm;}
 RFPWRoute.prototype.getPaths = function() {return this.paths;}
 RFPWRoute.prototype.getColor = function() {return this.color;}
+RFPWRoute.prototype.getStartStop = function() {return this.startStop;}
+RFPWRoute.prototype.getEndStop = function() {return this.endStop;}
 RFPWRoute.prototype.getDrawnPaths = function() {return this.drawnPaths;}
 RFPWRoute.prototype.addDrawnPath = function(path) {this.drawnPaths.push(path);}
 RFPWRoute.prototype.clearDrawnPaths = function() {this.drawnPaths = [];}

@@ -72,9 +72,6 @@ RFPWMapHandler.prototype.init = function()
       $.proxy(this.reqSentimentAnalysis, this, null, null));
   $("#btn-trips-traffic-jam").on("click tap",
       $.proxy(this.reqTrafficJam, this, null, null));
-
-  $(window).on("resize",
-    $.proxy(this.onResizeWait, this));
   
   // Only activate the first time map init if the app started in another tab than the map
   if ($("ul#navbar li.active").find("a").attr("href") != "#div-trips")
@@ -161,12 +158,24 @@ RFPWMapHandler.prototype._chgStateTripsMoreBtns = function(disabled)
 
 RFPWMapHandler.prototype._onCreateTrip = function()
 {
-  // Create the dialog once
-  if (this._createTripHandler == null)
+  if (!applicationContext.moreHandler.getCurrentCity().getHasBRTrips()
+      && !applicationContext.moreHandler.getCurrentCity().getHasOTP())
   {
-    this._createTripHandler = new RFPWBRCreateTripHandler(this);
+    $.notify($("#notify-i-trips-create-trip-non").text(), 
+        {
+          className: "info",
+          globalPosition: 'top left'
+        }
+      );
+  } else
+  {
+    // Create the dialog once
+    if (this._createTripHandler == null)
+    {
+      this._createTripHandler = new RFPWBRCreateTripHandler(this);
+    }
+    this._createTripHandler.showCreateTripDlg();
   }
-  this._createTripHandler.showCreateTripDlg();
 }
 
 RFPWMapHandler.prototype.showLayersDlg = function()
@@ -243,13 +252,6 @@ RFPWMapHandler.prototype.setHeightMap = function()
   // console.log("heightRows: " + $("#navbar").height());
   $("#map-container").css('height', $(window).height() - $("#navbar").height() -
     $("#div-trips-more-container").height());
-}
-
-RFPWMapHandler.prototype.onResizeWait = function()
-{
-  //console.log("Resize from Maphandler");
-  applicationContext.waitForFinalEvent(
-    $.proxy(this.onResize, this), 500, "Resize from Maphandler");
 }
 
 RFPWMapHandler.prototype.onResize = function()
@@ -589,19 +591,84 @@ RFPWMapHandler.prototype._sucSentimentAnalysis = function(callBSuc, callBErr, re
 { 
   var valuesLst = responseJson["data"];
   var markersLst = []
-  // Now iterate over data and add it to our structure
-  for (var idx in valuesLst)
-  {
+  
+  //for (var idxC=0; idxC< 100; ++idxC) {
+  for (var  idx in valuesLst) {
     var value = new RFPWSAValue(valuesLst[idx]);
-    delete valuesLst[idx];
-    var numPoint = Math.round(value.getVal() * 10);
-    for (var idx=0; idx<numPoint; ++idx)
-      markersLst.push([value.getLat(), value.getLng(), value.getVal()]);
+    const coordinates = [value.getLat(), value.getLng()];
+    const properties = {
+        a: value.getVal(),
+        b: value.getVal()
+    };
+
+    const marker = L.circleMarker(coordinates, {radius: 1, fillColor: 'black'});
+    markersLst.push( {
+        marker: marker, 
+        properties: properties
+    });
   }
+  //}
+  const rules = {
+      cells: {
+          "fillColor": {
+              "method": "mean",
+              "attribute": "b",
+              "scale": "continuous",
+              "range": ["red", "yellow", "green"]
+          },
+          "color": "black",
+          "fillOpacity": 0.2,
+          "weight": 0
+      },
+      markers: {
+          "color": "white",
+          "weight": 2,
+          "fillOpacity": 0.9,
+          "fillColor": {
+              "method": "mean",
+              "attribute": "b",
+              "scale": "continuous",
+              "range": ["red", "yellow", "green"]
+          },
+          "radius": {
+              "method": "count",
+              "attribute": "",
+              "scale": "continuous",
+              "range": [1, 10]
+          }
+      },
+      texts: {}
+  }
+  
+  var markers = L.regularGridCluster(
+      {
+          rules: rules,
+          gridMode: "hexagon",
+          showCells: true,
+          showMarkers: true,
+          showTexts: false,
+          showEmptyCells: true,
+          zoomShowElements:20,
+          zoomHideGrid:20
+      }
+  );
+  markers.addLayers(markersLst);
+
+  
+  
+  // Now iterate over data and add it to our structure
+//  for (var idx in valuesLst)
+//  {
+//    var value = new RFPWSAValue(valuesLst[idx]);
+//    delete valuesLst[idx];
+//    var numPoint = Math.round(value.getVal() * 10);
+//    for (var idx=0; idx<numPoint; ++idx)
+//      markersLst.push([value.getLat(), value.getLng(), value.getVal()]);
+//  }
   //markers.on('click', $.proxy(this._onMarkerClick, this));
 
 
-  var markers = L.heatLayer(markersLst, {radius: 25, gradient: {0.3: 'red', 0.5: 'yellow', 0.9: 'green'}});
+  //var markers = L.heatLayer(markersLst, {radius: 25, gradient: {0.3: 'red', 0.5: 'yellow', 0.9: 'green'}});
   this._map.addLayer(markers);
 
   var ml = this._mapLayerFactory.createMLSentimentAnalysis(this._map,

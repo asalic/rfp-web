@@ -57,7 +57,7 @@ public class BestRecommender {
   static final Logger LOGGER = Logger.getLogger(BestRecommender.class);
   protected static final String MSG_CITY_NOT_FOUND = "City not found";
   protected static final String MSG_BR_ROUTE_NOT_SUP = "Best Recommender Routes not supported for this city/country";
-  
+
   protected static final String BTR_COUNTRY_CODE_FIELD = "btrCountryCode";
   protected static final String BTR_CITY_CODE_FIELD = "btrCityCode";
   protected static final String BTR_PATH_FIELD = "btrPath";
@@ -67,16 +67,16 @@ public class BestRecommender {
   protected static final String BTR_TIME = "time";
   protected static final String BTR_DATE = "date";
   protected static final String ROUTE_DEF_COLOR = "000000";
-  protected static final DateTimeFormatter TIME_CALL_FORMATTER = DateTimeFormatter.ofPattern("HH:mm:ss"); 
-  protected static final DateTimeFormatter DATE_CALL_FORMATTER = DateTimeFormatter.ofPattern("MM/dd/YYYY"); 
-  
+  //protected static final DateTimeFormatter TIME_CALL_FORMATTER = DateTimeFormatter.ofPattern("HH:mm:ss");
+  //protected static final DateTimeFormatter DATE_CALL_FORMATTER = DateTimeFormatter.ofPattern("MM/dd/YYYY");
+
   protected static final TimeZone GMT_TMZ = TimeZone.getTimeZone("GMT");
-  
+
   public static class BestRecommenderResp<T_RESPONSE>
   {
     protected String msg = null;
     protected T_RESPONSE response = null;
-    
+
     public BestRecommenderResp(String msg, T_RESPONSE response)
     {
       this.msg = msg;
@@ -89,21 +89,21 @@ public class BestRecommender {
 
     public T_RESPONSE getResponse() {
       return response;
-    }   
-    
+    }
+
   }
-  
+
   protected Params params;
   protected Regions regions;
-  
+
   public BestRecommender(Params params, Regions regions)
   {
     this.params = params;
     this.regions = regions;
   }
-  
-  
-  
+
+
+
   public void fillRoutesEvaluation(List<Route> routes)
   {
     for (Route r : routes)
@@ -113,10 +113,10 @@ public class BestRecommender {
       r.setResponsivness(Math.floor(Math.random() * 101));
       r.setConservation(Math.floor(Math.random() * 101));
       r.setStars(Math.floor(Math.random() * 6));
-      
+
     }
   }
-  
+
   public BestRecommenderResp<List<TripRec> > getTripsRecs(String countryCode,
       String cityCode,
       String fromLat,
@@ -127,38 +127,43 @@ public class BestRecommender {
       int utc) throws URISyntaxException, MalformedURLException, IOException, JSONException, InterruptedException
     {
       City city = regions.getCity(
-          countryCode, 
+          countryCode,
           cityCode);
-      
+
           Calendar cal = Calendar.getInstance(GMT_TMZ);
           long idStart = cal.getTimeInMillis();
           List<TripRec> result = new ArrayList<>();
           URIBuilder builder = new URIBuilder();
-          builder.setScheme("http").setHost(city.getHostBRTrips() + ":" + 
+          builder.setScheme("http").setHost(city.getHostBRTrips() + ":" +
               city.getPortBRTrips()).setPath("btr_routes_plans");
-           
+
           URI requestURL = builder.build();
           LOGGER.info("Request is " + requestURL.toString() + " for city " + city.getName());
           HttpURLConnection connection = (HttpURLConnection) requestURL.toURL().openConnection();
           connection.setRequestMethod("POST");
-          connection.setRequestProperty("cache-control", "no-cache");  
-          connection.setRequestProperty("content-type", "application/json"); 
+          connection.setRequestProperty("cache-control", "no-cache");
+          connection.setRequestProperty("content-type", "application/json");
           connection.setUseCaches(false);
           connection.setDoOutput(true);
           connection.setDoInput(true);
-          
-          Date dt = Calendar.getInstance(TimeZone.getTimeZone(city.getTimezone())).getTime();
+
+          //Date dt = Calendar.getInstance(TimeZone.getTimeZone(city.getTimezone())).getTime();
+          Calendar dt = Calendar.getInstance(TimeZone.getTimeZone(city.getTimezone()));
+          LOGGER.info(city.getName());
           LOGGER.info(dt);
-          final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("MM/dd/YYYY");
-          final SimpleDateFormat TIME_FORMAT = new SimpleDateFormat("HH:mm:ss");
-          builder.setParameter("time", TIME_FORMAT.format(dt));// "09:00");
-          builder.setParameter("date", DATE_FORMAT.format(dt));// "2017-09-12");
+          SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("MM/dd/YYYY");
+          DATE_FORMAT.setCalendar(dt);
+          SimpleDateFormat TIME_FORMAT = new SimpleDateFormat("HH:mm:ss");
+          TIME_FORMAT.setCalendar(dt);
+
+          //builder.setParameter("time", TIME_FORMAT.format(dt));// "09:00");
+          //builder.setParameter("date", DATE_FORMAT.format(dt));// "2017-09-12");
           JSONObject data = new JSONObject();
           data.put("fromPlace", fromLat + "," + fromLng);
           data.put("toPlace", toLat + "," + toLng);
           data.put("mode", "TRANSIT,WALK");
-          data.put("date", DATE_FORMAT.format(dt));
-          data.put("time", TIME_FORMAT.format(dt));
+          data.put("date", DATE_FORMAT.format(dt.getTime()));
+          data.put("time", TIME_FORMAT.format(dt.getTime()));
           LOGGER.info(data);
           OutputStreamWriter wr = new OutputStreamWriter(connection.getOutputStream());
           wr.write(data.toString());
@@ -168,7 +173,7 @@ public class BestRecommender {
 //          LOGGER.debug("Calling: " + builder.toString());
 //          LOGGER.debug("Response code: " + responseCode);
 //          LOGGER.debug("Response msg: " + msg);
-          //Get Response  
+          //Get Response
           InputStream is = connection.getInputStream();
           BufferedReader rd = new BufferedReader(new InputStreamReader(is));
           StringBuffer response = new StringBuffer();
@@ -180,11 +185,11 @@ public class BestRecommender {
           rd.close();
           //LOGGER.debug(response.toString());
           List<TripRec> tr = createTripsRecs(response.toString(), idStart);
-          
+
           return new BestRecommenderResp<List<TripRec> >("", tr);
-        
+
     }
-    
+
     protected List<TripRec> createTripsRecs(String jsonTripDesc,
         long idStart) throws JSONException, InterruptedException
     {
@@ -248,11 +253,11 @@ public class BestRecommender {
 
             if (routeColor.isEmpty())
               rs.setRouteColor(ROUTE_DEF_COLOR);
-            else            
+            else
               rs.setRouteColor(routeColor);
           } else
             rs.setRouteColor(ROUTE_DEF_COLOR);
-          
+
           if (leg.has("route") && !leg.isNull("route"))
           {
             String route = leg.getString("route");
@@ -269,16 +274,16 @@ public class BestRecommender {
           //List<List<Double> > pathM = new ArrayList<>(path.size());
           String[][] pathM = new String[path.size()][];
           for (int idxPath=0; idxPath<path.size(); ++idxPath)
-            pathM[idxPath] = new String[] {formatter.format(path.get(idxPath).lng), 
+            pathM[idxPath] = new String[] {formatter.format(path.get(idxPath).lng),
                 formatter.format(path.get(idxPath).lat)};
           rs.setShape(new Shape("Feature", new Shape.Geometry("LineString", pathM),
-              new Shape.Properties(Integer.toString(ilegs), ilegs)));       
+              new Shape.Properties(Integer.toString(ilegs), ilegs)));
           srLst.add(rs);
         }
-        
+
         tr.setSegmentRecs(srLst);
       }
-      
+
       // Just to be sure that we won't generate the same id next time we call the method
       // We wait a bit; This part shouldn't be called unless we return many trips
       // the the execution is done extremely fast
@@ -294,23 +299,4 @@ public class BestRecommender {
       //path.get(0).
       return result;
     }
-  
-  protected long getNTPTime() throws IOException
-  {
-    NTPUDPClient client = new NTPUDPClient();
-    client.open();
-    InetAddress hostAddr = InetAddress.getByName(params.getNtpServer());
-    TimeInfo info = client.getTime(hostAddr);
-    info.computeDetails(); // compute offset/delay if not already done
-    Long offsetValue = info.getOffset();
-    Long delayValue = info.getDelay();
-    String delay = (delayValue == null) ? "N/A" : delayValue.toString();
-    String offset = (offsetValue == null) ? "N/A" : offsetValue.toString();
-
-    System.out.println(" Roundtrip delay(ms)=" + delay
-                   + ", clock offset(ms)=" + offset); // offset in ms
-    client.close();
-    return info.getMessage().getTransmitTimeStamp().getTime();
-  }
-
 }

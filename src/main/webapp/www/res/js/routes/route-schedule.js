@@ -30,7 +30,6 @@ RFPWRouteSchedule.prototype.getTripsIdxNames = function()
 
 RFPWRouteSchedule.prototype.getStopsByTripIdx = function(idx)
 {
-  console.log(this._trips);
   return this._trips[idx].getStops();
 }
 

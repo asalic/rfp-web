@@ -9,6 +9,11 @@
   color: #66CCFF;
 }*/
 
+.spa-rfpw-btns-left-margin 
+{
+	margin-right: 0.5em;	
+}
+
 .spa-rfpw-hover {
     position:relative;
     /*top:50px;
@@ -102,6 +107,12 @@
   border-top:15px solid #2c3e50;
   }
 */
+
+.spa-rfpw-route-options-btn  
+{
+	margin-right: 0.5em;	
+}
+
 .spa-rfpw-bus-line-progress
 {
   margin-bottom:5%;
@@ -278,6 +289,8 @@ body {
   height: 100%;
   background-color: white;
   margin: 0;
+  overflow-y:hidden; 
+  overflow-x:hidden;
   /*background-color: white;*/
 }
 

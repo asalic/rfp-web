@@ -68,11 +68,24 @@ RFPWApplicationContext.prototype.init = function()
   this.routesHandler = new RFPWRoutesHandler($("#routes-main-lst"));
   this.favsHandler = new RFPWFavsHandler();
   this.moreHandler = new RFPWMoreHandler();
+  $(window).on("resize",
+      $.proxy(this.onResizeWait, this));
   this._tokenAuthenticate();
   if (!this.storage.isAcceptStorageUsr())
   {// Show the information box
     $("#div-accept-storage-usr").removeClass("spa-rfpw-diplay-none");
   }
+}
+
+RFPWApplicationContext.prototype.onResizeWait = function()
+{
+  //console.log("Resize from Maphandler");
+  this.waitForFinalEvent(
+    $.proxy(this.mapHandler.onResize, this.mapHandler), 500, "Resize RFPWMapHandler");
+  this.waitForFinalEvent(
+      $.proxy(this.routesHandler.onResize, this.routesHandler), 500, "Resize RFPWRoutesHandler");
+  this.waitForFinalEvent(
+      $.proxy(this.moreHandler.onResize, this.moreHandler), 500, "Resize RFPWMoreHandler"); 
 }
 
 RFPWApplicationContext.prototype._tokenAuthenticate = function()
@@ -290,7 +303,7 @@ RFPWApplicationContext.prototype.asyncReq = function(callbSucces, callbErr,
   });
 }
 
-RFPWApplicationContext.prototype.getTabContainerSize = function()
+RFPWApplicationContext.prototype.getMainTabHeight = function()
 {
   return {width: $(window).width(), height: $(window).height() - $("#navbar").height()};
 }

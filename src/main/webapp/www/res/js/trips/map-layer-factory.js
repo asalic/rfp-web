@@ -42,6 +42,7 @@ RFPWMapLayerFactory.prototype.createMLSentimentAnalysis = function(map, layerObj
     }
   ml.remove = function()
     {
+    ml.getLayerObject().unregister();
     map.removeLayer(ml.getLayerObject());
     }
   return ml;

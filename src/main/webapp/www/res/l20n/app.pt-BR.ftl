@@ -1,4 +1,5 @@
 notify-e-trips-create-trip-err = Erro ao criar viagem
+notify-i-trips-create-trip-non = Criar viagem não suportada para esta cidade
 notify-e-favs-add-fav-err = Erro ao adicionar favoritos
 notify-e-favs-rm-fav-err = Não é possível remover favorito
 notify-i-trips-sentiment-analysis-non = Análise de sentimento não suportada para esta cidade
@@ -12,6 +13,10 @@ notify-w-routes-favs-not-add-rm = Não é possível adicionar ou remover favorit
 notify-w-trips-favs-not-load = Favoritos ainda não terminaram de carregar, aguarde até que o carregamento esteja completo
 notify-i-trips-fav-add-suc = Melhor recomendada viagem favorita adicionada com sucesso
 notify-w-trips-fav-add-err = Erro ao adicionar melhor recomendada viagem favorita
+tblh-routes-sched-stop-names = Nome de Parada
+tblh-routes-sched-arrival-times = Lista de Horas de Chegada
+spn-routes-dlg-scheduling-ttl = Programação para rota 
+spn-inp-routes-search-by-name = Toque / Clique para pesquisar rotas por nome curto e longo
 btn-trips-create-trip = Criar uma viagem
 btn-trips-sentiment-analysis = Mostrar Camada de Análise Sentimento 
 btn-trips-traffic-jam = Mostrar Camada Atolamento

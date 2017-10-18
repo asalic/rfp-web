@@ -1,7 +1,13 @@
 package upv.bigsea.rfpweb.model;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -13,7 +19,6 @@ import org.apache.log4j.Logger;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import upv.bigsea.rfpweb.MainWS;
 import upv.bigsea.rfpweb.Params;
 
 public class Regions {
@@ -27,14 +32,28 @@ public class Regions {
   
   public Regions(Params params) throws IOException
   {
+    
+    URL url = new URL(params.getRegionsURL());
+    URLConnection conn = url.openConnection();
+    BufferedReader inputStream = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+
+    String line;
+    StringBuilder content = new StringBuilder();
+    // read from the urlconnection via the bufferedreader
+    while ((line = inputStream.readLine()) != null)
+    {
+      content.append(line + "\n");
+    }
+    inputStream.close();
+    
     // Load regions
     regionsByCode = new HashMap<String, Country>();
     ObjectMapper mapper = new ObjectMapper();
     //classLoader.getResource("regions.json").getFile();
     //regionsJsonTxt = new String(Files.readAllBytes(Paths.get(params.getRegionsPath())));
     
-    regionsLst = Arrays.asList(mapper.readValue(new File(params.getRegionsPath()), Country[].class));
-    List<Country> rTemp = Arrays.asList(mapper.readValue(new File(params.getRegionsPath()), Country[].class));
+    regionsLst = Arrays.asList(mapper.readValue(content.toString(), Country[].class));
+    List<Country> rTemp = Arrays.asList(mapper.readValue(content.toString(), Country[].class));
     // Let's improve the execution by grouping by code
     for (Country c : regionsLst)
     {

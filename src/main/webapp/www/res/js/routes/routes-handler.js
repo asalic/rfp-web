@@ -1,8 +1,8 @@
 
 //   In GTFS, these names have ids ranging from 0 to 7, therefore
 //   there is no need for a map to store the types
-RFPWRoutesHandler.ROUTE_TYPE_STR = ["Tram", "Metro", "Rail", "Bus", "Ferry",
-  "Cable car", "Gondola", "Funicular", "Walk"];
+RFPWRoutesHandler.ROUTE_TYPE_STR = ["Tram, Streetcar, Light rail", "Subway, Metro", "Rail", "Bus", "Ferry",
+  "Cable car", "Gondola, Suspended cable car", "Funicular", "Walk"];
 
 function RFPWRoutesHandler(routesTabDOM)
 {
@@ -15,7 +15,7 @@ function RFPWRoutesHandler(routesTabDOM)
 //  this.routesLst = [];
 //  this._routesLstByUId = Object.create(null);
 //  this._routesLstById = Object.create(null);
-  $("#inp-filter-routes-by-nm").on("input paste change",
+  $("#inp-routes-search-by-name").on("input paste change",
     $.proxy(this._filterRoutesByNm, this));
   // this.routeTypesStr = ["T", "M", "R", "B", "F",
   //   "C", "G", "F"];
@@ -33,6 +33,12 @@ function RFPWRoutesHandler(routesTabDOM)
   this._routesLstById = Object.create(null);
   this._displRouteSchedule = null;
   this._cancelSchedByRouteIdDate = true;
+  this.onResize();
+  $("#inp-routes-search-by-name").attr("placeholder", $("#spn-inp-routes-search-by-name").text()).focus().blur();;
+  // Add this to monitor language change
+  $("#spn-inp-routes-search-by-name").bind("DOMSubtreeModified",function(){
+    $("#inp-routes-search-by-name").attr("placeholder", $(this).text());
+  });
   //this._displRouteSchedule = null;
 }
 
@@ -48,10 +54,15 @@ RFPWRoutesHandler.prototype._reqSchedByRouteIdDate = function(routeId)
 {
   this._cancelSchedByRouteIdDate = false;
   applicationContext.showLoadingPnl("div-routes-sched-body");
-  $("#sel-routes-sched-trip").removeClass("spa-rfpw-hidden");
-  $("#tbl-routes-sched").removeClass("spa-rfpw-hidden");
-  $("#spn-routes-sched-err-req").addClass("spa-rfpw-hidden");
+  $("#sel-routes-sched-trip").removeClass("spa-rfpw-diplay-none");
+  $("#tbl-routes-sched").removeClass("spa-rfpw-diplay-none");
+  $("#spn-routes-sched-err-req").addClass("spa-rfpw-diplay-none");
+  var rTtl = RFPWRoutesHandler.ROUTE_TYPE_STR[this._routesLstById[RFPWUtils.strA2H(routeId)].getType()][0] + 
+    this._routesLstById[RFPWUtils.strA2H(routeId)].getShortNm() + 
+    " (" + this._routesLstById[RFPWUtils.strA2H(routeId)].getLongNm() + ")";
+  $("#spn-routes-dlg-scheduling-ttl-route").text(rTtl);
   $("#dlg-routes-sched").modal();
+  this.onResize();
 
   var dt = applicationContext.moreHandler.getDateTimeHandler().
     getDateTimeMinutesUTC();
@@ -69,7 +80,6 @@ RFPWRoutesHandler.prototype._sucSchedByRouteIdDate = function(routeId, data)
   //console.log(routeId);
   if (!this._cancelSchedByRouteIdDate)
   {//   If the user didn't cancel the dialog, add the data
-    console.log(data);
     this._displRouteSchedule = new RFPWRouteSchedule(data.data);
     var tripsSel = $("#sel-routes-sched-trip");
     tripsSel.empty();
@@ -94,10 +104,10 @@ RFPWRoutesHandler.prototype._errSchedByRouteIdDate = function(routeId, request,
 {
   if (!this._cancelSchedByRouteIdDate)
   {//   If the user didn't cancel the dialog, add the data
-    $("#spn-routes-sched-err-req").removeClass("spa-rfpw-hidden");
+    $("#spn-routes-sched-err-req").removeClass("spa-rfpw-diplay-none");
     $('#spn-routes-sched-err-req').append(document.createTextNode(request.responseText));
-    $("#sel-routes-sched-trip").addClass("spa-rfpw-hidden");
-    $("#tbl-routes-sched").addClass("spa-rfpw-hidden");
+    $("#sel-routes-sched-trip").addClass("spa-rfpw-diplay-none");
+    $("#tbl-routes-sched").addClass("spa-rfpw-diplay-none");
     applicationContext.hideLoadingPnl("div-routes-sched-body");
   }
 }
@@ -128,7 +138,7 @@ RFPWRoutesHandler.prototype.reqAllRoutes = function(callBSuc, callBErr)
 {
   applicationContext.showLoadingPnl("routes-main-lst");
 
-  $("#spn-routes-err-req").addClass("spa-rfpw-hidden");
+  $("#spn-routes-err-req").addClass("spa-rfpw-diplay-none");
   applicationContext.asyncReq($.proxy(this._sucAllRoutes, this, callBSuc),
     $.proxy(this._errAllRoutes, this, callBErr),
     "routes",
@@ -189,7 +199,7 @@ RFPWRoutesHandler.prototype._sucAllRoutes = function(callBSuc, srvRoutesLst)
 RFPWRoutesHandler.prototype._errAllRoutes = function(callBErr, request,
     textStatus, errorThrown)
 {
-  $("#spn-routes-err-req").removeClass("spa-rfpw-hidden");
+  $("#spn-routes-err-req").removeClass("spa-rfpw-diplay-none");
   $('#spn-routes-err-req').append(document.createTextNode(request.responseText));
   applicationContext.hideLoadingPnl("routes-main-lst");
   if (callBErr != null)
@@ -213,6 +223,8 @@ RFPWRoutesHandler.prototype.rmAlRoutes = function()
 {
   this.routesLoaded = false;
   this.routesLst = [];
+  this._routesLstByUId = Object.create(null);
+  this._routesLstById = Object.create(null);
   this.routesTabDOM.empty();
   $("#routes-lst-empty").show();
 }
@@ -324,7 +336,7 @@ RFPWRoutesHandler.prototype._filterRoutesByNm = function(event)
 {
   //this = event.data.routesObj;
   //console.log();
-  var txt = $("#inp-filter-routes-by-nm").val().toLowerCase().split(/[ ,\t]+/).join(')(?=.*');
+  var txt = $("#inp-routes-search-by-name").val().toLowerCase().split(/[ ,\t]+/).join(')(?=.*');
   var reTxt = new RegExp("(?=.*" + txt + ")");
   //console.log("^(?=.*" + txt + ").*");
   if (this.routesLoaded)
@@ -360,8 +372,12 @@ RFPWRoutesHandler.prototype.genStarsDOM = function(num)
 
 RFPWRoutesHandler.prototype.genRouteRow = function(routeInfo)
 {
-  var showStartStopStop = (routeInfo.startStop === null ||
-    routeInfo.endStop === null ? "spa-rfpw-diplay-none" : "");
+//  var showStartStopStop = (routeInfo.startStop === null &&
+//    routeInfo.endStop === null ? "spa-rfpw-diplay-none" : "");
+//  var showLongName = (routeInfo.startStop === null &&
+//      routeInfo.endStop === null ? "" : "spa-rfpw-diplay-none");
+//  var showStartStop = (routeInfo.startStop === null ? "spa-rfpw-diplay-none" : "");
+//  var showEndStop = (routeInfo.endStop === null ? "spa-rfpw-diplay-none" : "");
   var showFavs = "spa-rfpw-diplay-none";
   var routeFavIco;
   if (applicationContext.moreHandler.getUserAuth().isUserAuth())
@@ -376,31 +392,47 @@ RFPWRoutesHandler.prototype.genRouteRow = function(routeInfo)
             '" class="panel panel-default">'+
       '<div class="panel-heading">'+
         '<div style="background-color: ' + routeInfo.color + ';" class="spa-rfpw-vert-bar" ></div>'+
-        '<div class="spa-rfpw-nm-star pull-left">' +
-          routeInfo.shortNm + '<br />'+
-        '</div>' +    
-        
-        '<div class="' + showStartStopStop + ' pull-right">' +
-          '<span class="glyphicon glyphicon-triangle-right"></span>' +
-            routeInfo.startStop + '<br />' +
-          '<span class="glyphicon glyphicon-triangle-left"></span>' +
-            routeInfo.endStop +
-        '</div>' +
-        
+        '<div class="pull-left">' +
+          RFPWRoutesHandler.ROUTE_TYPE_STR[this._routesLstById[RFPWUtils.strA2H(routeInfo.getId())].getType()][0] +
+          routeInfo.getShortNm() + 
+          '&nbsp;(' +
+          RFPWRoutesHandler.ROUTE_TYPE_STR[this._routesLstById[RFPWUtils.strA2H(routeInfo.getId())].getType()] +
+          ')<br />'+
+          routeInfo.getLongNm() +
+        '</div>' +         
         '<div class="pull-right">' + 
           '<div class="' +  showFavs + ' spa-rfpw-route-fav pull-left">' +
-            '<button id="btn-routes-fav-add-rm'+ routeInfo.getUId() + '"class="spa-rfpw-hover btn btn-default glyphicon ' + routeFavIco + '"><div class="spa-rfpw-tooltip" data-l10n-id="btnroutesfav"></div></button>' +
+            '<button id="btn-routes-fav-add-rm'+ routeInfo.getUId() + '"class="spa-rfpw-hover btn btn-default spa-rfpw-route-options-btn glyphicon ' + routeFavIco + '"><div class="spa-rfpw-tooltip" data-l10n-id="btnroutesfav"></div></button>' +
           '</div>' +
           '<button id="btn-show-route-map'+ routeInfo.getUId() +
-            '" class="btn btn-default bus-line-btn spa-rfpw-hover glyphicon glyphicon-picture"><div class="spa-rfpw-tooltip" data-l10n-id="btnroutesshowonmap"></div></button>'+
+            '" class="btn btn-default spa-rfpw-hover spa-rfpw-route-options-btn glyphicon glyphicon-picture"><div class="spa-rfpw-tooltip" data-l10n-id="btnroutesshowonmap"></div></button>'+
           '<button id="btn-routes-show-sched'+ routeInfo.getUId() + 
-            '" class="btn btn-default bus-line-btn schedule-btn spa-rfpw-hover glyphicon glyphicon-time"><div class="spa-rfpw-tooltip" data-l10n-id="btnroutesschedule"></div></button>'+   
+            '" class="btn btn-default spa-rfpw-hover spa-rfpw-route-options-btn glyphicon glyphicon-time"><div class="spa-rfpw-tooltip" data-l10n-id="btnroutesschedule"></div></button>'+   
           
         '</div>' +
         '<div class="clearfix"></div>' + 
       '</div>' +
         '</div>'+
       '</div>';
+}
+
+RFPWRoutesHandler.prototype.onResize = function()
+{
+  var searchRoutesHTMLHeight = 0;
+  $("#div-routes-search-routes").children().each(function(){
+    searchRoutesHTMLHeight += $(this).outerHeight();
+  });
+  $("#routes-main-lst").css('height', $(window).height() - applicationContext.getMainTabSelectorHeight() -
+      searchRoutesHTMLHeight);
+
+  //console.log("win height: " + $(window).height());
+  var headerHeight = 0;
+  $("#dlg-routes-sched").children().each(function(){
+    headerHeight += $(this).outerHeight();
+  });
+  //console.log("routes dlg margin top: " + headerHeight);
+  $("#div-routes-sched-tbl-result").css('height', $(window).height() - 
+      headerHeight);
 }
 
 

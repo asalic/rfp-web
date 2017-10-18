@@ -42,13 +42,13 @@ RUN chown -R ${tomcat_user} ${tomcat_root}/conf/ ${tomcat_root}/webapps/ ${tomca
 
 # Create the app folder and giver full permission to the tomcat user
 RUN mkdir -p ${app_path}
-COPY ./mesos-dns-discover.py ${app_base_path}
-RUN chmod +x ${app_base_path}/mesos-dns-discover.py
+#COPY ./mesos-dns-discover.py ${app_base_path}
+#RUN chmod +x ${app_base_path}/mesos-dns-discover.py
 ADD ./ ${app_path}/
 #COPY ./regions.json ${app_base_path}
 RUN chown -R ${tomcat_user} ${app_base_path}
 
-# Once we have everything set, time to switch to a limited user
+# Once we have everything set, time to switch to a restricted user
 USER ${tomcat_user}
 
 #  Different environment variables used to control the environment
@@ -56,25 +56,21 @@ ENV USER ${tomcat_user}
 ENV APP_BASE_PATH ${app_base_path}
 ENV APP_PATH ${app_path}
 ENV TOMCAT_ROOT ${tomcat_root}
-ENV NTP_SERVER time-a.nist.gov
 ENV PFX default
-ENV PSQL_USER postgres
+ENV PSQL_USER default
 ENV PSQL_PASSW default
-ENV PSQL_PORT 5432
-ENV PSQL_HOST localhost
+#ENV PSQL_PORT 0
+#ENV PSQL_HOST localhost
 ENV MESOS_DNS_IP_PORT http://127.0.0.1:8123
 ENV MESOS_DNS_RFP_DB_ID _rfp-db-lb-rfp._tcp.marathon.mesos
-ENV AUTH_SERVICE_URL https://eubrabigsea.dei.uc.pt/engine/api/verify_token
-ENV AUTH_SERVICE_INVALID_TOKEN_RESP "invalid token"
+ENV MESOS_DNS_LB_INTERNAL_ID _rfp-lb-internal-rfp._tcp.marathon.mesos
+ENV LB_RFP_DB_PORT 0
+ENV LB_RFP_DB_HOST server
 ENV MESOS_DNS_AUTH_SERVICE_ID _auth._tcp.marathon.mesos
 #ENV REGIONS_PATH ${app_base_path}/regions.json
 ENV CMD_KEEP_ALIVE tail -f /dev/null
 ENV REGIONS_URL ftp://ftpgrycap.i3m.upv.es/public/eubrabigsea/data/regions.json
-ENV REGIONS_LOCAL_PATH ${app_path}/regions.json
 ENV CONTACT_MAIL_ADDR default@mail.com
-#ENV CONTACT_MAIL_PASSW default
-#ENV CONTACT_MAIL_SMTP_HOST default
-#ENV CONTACT_MAIL_SMTP_PORT 587
 
 # Prepare and deploy app 
 RUN rm -rf ${TOMCAT_ROOT}/webapps/ROOT.war ${TOMCAT_ROOT}/webapps/ROOT || true
@@ -82,15 +78,9 @@ RUN rm -rf ${TOMCAT_ROOT}/webapps/ROOT.war ${TOMCAT_ROOT}/webapps/ROOT || true
 #RUN cat ${APP_PATH}/pom.xml.tmp | sed "s|<tomcatUserPassw>[^ ]*</tomcatUserPassw>|<tomcatUserPassw>${TOMCAT_USER_PASSW}</tomcatUserPassw>|" > ${APP_PATH}/pom.xml
 RUN cat ${APP_PATH}/pom.xml | sed "s|<outputDirectory>[^ ]*</outputDirectory>|<outputDirectory>${TOMCAT_ROOT}/webapps/</outputDirectory>|" > ${APP_PATH}/pom.xml.tmp &&\
 	mv ${APP_PATH}/pom.xml.tmp ${APP_PATH}/pom.xml
-RUN node ${APP_PATH}/src/main/webapp/build.js -p "${APP_PATH}/src/main/webapp/" -v "2.0beta" -w "/webservice"
+#RUN node ${APP_PATH}/src/main/webapp/build.js -p "${APP_PATH}/src/main/webapp/" -v "2.0beta" -w "/webservice"
 RUN mvn -e -f ${APP_PATH}/pom.xml -P release clean package
 #RUN chown -R tomcat ${TOMCAT_ROOT}/webapps/ ${TOMCAT_ROOT}/work/ ${TOMCAT_ROOT}/temp/ ${TOMCAT_ROOT}/logs/
 
-ENTRYPOINT python2 ${APP_PATH}/mesos-dns-discover.py --mesosdns "${MESOS_DNS_IP_PORT}" \
-    --regions_template_url "${REGIONS_URL}" \
-    --mesosdns_db "${MESOS_DNS_RFP_DB_ID}" \
-    --vars /eubrabigsea/vars.rc \
-    --regions_local_path "${REGIONS_LOCAL_PATH}" &&\
-  export $(cat /eubrabigsea/vars.rc) &&\
-  ${TOMCAT_ROOT}/bin/startup.sh &&\
+ENTRYPOINT ${TOMCAT_ROOT}/bin/startup.sh &&\
   eval ${CMD_KEEP_ALIVE}

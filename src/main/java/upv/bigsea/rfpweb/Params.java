@@ -16,18 +16,19 @@ public class Params {
 //  protected String appPath;
   //protected int unsecurePort;
   //protected int securePort;
-  protected String ntpServer;
+  //protected String ntpServer;
   protected String pfx;
   protected String psqlUser;
   protected String psqlPassw;
   protected int psqlPort;
   protected String psqlHost;
-
-  protected String authServiceInvalidTokenResp;
-  protected String authServiceUrl;
   
-  protected String regionsPath;
+  //protected String regionsPath;
   protected String contactMailAddr;
+  protected String mesosDNSIPPort;
+  protected String mesosDNSLBInternalId;
+  protected String mesosDNSRFPDBId;
+  protected String regionsURL;
 //  protected String contactMailPassw;
 //  protected String contactMailSMTPHost;
 //  protected String contactMailSMTPPort;
@@ -36,16 +37,18 @@ public class Params {
   {
 	  //this.unsecurePort = Integer.parseInt(System.getenv("SECURE_PORT"));
 	  //this.securePort = Integer.parseInt(System.getenv("UNSECURE_PORT"));
-    this.ntpServer = System.getenv("NTP_SERVER");
+    //this.ntpServer = System.getenv("NTP_SERVER");
 	  this.pfx = System.getenv("PFX");
 	  this.psqlUser = System.getenv("PSQL_USER");
 	  this.psqlPassw = System.getenv("PSQL_PASSW");
-	  this.psqlPort = Integer.parseInt(System.getenv("PSQL_PORT"));
-	  this.psqlHost = System.getenv("PSQL_HOST");
-	  this.authServiceUrl = System.getenv("AUTH_SERVICE_URL");
-    this.authServiceInvalidTokenResp = System.getenv("AUTH_SERVICE_INVALID_TOKEN_RESP").toLowerCase();
-    this.regionsPath = System.getenv("REGIONS_LOCAL_PATH");
+	  this.psqlPort = Integer.parseInt(System.getenv("LB_RFP_DB_PORT"));
+	  this.psqlHost = System.getenv("LB_RFP_DB_HOST");
+    //this.regionsPath = System.getenv("REGIONS_LOCAL_PATH");
 	  this.contactMailAddr = System.getenv("CONTACT_MAIL_ADDR");
+	  this.mesosDNSIPPort = System.getenv("MESOS_DNS_IP_PORT");
+	  this.mesosDNSLBInternalId = System.getenv("MESOS_DNS_LB_INTERNAL_ID");
+	  this.mesosDNSRFPDBId = System.getenv("MESOS_DNS_RFP_DB_ID");
+	  this.regionsURL = System.getenv("REGIONS_URL");
 //    this.contactMailPassw = System.getenv("CONTACT_MAIL_PASSW");
 //    this.contactMailSMTPHost = System.getenv("CONTACT_MAIL_SMTP_HOST");
 //    this.contactMailSMTPPort = System.getenv("CONTACT_MAIL_SMTP_PORT");
@@ -66,13 +69,6 @@ public class Params {
   
   public String getPfx() {
     return pfx;
-  }
-  public String getNtpServer() {
-    return ntpServer;
-  }
-
-  public void setNtpServer(String ntpServer) {
-    this.ntpServer = ntpServer;
   }
 
   public void setPfx(String pfx) {
@@ -102,30 +98,6 @@ public class Params {
   public void setPsqlHost(String psqlHost) {
     this.psqlHost = psqlHost;
   }
-  
-  public String getAuthServiceInvalidTokenResp() {
-    return authServiceInvalidTokenResp;
-  }
-
-  public void setAuthServiceInvalidTokenResp(String authServiceInvalidTokenResp) {
-    this.authServiceInvalidTokenResp = authServiceInvalidTokenResp;
-  }
-
-  public String getAuthServiceUrl() {
-    return authServiceUrl;
-  }
-
-  public void setAuthServiceUrl(String authServiceUrl) {
-    this.authServiceUrl = authServiceUrl;
-  }
-
-  public String getRegionsPath() {
-    return regionsPath;
-  }
-
-  public void setRegionsPath(String regionsPath) {
-    this.regionsPath = regionsPath;
-  }
 
   public String getContactMailAddr() {
     return contactMailAddr;
@@ -135,6 +107,24 @@ public class Params {
     this.contactMailAddr = contactMailAddr;
   }
   
+  
+  
+  public String getRegionsURL() {
+    return regionsURL;
+  }
+
+  public void setRegionsURL(String regionsURL) {
+    this.regionsURL = regionsURL;
+  }
+
+  public String getMesosDNSIPPort() {
+    return mesosDNSIPPort;
+  }
+
+  public void setMesosDNSIPPort(String mesosDNSIPPort) {
+    this.mesosDNSIPPort = mesosDNSIPPort;
+  }
+
   public String toString()
   {
     String res = null;

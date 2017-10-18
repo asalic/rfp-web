@@ -65,7 +65,6 @@ public class MainWS {
   protected static Gtfs gtfs = WSContextListener.getGtfs();
   protected static BestRecommender bestRecommender = WSContextListener.getBestRecommender();
   protected static OTPTrips otpTrips = WSContextListener.getOTPTrips();
-  protected static Auth auth = WSContextListener.getAuth();
   
   static final Logger LOGGER = Logger.getLogger(MainWS.class);
 
@@ -100,25 +99,25 @@ public class MainWS {
 //    return this.respond(new Msg<String>(200, "", "success"));
 //  }
   
-  @Path("/auth/userdetails/{userToken}")
-  @GET
-  @Produces("application/json")
-  public Response getUserDetails(@PathParam("userToken") String userToken) {
-    try
-    {
-      User r = auth.getUserByToken(userToken);
-      Msg<User> m = new Msg<User>(200, "", r);
-      return this.respond(m);
-    } catch (JSONException e)
-    {
-      LOGGER.error(e.getMessage() + " - " + Arrays.toString(e.getStackTrace()));
-      return Response.status(500).entity(MSG_SRV_500_ERROR).build();
-    } catch (IOException e) {
-      LOGGER.error(e.getMessage() + " - " + Arrays.toString(e.getStackTrace()));
-      return Response.status(500).entity(MSG_SRV_500_ERROR).build();
-    }
-  }
-  
+//  @Path("/auth/userdetails/{userToken}")
+//  @GET
+//  @Produces("application/json")
+//  public Response getUserDetails(@PathParam("userToken") String userToken) {
+//    try
+//    {
+//      User r = auth.getUserByToken(userToken);
+//      Msg<User> m = new Msg<User>(200, "", r);
+//      return this.respond(m);
+//    } catch (JSONException e)
+//    {
+//      LOGGER.error(e.getMessage() + " - " + Arrays.toString(e.getStackTrace()));
+//      return Response.status(500).entity(MSG_SRV_500_ERROR).build();
+//    } catch (IOException e) {
+//      LOGGER.error(e.getMessage() + " - " + Arrays.toString(e.getStackTrace()));
+//      return Response.status(500).entity(MSG_SRV_500_ERROR).build();
+//    }
+//  }
+//  
 //  @Path("/br/create_trip/{userToken}")
 //  @GET
 //  @Produces("application/json")

@@ -148,7 +148,7 @@ public class Gtfs {
 
   public List<SchedRouteStop> getSchedRouteStop(String countryCode, String cityCode, String routeId, String dt,
       String utc) throws SQLException, ClassNotFoundException {
-    List<SchedRouteStop> schedRouteStop = new ArrayList<SchedRouteStop>();
+    //List<SchedRouteStop> schedRouteStop = new ArrayList<SchedRouteStop>();
     Connection getGtfsDBConn = this.getGtfsDBConn(getDBName(countryCode, cityCode));
     Statement stmt = getGtfsDBConn.createStatement();
     final Calendar calendar = Calendar.getInstance();
@@ -157,52 +157,37 @@ public class Gtfs {
     // Calendar.LONG, Locale.US));
     ResultSet rs = stmt.executeQuery(String.format(GET_SCHED_ROUTE_STOP_QUERY, routeId,
         calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.US).toLowerCase()));
-    Map<String, Map<String, List<String>>> tmpResults = new HashMap<>();
+    
+    
+    // Stops should be unique when grouped by by trip ID
+    // We also need to group them by shape ID because on the client side
+    // we display the results by shape (and for each stop of a shape we list all encountered
+    // arrival times from all trips included in that shape)
+    // In here, we merge all trips' arrival times for a shape into one array =>
+    // each stop for a shape has the arrival times of all trips for that shape
+    Map<String, SchedRouteStop> schedShapesByShape = new HashMap<>();    
     while (rs.next()) {
-      String sid = rs.getString("shape_id");
-      if (!tmpResults.containsKey(sid))
-        tmpResults.put(sid, new HashMap<String, List<String>>());
-
-      Map<String, List<String>> stopMap = tmpResults.get(sid);
-      String stopId = rs.getString("stop_id");
-      if (!stopMap.containsKey(stopId))
-      {
-        List<String> aTimeLstTmp = new ArrayList<String>();
-        aTimeLstTmp.add(rs.getString("stop_name"));
-        stopMap.put(stopId, aTimeLstTmp);
-      }
-
-      List<String> aTimeLst = stopMap.get(stopId);
-      String aTime = rs.getString("arrival_time");
-      aTimeLst.add(aTime);
-    }
-
-    int uid = 0;
-    int uidSIM = 0;
-    for (Map.Entry<String, Map<String, List<String>>> entry : tmpResults.entrySet()) {
-      ++uid;
-      String key = entry.getKey();
-      Map<String, List<String>> stopMap = entry.getValue();
-      SchedRouteStop srs = new SchedRouteStop();
-      srs.setShapeId(key);
-      srs.setUid(uid);
-      List<SchedRouteStop.StopsIdsNms> stopsIdsNms = new ArrayList<>();
-      for (Map.Entry<String, List<String>> sm : stopMap.entrySet()) {
-        ++uidSIM;
-        String stopId = sm.getKey();
-        List<String> aTimes = sm.getValue();
-        String sName = aTimes.get(0);
-        aTimes.remove(0);
-        Set<String> aTimesTmp = new HashSet<>(aTimes);
-        String []aTimesArr = aTimesTmp.toArray(new String[aTimesTmp.size()]);
-        Arrays.sort(aTimesArr);
-        stopsIdsNms.add(new SchedRouteStop.StopsIdsNms(uidSIM, stopId, sName, aTimesArr));
-      }
+      String shapeId = rs.getString("shape_id");
+      //String tripId = rs.getString("trip_id");
       
-      srs.setStopsIdsNms(stopsIdsNms);
-      schedRouteStop.add(srs);
+      SchedRouteStop schedShape = schedShapesByShape.get(shapeId);
+      if (schedShape == null)
+      {
+        schedShape = new SchedRouteStop(0, shapeId);
+        schedShapesByShape.put(shapeId, schedShape);
+      }      
+      
+      String aTime = rs.getString("arrival_time");
+      aTime = aTime.substring(0, aTime.lastIndexOf(':'));
+      schedShape.addStopsIdsNms(0, rs.getString("stop_id"), rs.getString("stop_name"),
+          rs.getInt("stop_sequence"), aTime);
     }
-
+    
+    // Once everything is added, finalize all scheduled shapes
+    List<SchedRouteStop> schedRouteStop = new ArrayList<>(schedShapesByShape.values());
+    for (SchedRouteStop schedShape: schedRouteStop)
+      schedShape.freeze();
+    
     rs.close();
     stmt.close();
     getGtfsDBConn.close();
@@ -211,6 +196,7 @@ public class Gtfs {
 
   protected Connection getGtfsDBConn(String dbName) throws SQLException, ClassNotFoundException {
     Class.forName("org.postgresql.Driver");
+    
     String url = String.format("jdbc:postgresql://%s:%d/%s", params.getPsqlHost(), params.getPsqlPort(), dbName);
     Properties parameters = new Properties();
     parameters.put("user", params.getPsqlUser());

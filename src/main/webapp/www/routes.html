@@ -1,18 +1,15 @@
 <!DOCTYPE html>
 <div> <!-- here -->
-<nav class="navbar navbar-default">
-  <div class="container-fluid">
-    <input id="inp-filter-routes-by-nm" type="text" class="form-control"
-      placeholder="Filter routes">
-    </input>
-  </div><!-- /.container-fluid -->
-</nav>
-<div id="routes-main-lst" class="panel-group">
-  <span id="spn-routes-err-req" class="spa-rfpw-hidden"
-    data-l10n-id="spn-routes-err-req"></span>
-  <span></span>
+		  <div id="div-routes-search-routes"  class="container-fluid" style="padding: 0.5em;">
+		    <input id="inp-routes-search-by-name" type="text" class="form-control"
+		      >
+		  </div><!-- /.container-fluid -->
+	<div id="routes-main-lst" style="overflow: scroll; height:0px;">
+	  <span id="spn-routes-err-req" class="spa-rfpw-diplay-none"
+	    data-l10n-id="spn-routes-err-req"></span>
+	  <span></span>
+	</div>
 </div>
-
 
 <div class="modal fade" id="dlg-routes-sched" role="dialog">
   <div class="modal-dialog">
@@ -21,25 +18,26 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&#x274C;</button>
-        <h4 class="modal-title">Scheduling</h4>
+        <h4 class="modal-title"><span data-l10n-id="spn-routes-dlg-scheduling-ttl"></span><span id="spn-routes-dlg-scheduling-ttl-route"></span></h4>
       </div>
-      <div id="div-routes-sched-body" class="modal-body">
-        <span id="spn-routes-sched-err-req" class="spa-rfpw-hidden"
+      <div id="div-routes-sched-body" class="modal-body" >
+        <span id="spn-routes-sched-err-req" class="spa-rfpw-diplay-none"
           data-l10n-id="spn-routes-sched-err-req"></span>
 
         <select id="sel-routes-sched-trip" class="form-control clearfix"></select>
-
-        <table id="tbl-routes-sched" class="table-hover table-condensed">
-          <thead>
-            <tr>
-              <th class="spa-rfpw-diplay-none">ID</th>
-              <th data-l10n-id="tblh-routes-sched-stop-names">Stop Name</th>
-              <th data-l10n-id="tblh-routes-sched-arrival-times">Arrival Time</th>
-            </tr>
-          </thead>
-          <tbody id="tblb-routes-sched">
-          </tbody>
-        </table>
+		<div id="div-routes-sched-tbl-result" style="display: block; overflow-x: hidden; overflow-y: auto; height: 0px; width: 100%;">
+	        <table id="tbl-routes-sched" class="table-hover table-condensed" >
+	          <thead>
+	            <tr>
+	              <th class="spa-rfpw-diplay-none">ID</th>
+	              <th data-l10n-id="tblh-routes-sched-stop-names"></th>
+	              <th data-l10n-id="tblh-routes-sched-arrival-times"></th>
+	            </tr>
+	          </thead>
+	          <tbody id="tblb-routes-sched" >
+	          </tbody>
+	        </table>
+        </div>
       </div>
       <div class="modal-footer">
         <button type="button" data-l10n-id="btn-dlg-close" class="btn btn-default"
@@ -49,7 +47,7 @@
 
   </div>
 </div>
-</div>
 
 <span id="notify-w-routes-favs-not-add-rm" data-l10n-id="notify-w-routes-favs-not-add-rm" class="spa-rfpw-diplay-none" data-notify-html="title"></span>
+<span id="spn-inp-routes-search-by-name" data-l10n-id="spn-inp-routes-search-by-name" class="spa-rfpw-diplay-none" data-notify-html="title"></span>
 

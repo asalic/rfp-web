@@ -89,6 +89,8 @@ RFPWBRCreateTripHandler.prototype.clear = function()
 
 RFPWBRCreateTripHandler.prototype._reqCreateTrip = function()
 {
+  $("#btn-trips-br-trips-create").prop("disabled", true);
+  applicationContext.showLoadingPnl("div-trips-br-trips-loading-pnl");
   this._rmTripsHTML();
   //var stopFrom = this._stopsMH[this._fromStop.idxStopsMH];
   //var stopTo = this._stopsMH[this._toStop.idxStopsMH];
@@ -119,6 +121,8 @@ RFPWBRCreateTripHandler.prototype._rmTripsHTML = function()
 
 RFPWBRCreateTripHandler.prototype._sucCreateTrip = function(data)
 {
+  applicationContext.hideLoadingPnl("div-trips-br-trips-loading-pnl");
+  $("#btn-trips-br-trips-create").prop("disabled", false);
   if (data["errorMsg"].length == 0)
   {
     var tripRecs = data["data"];
@@ -188,6 +192,8 @@ RFPWBRCreateTripHandler.prototype._addFavErr = function(tripObj)
 RFPWBRCreateTripHandler.prototype._errCreateTrip = function(request,
     textStatus, errorThrown)
 {
+  applicationContext.hideLoadingPnl("div-trips-br-trips-loading-pnl");
+  $("#btn-trips-br-trips-create").prop("disabled", false);
   $.notify($("#notify-e-trips-create-trip-err").text(), 
       {
         className: "error",

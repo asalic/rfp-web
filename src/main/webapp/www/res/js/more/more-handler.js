@@ -33,6 +33,7 @@ RFPWMoreHandler.prototype.initAfterAuth = function()
 {
   this._contactHandler.init();
   this.reqRetrieveRegions();
+  this.onResize();
 }
 
 RFPWMoreHandler.prototype.reqRetrieveRegions = function()
@@ -292,6 +293,15 @@ RFPWMoreHandler.prototype._onReset = function()
   applicationContext.storage.reset();
   location.reload(true);
 }
+
+RFPWMoreHandler.prototype.onResize = function()
+{
+  $("#div-more-wrapper").css('height', $(window).height() - applicationContext.getMainTabSelectorHeight());
+  console.log("height more: " + $("#btn-more-about").outerHeight())
+  $("#div-more-region-lst").css('height', 
+      $(window).height() - applicationContext.getMainTabSelectorHeight() - 3 * $("#btn-more-about").outerHeight());
+}
+
 
 RFPWMoreHandler.prototype.isLoadedRegions = function()
 {return this._loadedRegions;}
