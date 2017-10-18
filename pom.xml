@@ -11,7 +11,7 @@
 		<jackson-2-version>2.8.0</jackson-2-version>
 		<maven-compiler-plugin-version>3.6.1</maven-compiler-plugin-version>
 		<build-release-webapp-root>${basedir}/src/main/webapp/</build-release-webapp-root>
-		<build-release-webapp-version>${version}</build-release-webapp-version>
+		<build-release-webapp-version>${project.version}</build-release-webapp-version>
 		<build-release-webapp-webservice-url-root>/webservice</build-release-webapp-webservice-url-root>
 	</properties>
 
@@ -31,7 +31,8 @@
 				<plugins>
 					<plugin>
 						<artifactId>exec-maven-plugin</artifactId>
-						<groupId>org.codehaus.mojo</groupId>
+						<groupId>org.codehaus.mojo</groupId>						
+						<version>1.6.0</version>	
 						<executions>
 							<execution>
 								<id>Generate release website</id>
@@ -40,6 +41,7 @@
 									<goal>exec</goal>
 								</goals>
 								<configuration>
+									<longModulepath>false</longModulepath>
 									<executable>nodejs</executable>
 									<arguments>
 										<argument>${basedir}/src/main/webapp/build.js</argument>
@@ -204,3 +206,4 @@
 		<finalName>rfp-web</finalName>
 	</build>
 </project>
+

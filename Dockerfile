@@ -1,209 +1,86 @@
+FROM ubuntu:16.04
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>rfp-web</groupId>
-	<artifactId>rfp-web</artifactId>
-	<packaging>war</packaging>
-	<version>1.3.0</version>
-	<name>rfp-web Maven Webapp</name>
-	<url>http://maven.apache.org</url>
-	<properties>
-		<jackson-2-version>2.8.0</jackson-2-version>
-		<maven-compiler-plugin-version>3.6.1</maven-compiler-plugin-version>
-		<build-release-webapp-root>${basedir}/src/main/webapp/</build-release-webapp-root>
-		<build-release-webapp-version>${project.version}</build-release-webapp-version>
-		<build-release-webapp-webservice-url-root>/webservice</build-release-webapp-webservice-url-root>
-	</properties>
+MAINTAINER Andy S Alic (asalic@upv.es) Universitat Politecnica de Valencia
 
-	<profiles>
-		<profile>
-			<id>debug</id>
-			<properties>
-				<warplugin-webresources-dir>src/main/webapp/www</warplugin-webresources-dir>
-			</properties>
-		</profile>
-		<profile>
-			<id>release</id>
-			<properties>
-				<warplugin-webresources-dir>src/main/webapp/release</warplugin-webresources-dir>
-			</properties>
-			<build>
-				<plugins>
-					<plugin>
-						<artifactId>exec-maven-plugin</artifactId>
-						<groupId>org.codehaus.mojo</groupId>						
-						<version>1.6.0</version>	
-						<executions>
-							<execution>
-								<id>Generate release website</id>
-								<phase>generate-sources</phase>
-								<goals>
-									<goal>exec</goal>
-								</goals>
-								<configuration>
-									<longModulepath>false</longModulepath>
-									<executable>nodejs</executable>
-									<arguments>
-										<argument>${basedir}/src/main/webapp/build.js</argument>
-										<argument>-p</argument>
-										<argument>${build-release-webapp-root}</argument>
-										<argument>-v</argument>
-										<argument>${build-release-webapp-version}</argument>
-										<argument>-w</argument>
-										<argument>${build-release-webapp-webservice-url-root}</argument>
-									</arguments>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
+RUN apt-get update && apt-get -y install npm less curl maven openjdk-8-jdk openjdk-8-jre python-requests 
+RUN npm install fs-extra path yargs jsrender request cheerio html-validator node-minify babel-core html-minifier babel-preset-es2015
+RUN ln -s /usr/bin/nodejs /usr/bin/node
+#  Open http(s) ports for the tomcat server
+EXPOSE 8443
+EXPOSE 8080
 
-	<dependencies>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>3.8.1</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpclient</artifactId>
-			<version>4.5.3</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>fluent-hc</artifactId>
-			<version>4.5.3</version>
-		</dependency>
-		<dependency>
-			<groupId>org.postgresql</groupId>
-			<artifactId>postgresql</artifactId>
-			<version>42.1.1</version>
-		</dependency>
-		<dependency>
-			<groupId>asm</groupId>
-			<artifactId>asm</artifactId>
-			<version>3.3.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.glassfish.jersey.containers</groupId>
-			<artifactId>jersey-container-servlet</artifactId>
-			<version>2.25.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.json</groupId>
-			<artifactId>json</artifactId>
-			<version>20170516</version>
-		</dependency>
-		<!-- the core, which includes Streaming API, shared low-level abstractions 
-			(but NOT data-binding) -->
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-core</artifactId>
-			<version>${jackson-2-version}</version>
-		</dependency>
+ARG tomcat_group=tomcat
+ARG tomcat_user=tomcat
+ARG tomcat_root=/opt/tomcat
+ARG tomcat_minor_version=0.47
+ARG app_base_path=/eubrabigsea
+ARG app_path=${app_base_path}/rfp-web
 
-		<!-- Just the annotations; use this dependency if you want to attach annotations 
-			to classes without connecting them to the code. -->
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-annotations</artifactId>
-			<version>${jackson-2-version}</version>
-		</dependency>
+# root variables
+#ENV TOMCAT_USER ${tomcat_user}
+#ENV TOMCAT_USER_PASSW default
+ENV TOMCAT_ADMIN admin
+ENV TOMCAT_ADMIN_PASSW password
 
-		<!-- databinding; ObjectMapper, JsonNode and related classes are here -->
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-databind</artifactId>
-			<version>${jackson-2-version}</version>
-		</dependency>
+# Create user and adjust permissions for tomcat
+RUN echo ${tomcat_root}
+RUN mkdir ${tomcat_root}
+RUN groupadd ${tomcat_group}
+RUN useradd -s /bin/false -g ${tomcat_group} -d ${tomcat_root} ${tomcat_user}
+RUN chown -R ${tomcat_user}:${tomcat_group} ${tomcat_root}
+#RUN echo ${TOMCAT_USER_PASSW} | passwd ${TOMCAT_USER} --stdin
 
-		<!-- smile (binary JSON). Other artifacts in this group do other formats. -->
-		<dependency>
-			<groupId>com.fasterxml.jackson.dataformat</groupId>
-			<artifactId>jackson-dataformat-smile</artifactId>
-			<version>${jackson-2-version}</version>
-		</dependency>
-		<!-- JAX-RS provider -->
-		<dependency>
-			<groupId>com.fasterxml.jackson.jaxrs</groupId>
-			<artifactId>jackson-jaxrs-json-provider</artifactId>
-			<version>${jackson-2-version}</version>
-		</dependency>
-		<!-- Support for JAX-B annotations as additional configuration -->
-		<dependency>
-			<groupId>com.fasterxml.jackson.module</groupId>
-			<artifactId>jackson-module-jaxb-annotations</artifactId>
-			<version>${jackson-2-version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.maven.plugins</groupId>
-			<artifactId>maven-compiler-plugin</artifactId>
-			<version>${maven-compiler-plugin-version}</version>
-		</dependency>
+# Install custom version of Tomcat (the one from the repo has bugs)
+RUN curl -o /tmp/apache-tomcat-8.tar.gz http://apache.uvigo.es/tomcat/tomcat-8/v8.${tomcat_minor_version}/bin/apache-tomcat-8.${tomcat_minor_version}.tar.gz
+RUN tar xzvf /tmp/apache-tomcat-8.tar.gz -C ${tomcat_root} --strip-components=1
+#COPY ./tomcat-users_template.xml ${tomcat_root}/conf/tomcat-users.xml
 
-		<!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
-			<version>3.1.0</version>
-			<scope>provided</scope>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/log4j/log4j -->
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>1.2.17</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/com.google.maps/google-maps-services -->
-		<dependency>
-			<groupId>com.google.maps</groupId>
-			<artifactId>google-maps-services</artifactId>
-			<version>0.2.0</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/commons-net/commons-net -->
-		<dependency>
-			<groupId>commons-net</groupId>
-			<artifactId>commons-net</artifactId>
-			<version>3.6</version>
-		</dependency>
+RUN chmod -R g+r ${tomcat_root}/conf
+RUN chmod -R +x ${tomcat_root}/bin/
+RUN chmod g+x ${tomcat_root}/conf
+RUN chown -R ${tomcat_user} ${tomcat_root}/conf/ ${tomcat_root}/webapps/ ${tomcat_root}/work/ ${tomcat_root}/temp/ ${tomcat_root}/logs/
 
+# Create the app folder and giver full permission to the tomcat user
+RUN mkdir -p ${app_path}
+#COPY ./mesos-dns-discover.py ${app_base_path}
+#RUN chmod +x ${app_base_path}/mesos-dns-discover.py
+ADD ./ ${app_path}/
+#COPY ./regions.json ${app_base_path}
+RUN chown -R ${tomcat_user} ${app_base_path}
 
-	</dependencies>
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-war-plugin</artifactId>
-				<version>3.1.0</version>
-				<configuration>
-					<outputDirectory>/opt/tomcat/webapps</outputDirectory>
-					<warName>ROOT</warName>
-					<webResources>
-						<resource>
-							<excludes>
-								<exclude>dbre.xml</exclude>
-							</excludes>
-							<directory>${warplugin-webresources-dir}</directory>
-							<targetPath></targetPath>
-						</resource>
-					</webResources>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>${maven-compiler-plugin-version}</version>
-				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
-				</configuration>
-			</plugin>
-		</plugins>
-		<finalName>rfp-web</finalName>
-	</build>
-</project>
+# Once we have everything set, time to switch to a restricted user
+USER ${tomcat_user}
+
+#  Different environment variables used to control the environment
+ENV USER ${tomcat_user}
+ENV APP_BASE_PATH ${app_base_path}
+ENV APP_PATH ${app_path}
+ENV TOMCAT_ROOT ${tomcat_root}
+ENV PFX default
+ENV PSQL_USER default
+ENV PSQL_PASSW default
+#ENV PSQL_PORT 0
+#ENV PSQL_HOST localhost
+ENV MESOS_DNS_IP_PORT http://127.0.0.1:8123
+ENV MESOS_DNS_RFP_DB_ID _rfp-db-lb-rfp._tcp.marathon.mesos
+ENV MESOS_DNS_LB_INTERNAL_ID _rfp-lb-internal-rfp._tcp.marathon.mesos
+ENV LB_RFP_DB_PORT 0
+ENV LB_RFP_DB_HOST server
+ENV MESOS_DNS_AUTH_SERVICE_ID _auth._tcp.marathon.mesos
+#ENV REGIONS_PATH ${app_base_path}/regions.json
+ENV CMD_KEEP_ALIVE tail -f /dev/null
+ENV REGIONS_URL ftp://ftpgrycap.i3m.upv.es/public/eubrabigsea/data/regions.json
+ENV CONTACT_MAIL_ADDR default@mail.com
+
+# Prepare and deploy app 
+RUN rm -rf ${TOMCAT_ROOT}/webapps/ROOT.war ${TOMCAT_ROOT}/webapps/ROOT || true
+#RUN cat ${APP_PATH}/pom.xml | sed "s|<tomcatUser>[^ ]*</tomcatUser>|<tomcatUser>${TOMCAT_USER}</tomcatUser>|" > ${APP_PATH}/pom.xml.tmp
+#RUN cat ${APP_PATH}/pom.xml.tmp | sed "s|<tomcatUserPassw>[^ ]*</tomcatUserPassw>|<tomcatUserPassw>${TOMCAT_USER_PASSW}</tomcatUserPassw>|" > ${APP_PATH}/pom.xml
+RUN cat ${APP_PATH}/pom.xml | sed "s|<outputDirectory>[^ ]*</outputDirectory>|<outputDirectory>${TOMCAT_ROOT}/webapps/</outputDirectory>|" > ${APP_PATH}/pom.xml.tmp &&\
+	mv ${APP_PATH}/pom.xml.tmp ${APP_PATH}/pom.xml
+#RUN node ${APP_PATH}/src/main/webapp/build.js -p "${APP_PATH}/src/main/webapp/" -v "2.0beta" -w "/webservice"
+RUN mvn -e -f ${APP_PATH}/pom.xml -P release clean package
+#RUN chown -R tomcat ${TOMCAT_ROOT}/webapps/ ${TOMCAT_ROOT}/work/ ${TOMCAT_ROOT}/temp/ ${TOMCAT_ROOT}/logs/
+
+ENTRYPOINT ${TOMCAT_ROOT}/bin/startup.sh &&\
+  eval ${CMD_KEEP_ALIVE}
