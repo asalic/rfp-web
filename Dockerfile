@@ -12,7 +12,7 @@ EXPOSE 8080
 ARG tomcat_group=tomcat
 ARG tomcat_user=tomcat
 ARG tomcat_root=/opt/tomcat
-ARG tomcat_minor_version=0.46
+ARG tomcat_minor_version=0.47
 ARG app_base_path=/eubrabigsea
 ARG app_path=${app_base_path}/rfp-web
 
