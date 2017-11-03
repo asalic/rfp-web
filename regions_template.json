@@ -3,6 +3,7 @@
     "id": 1,
     "code": "be",
     "name": "Belgium",
+    "osmDlURL": "http://download.geofabrik.de/europe/belgium-latest.osm.pbf",
     "cities":
       [
         {
@@ -32,7 +33,14 @@
           "osmVersion": "170912",
           "mesosDNSBRRoutes": "",
           "mesosDNSBRTrips": "",  
-          "mesosDNSOTP": "_rfp-otp-be-brussels-rfp._tcp.marathon.mesos"    
+          "mesosDNSOTP": "",
+          "gtfsDlURL": [
+          	"https://transitfeeds.com/p/societe-des-transports-intercommunaux-de-bruxelles/527/latest/download"
+          ],
+          "latMin": 50.8503,
+          "lngMin": 4.3517,
+          "latMax": 50.8503,
+          "lngMax": 4.3517
         }
       ]
   },
@@ -40,6 +48,7 @@
     "id": 3,
     "code": "es",
     "name": "Spain",
+    "osmDlURL": "http://download.geofabrik.de/europe/spain-latest.osm.pbf",
     "cities":
       [
         {
@@ -69,7 +78,16 @@
           "osmVersion": "170912",
           "mesosDNSBRRoutes": "",
           "mesosDNSBRTrips": "",  
-          "mesosDNSOTP": "_rfp-otp-es-madrid-rfp._tcp.marathon.mesos"     
+          "mesosDNSOTP": "",
+          "gtfsDlURL": [
+          	"https://transitfeeds.com/p/emt-madrid/212/latest/download",
+          	"https://transitfeeds.com/p/consorcio-regional-de-transportes-de-madrid/742/latest/download",
+          	"https://transitfeeds.com/p/consorcio-regional-de-transportes-de-madrid/743/latest/download"
+          ],
+          "latMin": 40.4168,
+          "lngMin": 3.7038,
+          "latMax": 40.4168,
+          "lngMax": 3.7038   
         },
         {
           "id": 5,
@@ -98,7 +116,14 @@
           "osmVersion": "170912",
           "mesosDNSBRRoutes": "",
           "mesosDNSBRTrips": "",  
-          "mesosDNSOTP": "_rfp-otp-es-valencia-rfp._tcp.marathon.mesos"     
+          "mesosDNSOTP": "",
+          "gtfsDlURL": [
+          	"https://transitfeeds.com/p/emt-valencia/719/latest/download"
+          ],
+          "latMin": 40.4168,
+          "lngMin": 3.7038,
+          "latMax": 40.4168,
+          "lngMax": 3.7038   
         }
       ]
   },
@@ -106,6 +131,7 @@
     "id": 6,
     "code": "br",
     "name": "Brazil",
+    "osmDlURL": "http://download.geofabrik.de/south-america/brazil-latest.osm.pbf",
     "cities":
       [
         {
@@ -135,7 +161,12 @@
           "osmVersion": "170912",
           "mesosDNSBRRoutes": "",
           "mesosDNSBRTrips": "",  
-          "mesosDNSOTP": ""     
+          "mesosDNSOTP": "",
+          "gtfsDlURL": [],
+          "latMin": -19.9245,
+          "lngMin": -43.9352,
+          "latMax": -19.9245,
+          "lngMax": -43.9352   
         },
         {
           "id": 8,
@@ -164,7 +195,12 @@
           "osmVersion": "170912",
           "mesosDNSBRRoutes": "",
           "mesosDNSBRTrips": "",
-          "mesosDNSOTP": ""     
+          "mesosDNSOTP": "",
+          "gtfsDlURL": [],
+          "latMin": -7.2291,
+          "lngMin": -35.8808,
+          "latMax": -7.2291,
+          "lngMax": -35.8808     
         },
         {
           "id": 9,
@@ -192,8 +228,13 @@
           "gtfsVersion": "160912",
           "osmVersion": "170912",
           "mesosDNSBRRoutes": "",
-          "mesosDNSBRTrips": "_btr2-service-melhorbusao._tcp.marathon.mesos.",  
-          "mesosDNSOTP": ""     
+          "mesosDNSBRTrips": "",  
+          "mesosDNSOTP": "",
+          "gtfsDlURL": [],
+          "latMin": -25.4244,
+          "lngMin": -49.2654,
+          "latMax": -25.4244,
+          "lngMax": -49.2654    
         },
         {
           "id": 10,
@@ -222,7 +263,12 @@
           "osmVersion": "170912",
           "mesosDNSBRRoutes": "",
           "mesosDNSBRTrips": "",  
-          "mesosDNSOTP": ""
+          "mesosDNSOTP": "",
+          "gtfsDlURL": [],
+          "latMin": -3.7319,
+          "lngMin": -38.5267,
+          "latMax": -3.7319,
+          "lngMax": -38.5267   
         },
         {
           "id": 11,
@@ -251,7 +297,12 @@
           "osmVersion": "170912",
           "mesosDNSBRRoutes": "",
           "mesosDNSBRTrips": "",  
-          "mesosDNSOTP": ""
+          "mesosDNSOTP": "",
+          "gtfsDlURL": [],
+          "latMin": -30.0346,
+          "lngMin": -51.2177,
+          "latMax": -30.0346,
+          "lngMax": -51.2177   
         },
         {
           "id": 12,
@@ -280,7 +331,12 @@
           "osmVersion": "170912",
           "mesosDNSBRRoutes": "",
           "mesosDNSBRTrips": "",  
-          "mesosDNSOTP": ""
+          "mesosDNSOTP": "",
+          "gtfsDlURL": [],
+          "latMin": -22.9068,
+          "lngMin": -43.1729,
+          "latMax": -22.9068,
+          "lngMax": -43.1729   
         }
       ]
   },
@@ -317,7 +373,14 @@
           "osmVersion": "170912",
           "mesosDNSBRRoutes": "",
           "mesosDNSBRTrips": "",  
-          "mesosDNSOTP": "_rfp-otp-fi-helsinki-rfp._tcp.marathon.mesos"
+          "mesosDNSOTP": "",
+          "gtfsDlURL": [
+          	"https://transitfeeds.com/p/helsinki-regional-transport/735/latest/download"
+          ],
+          "latMin": 60.1699,
+          "lngMin": 24.9384,
+          "latMax": 60.1699,
+          "lngMax": 24.9384   
         }
       ]
   }

@@ -1,5 +1,7 @@
 package upv.bigsea.rfpweb.model;
 
+import java.util.List;
+
 public class City {
   
   protected int id;
@@ -29,6 +31,13 @@ public class City {
   protected boolean enabled;
   protected String gtfsVersion;
   protected String osmVersion;
+  protected List<String> gtfsDlURL;
+  protected double latMin;
+  protected double lngMin;
+  protected double latMax;
+  protected double lngMax;
+  
+  
   public int getId() {
     return id;
   }

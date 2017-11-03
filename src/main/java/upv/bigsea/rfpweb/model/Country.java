@@ -4,12 +4,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class Country {
   
   protected int id;
   protected String name;
   protected String code;
+  protected String osmDlURL;
   protected List<City> cities;
+  @JsonIgnore
   protected Map<String, City> citiesByCode;
   
   public int getId() {
@@ -38,6 +42,15 @@ public class Country {
     genCitiesByCode();
   }
   
+  
+  
+  public String getOsmDlURL() {
+    return osmDlURL;
+  }
+  public void setOsmDlURL(String osmDlURL) {
+    this.osmDlURL = osmDlURL;
+  }
+  @JsonIgnore
   public City getCity(String cityCode)
   {
     if (citiesByCode != null)
@@ -46,6 +59,7 @@ public class Country {
       return null;
   }
   
+  @JsonIgnore
   public void genCitiesByCode()
   {
     citiesByCode = new HashMap<String, City>();
@@ -54,5 +68,7 @@ public class Country {
       citiesByCode.put(c.getCode(), c);
     }
   }
+  
+  
 
 }
