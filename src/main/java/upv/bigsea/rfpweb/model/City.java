@@ -208,6 +208,36 @@ public class City {
   public void setTimezone(String timezone) {
     this.timezone = timezone;
   }
+  public List<String> getGtfsDlURL() {
+    return gtfsDlURL;
+  }
+  public void setGtfsDlURL(List<String> gtfsDlURL) {
+    this.gtfsDlURL = gtfsDlURL;
+  }
+  public double getLatMin() {
+    return latMin;
+  }
+  public void setLatMin(double latMin) {
+    this.latMin = latMin;
+  }
+  public double getLngMin() {
+    return lngMin;
+  }
+  public void setLngMin(double lngMin) {
+    this.lngMin = lngMin;
+  }
+  public double getLatMax() {
+    return latMax;
+  }
+  public void setLatMax(double latMax) {
+    this.latMax = latMax;
+  }
+  public double getLngMax() {
+    return lngMax;
+  }
+  public void setLngMax(double lngMax) {
+    this.lngMax = lngMax;
+  }
   
 
 }

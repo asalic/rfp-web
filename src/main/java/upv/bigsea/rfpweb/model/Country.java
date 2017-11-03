@@ -40,9 +40,7 @@ public class Country {
   public void setCities(List<City> cities) {
     this.cities = cities;
     genCitiesByCode();
-  }
-  
-  
+  }  
   
   public String getOsmDlURL() {
     return osmDlURL;
